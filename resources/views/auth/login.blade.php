@@ -1,5 +1,5 @@
 <x-auth.layout title="Masuk">
-    <div class="card border-0 shadow rounded-4">
+    <div class="card border-0 shadow rounded-4 bg-white">
         <div class="card-body p-4 p-md-5">
             <x-auth.header
                 title="Masuk"
@@ -24,7 +24,7 @@
                             type="email"
                             name="email"
                             value="{{ old('email') }}"
-                            class="form-control @error('email') is-invalid @enderror"
+                            class="form-control bg-white @error('email') is-invalid @enderror"
                             placeholder="Masukkan email akun Anda"
                             required
                             autofocus
@@ -44,7 +44,7 @@
                             id="password"
                             type="password"
                             name="password"
-                            class="form-control @error('password') is-invalid @enderror"
+                            class="form-control bg-white @error('password') is-invalid @enderror"
                             placeholder="••••••••"
                             required
                             autocomplete="current-password"

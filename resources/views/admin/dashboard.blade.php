@@ -13,71 +13,63 @@
 
     <div class="row g-3 g-lg-4">
         <div class="col-12 col-md-6 col-xl-3">
-            <div class="card lm-card rounded-4 h-100">
-                <div class="card-body">
-                    <div class="d-flex align-items-start justify-content-between">
-                        <div>
-                            <div class="text-uppercase small lm-muted fw-semibold">Total Penjualan</div>
-                            <div class="mt-2 fs-4 fw-bold">Rp 12.450.000</div>
-                            <div class="small text-success mt-1">+12,5% <span class="lm-muted">vs bulan lalu</span></div>
-                        </div>
-                        <div class="lm-kpi-icon">
-                            <i class="bi bi-credit-card"></i>
-                        </div>
+            <x-admin.card class="h-100">
+                <div class="d-flex align-items-start justify-content-between">
+                    <div>
+                        <div class="text-uppercase small lm-muted fw-semibold">Total Penjualan</div>
+                        <div class="mt-2 fs-4 fw-bold">Rp 12.450.000</div>
+                        <div class="small text-success mt-1">+12,5% <span class="lm-muted">vs bulan lalu</span></div>
+                    </div>
+                    <div class="lm-kpi-icon">
+                        <i class="bi bi-credit-card"></i>
                     </div>
                 </div>
-            </div>
+            </x-admin.card>
         </div>
 
         <div class="col-12 col-md-6 col-xl-3">
-            <div class="card lm-card rounded-4 h-100">
-                <div class="card-body">
-                    <div class="d-flex align-items-start justify-content-between">
-                        <div>
-                            <div class="text-uppercase small lm-muted fw-semibold">Pengguna Aktif</div>
-                            <div class="mt-2 fs-4 fw-bold">1.284</div>
-                            <div class="small text-success mt-1">+5,2% <span class="lm-muted">vs bulan lalu</span></div>
-                        </div>
-                        <div class="lm-kpi-icon">
-                            <i class="bi bi-person-check"></i>
-                        </div>
+            <x-admin.card class="h-100">
+                <div class="d-flex align-items-start justify-content-between">
+                    <div>
+                        <div class="text-uppercase small lm-muted fw-semibold">Pengguna Aktif</div>
+                        <div class="mt-2 fs-4 fw-bold">1.284</div>
+                        <div class="small text-success mt-1">+5,2% <span class="lm-muted">vs bulan lalu</span></div>
+                    </div>
+                    <div class="lm-kpi-icon">
+                        <i class="bi bi-person-check"></i>
                     </div>
                 </div>
-            </div>
+            </x-admin.card>
         </div>
 
         <div class="col-12 col-md-6 col-xl-3">
-            <div class="card lm-card rounded-4 h-100">
-                <div class="card-body">
-                    <div class="d-flex align-items-start justify-content-between">
-                        <div>
-                            <div class="text-uppercase small lm-muted fw-semibold">Total Buku</div>
-                            <div class="mt-2 fs-4 fw-bold">452</div>
-                            <div class="small text-success mt-1">+2,1% <span class="lm-muted">stok baru tersedia</span></div>
-                        </div>
-                        <div class="lm-kpi-icon">
-                            <i class="bi bi-journal-bookmark"></i>
-                        </div>
+            <x-admin.card class="h-100">
+                <div class="d-flex align-items-start justify-content-between">
+                    <div>
+                        <div class="text-uppercase small lm-muted fw-semibold">Total Buku</div>
+                        <div class="mt-2 fs-4 fw-bold">452</div>
+                        <div class="small text-success mt-1">+2,1% <span class="lm-muted">stok baru tersedia</span></div>
+                    </div>
+                    <div class="lm-kpi-icon">
+                        <i class="bi bi-journal-bookmark"></i>
                     </div>
                 </div>
-            </div>
+            </x-admin.card>
         </div>
 
         <div class="col-12 col-md-6 col-xl-3">
-            <div class="card lm-card rounded-4 h-100">
-                <div class="card-body">
-                    <div class="d-flex align-items-start justify-content-between">
-                        <div>
-                            <div class="text-uppercase small lm-muted fw-semibold">Pengembalian</div>
-                            <div class="mt-2 fs-4 fw-bold">3</div>
-                            <div class="small text-danger mt-1">-0,8% <span class="lm-muted">dibanding pekan lalu</span></div>
-                        </div>
-                        <div class="lm-kpi-icon">
-                            <i class="bi bi-arrow-counterclockwise"></i>
-                        </div>
+            <x-admin.card class="h-100">
+                <div class="d-flex align-items-start justify-content-between">
+                    <div>
+                        <div class="text-uppercase small lm-muted fw-semibold">Pengembalian</div>
+                        <div class="mt-2 fs-4 fw-bold">3</div>
+                        <div class="small text-danger mt-1">-0,8% <span class="lm-muted">dibanding pekan lalu</span></div>
+                    </div>
+                    <div class="lm-kpi-icon">
+                        <i class="bi bi-arrow-counterclockwise"></i>
                     </div>
                 </div>
-            </div>
+            </x-admin.card>
         </div>
 
         <div class="col-12">

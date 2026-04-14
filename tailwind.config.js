@@ -11,6 +11,14 @@ export default {
 
     theme: {
         extend: {
+            colors: {
+                'lumina-blue': 'rgb(var(--lumina-blue-rgb) / <alpha-value>)',
+                'lumina-gold': 'rgb(var(--lumina-gold-rgb) / <alpha-value>)',
+                'lumina-cream': 'rgb(var(--lumina-cream-rgb) / <alpha-value>)',
+                'lumina-white': 'rgb(var(--lumina-white-rgb) / <alpha-value>)',
+                'lumina-black': 'rgb(var(--lumina-black-rgb) / <alpha-value>)',
+                'lumina-red': 'rgb(var(--lumina-red-rgb) / <alpha-value>)',
+            },
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
