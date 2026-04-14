@@ -94,13 +94,6 @@ Pastikan perangkat Anda sudah terinstal perangkat lunak berikut:
 
 8. Buka browser dan akses aplikasi Anda di: `http://localhost:8000`
 
----
-
-## 📞 Kontak (Contact)
-
-Jika Anda memiliki pertanyaan lebih lanjut, saran, atau kendala, silakan hubungi tim pengembang Lumina Media:
-- **Email:** support@luminamedia.com *(Ubah dengan email asli Anda)*
-- **Website:** www.luminamedia.com *(Ubah dengan domain asli Anda)*
 
 ---
 *Dibuat dengan ❤️ untuk pertumbuhan literatur digital.*
