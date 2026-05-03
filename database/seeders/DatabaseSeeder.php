@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+
 use App\Models\Book;
 use App\Models\Category;
 use App\Models\Order;
@@ -37,6 +38,17 @@ class DatabaseSeeder extends Seeder
                 'email_verified_at' => now(),
             ]
         );
+
+
+        User::query()->firstOrCreate(
+            ['email' => 'user@lumina.id'],
+            [
+                'nama' => 'User Lumina',
+                'password' => Hash::make('password'),
+                'role' => 'user',
+                'email_verified_at' => now(),
+            ]
+            );
 
         $users = User::factory()->count(10)->create([
             'role' => 'user',

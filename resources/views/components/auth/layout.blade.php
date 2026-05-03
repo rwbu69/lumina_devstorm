@@ -20,13 +20,13 @@
 
     <style>
         :root {
-            --lm-primary: #1a4fd9;
+            --lm-primary: #1d4ed8;
             --lm-accent: #f2c94c;
-            --lm-bg: #fdfbf7;
-            --lm-text: #111827;
+            --lm-bg: #FAF8F5;
+            --lm-text: #1e293b;
 
             --bs-primary: var(--lm-primary);
-            --bs-primary-rgb: 26, 79, 217;
+            --bs-primary-rgb: 29, 78, 216;
             --bs-warning: var(--lm-accent);
             --bs-warning-rgb: 242, 201, 76;
             --bs-body-bg: var(--lm-bg);
@@ -37,14 +37,16 @@
 
         body {
             font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, 'Noto Sans', 'Liberation Sans', sans-serif;
-            background: var(--lm-bg);
+            background-color: var(--lm-bg);
             color: var(--lm-text);
+            -webkit-font-smoothing: antialiased;
         }
 
         h1, h2, h3, h4, h5, h6,
         .display-1, .display-2, .display-3, .display-4, .display-5, .display-6,
         .navbar-brand {
             font-family: 'Playfair Display', serif;
+            color: #1e3a8a;
         }
     </style>
 </head>
