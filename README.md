@@ -95,5 +95,4 @@ Pastikan perangkat Anda sudah terinstal perangkat lunak berikut:
 8. Buka browser dan akses aplikasi Anda di: `http://localhost:8000`
 
 
----
-*Dibuat dengan ❤️ untuk pertumbuhan literatur digital.*
+hallo
