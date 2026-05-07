@@ -1,5 +1,5 @@
 <x-auth.layout title="Daftar">
-    <div class="card border-0 shadow rounded-4">
+    <div class="card border-0 shadow rounded-4 bg-white">
         <div class="card-body p-4 p-md-5">
             <x-auth.header
                 title="Daftar Akun Baru"
@@ -18,7 +18,7 @@
                             type="text"
                             name="nama"
                             value="{{ old('nama') }}"
-                            class="form-control @error('nama') is-invalid @enderror"
+                            class="form-control @error('nama') is-invalid @enderror bg-white"
                             placeholder="Masukkan nama akun anda"
                             required
                             autofocus
@@ -39,7 +39,7 @@
                             type="email"
                             name="email"
                             value="{{ old('email') }}"
-                            class="form-control @error('email') is-invalid @enderror"
+                            class="form-control @error('email') is-invalid @enderror bg-white"
                             placeholder="contoh@email.com"
                             required
                             autocomplete="username"
@@ -58,7 +58,7 @@
                             id="password"
                             type="password"
                             name="password"
-                            class="form-control @error('password') is-invalid @enderror"
+                            class="form-control @error('password') is-invalid @enderror bg-white"
                             placeholder="••••••••"
                             required
                             autocomplete="new-password"
@@ -78,7 +78,7 @@
                             id="password_confirmation"
                             type="password"
                             name="password_confirmation"
-                            class="form-control @error('password_confirmation') is-invalid @enderror"
+                            class="form-control @error('password_confirmation') is-invalid @enderror bg-white"
                             placeholder="••••••••"
                             required
                             autocomplete="new-password"
