@@ -16,7 +16,7 @@
 
     <style>
         :root {
-            --lm-sidebar-width: 280px;
+            --lm-sidebar-width: 260px;
             --lm-primary: #1a4fd9;
             --lm-accent: #f2c94c;
             --lm-bg: #fdfbf7;
@@ -30,12 +30,14 @@
             --bs-body-color: var(--lm-text);
             --bs-link-color: var(--lm-primary);
             --bs-link-hover-color: var(--lm-primary);
+            --bs-body-font-size: 0.9375rem;
         }
 
         body {
             background: var(--lm-bg);
             color: var(--lm-text);
             font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, 'Noto Sans', 'Liberation Sans', sans-serif;
+            -webkit-font-smoothing: antialiased;
         }
 
         h1, h2, h3, h4, h5, h6,
@@ -43,38 +45,55 @@
         .navbar-brand {
             font-family: 'Playfair Display', serif;
         }
+        
+        .h1, h1 { font-size: 1.75rem; }
+        .h2, h2 { font-size: 1.5rem; }
+        .h3, h3 { font-size: 1.25rem; }
+
         .lm-sidebar {
             position: fixed;
             inset: 0 auto 0 0;
             width: var(--lm-sidebar-width);
             background: #ffffff;
-            border-right: 1px solid rgba(0, 0, 0, .06);
+            border-right: 1px solid rgba(0, 0, 0, .05);
         }
         .lm-main { margin-left: 0; }
-        .lm-nav-link { color: var(--lm-text); }
-        .lm-nav-link:hover { background: rgba(var(--bs-primary-rgb), .06); }
-        .lm-nav-link.active {
-            background: rgba(var(--bs-primary-rgb), .12);
-            border: 1px solid rgba(var(--bs-primary-rgb), .18);
-            color: var(--bs-primary);
+        .lm-nav-link { 
+            color: var(--lm-text); 
+            font-size: 0.875rem;
+            font-weight: 500;
+            padding: 0.6rem 1rem !important;
         }
-        .lm-card { border: 1px solid rgba(0, 0, 0, .06); }
-        .lm-muted { color: rgba(17, 24, 39, .70); }
+        .lm-nav-link:hover { background: rgba(var(--bs-primary-rgb), .05); }
+        .lm-nav-link.active {
+            background: rgba(var(--bs-primary-rgb), .08);
+            border: 1px solid rgba(var(--bs-primary-rgb), .12);
+            color: var(--bs-primary);
+            font-weight: 600;
+        }
+        .lm-card { border: 1px solid rgba(0, 0, 0, .05); }
+        .lm-muted { color: rgba(17, 24, 39, .65); }
         .lm-kpi-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
             display: grid;
             place-items: center;
-            background: rgba(var(--bs-primary-rgb), .10);
+            background: rgba(var(--bs-primary-rgb), .08);
             color: var(--bs-primary);
+            font-size: 0.9rem;
         }
         .lm-chart {
-            height: 340px;
+            height: 320px;
             background: #fff;
-            border: 1px solid rgba(0, 0, 0, .06);
-            border-radius: 16px;
+            border: 1px solid rgba(0, 0, 0, .05);
+            border-radius: 14px;
         }
+        
+        .table > :not(caption) > * > * {
+            padding: 0.85rem 1rem;
+        }
+        
         @media (min-width: 992px) {
             .lm-main { margin-left: var(--lm-sidebar-width); }
         }

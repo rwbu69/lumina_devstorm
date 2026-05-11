@@ -25,7 +25,7 @@
             'active' => request()->routeIs('admin.reports.*'),
         ],
         [
-            'label' => 'User',
+            'label' => 'Kelola User',
             'icon' => 'bi-people',
             'route' => 'admin.users.index',
             'active' => request()->routeIs('admin.users.*'),

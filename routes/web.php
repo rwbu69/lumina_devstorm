@@ -58,6 +58,8 @@ Route::prefix('admin')
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
         Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
+        Route::patch('/orders/{order}/verify', [AdminOrderController::class, 'verify'])->name('orders.verify');
+        Route::patch('/orders/{order}/reject', [AdminOrderController::class, 'reject'])->name('orders.reject');
         Route::get('/orders/export-pdf', [AdminOrderController::class, 'exportPdf'])->name('orders.exportPdf');
 
         Route::resource('/books', AdminBookController::class);
@@ -66,6 +68,7 @@ Route::prefix('admin')
         Route::get('/reports/export-pdf', [AdminReportController::class, 'exportPdf'])->name('reports.exportPdf');
 
         Route::get('/users', [AdminManageUserController::class, 'index'])->name('users.index');
+        Route::get('/users/{user}', [AdminManageUserController::class, 'show'])->name('users.show');
         Route::patch('/users/{user}/credentials', [AdminManageUserController::class, 'updateCredentials'])->name('users.updateCredentials');
         Route::delete('/users/{user}', [AdminManageUserController::class, 'destroy'])->name('users.destroy');
     });
