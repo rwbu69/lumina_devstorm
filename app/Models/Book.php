@@ -16,6 +16,7 @@ class Book extends Model
         'judul',
         'penulis',
         'harga',
+        'deskripsi',
         'file_buku',
     ];
 

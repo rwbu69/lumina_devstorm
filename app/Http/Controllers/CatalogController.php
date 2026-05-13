@@ -9,13 +9,15 @@ use Illuminate\Http\Response;
 
 class CatalogController extends Controller
 {
-    public function index(): Response
+    public function index()
     {
-        return response('CatalogController@index (TODO)', 200);
+        $books = Book::with('category')->latest()->paginate(12);
+        return view('catalog.index', compact('books'));
     }
 
-    public function show(Book $book): Response
+    public function show(Book $book)
     {
-        return response('CatalogController@show book_id='.$book->id.' (TODO)', 200);
+        $book->load('category');
+        return view('catalog.show', compact('book'));
     }
 }

@@ -49,19 +49,25 @@
                     @endphp
 
                     <div class="col-12 col-sm-6 col-lg-3">
-                        <x-card layout="vertical" shadow="sm" hover>
-                            <x-slot:header>
-                                <div class="w-100 h-100 bg-primary-subtle d-flex align-items-center justify-content-center">
-                                    <div class="text-primary fw-semibold">COVER</div>
-                                </div>
-                            </x-slot:header>
+                        <a href="{{ route('catalog.show', $book) }}" class="text-decoration-none text-dark h-100 d-block">
+                            <x-card layout="vertical" shadow="sm" hover class="h-100">
+                                <x-slot:header>
+                                    <div class="w-100 h-100 bg-primary-subtle d-flex align-items-center justify-content-center" style="min-height: 200px;">
+                                        @if($book->file_buku)
+                                            <img src="{{ asset('storage/' . $book->file_buku) }}" class="img-fluid" alt="{{ $book->judul }}">
+                                        @else
+                                            <div class="text-primary fw-semibold">COVER</div>
+                                        @endif
+                                    </div>
+                                </x-slot:header>
 
-                            <div class="fw-semibold mb-1">{{ $book->judul }}</div>
-                            <div class="small text-secondary mb-2">{{ $book->penulis }}</div>
-                            <div class="small text-secondary mb-3">{{ Str::limit($synopsis, 90) }}</div>
+                                <div class="fw-semibold mb-1 text-truncate">{{ $book->judul }}</div>
+                                <div class="small text-secondary mb-2">{{ $book->penulis }}</div>
+                                <div class="small text-secondary mb-3">{{ Str::limit($synopsis, 90) }}</div>
 
-                            <div class="fw-semibold text-primary">{{ $rupiah($book->harga) }}</div>
-                        </x-card>
+                                <div class="fw-semibold text-primary mt-auto">{{ $rupiah($book->harga) }}</div>
+                            </x-card>
+                        </a>
                     </div>
                 @empty
                     <div class="col-12">
