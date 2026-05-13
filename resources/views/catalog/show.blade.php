@@ -11,7 +11,7 @@
         <nav aria-label="breadcrumb" class="mb-4">
             <ol class="breadcrumb small">
                 <li class="breadcrumb-item"><a href="{{ route('home') }}" class="text-secondary text-decoration-none">Home</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('catalog.index') }}" class="text-secondary text-decoration-none">{{ $book->category->nama ?? 'Kategori' }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('catalog.index') }}" class="text-secondary text-decoration-none">{{ $book->category->nama_kategori ?? 'Kategori' }}</a></li>
                 <li class="breadcrumb-item active fw-bold text-dark" aria-current="page">{{ $book->judul }}</li>
             </ol>
         </nav>
@@ -88,7 +88,7 @@
                         <div class="tab-pane fade" id="detail" role="tabpanel">
                             <div class="row g-2 small">
                                 <div class="col-4 text-secondary">Kategori</div>
-                                <div class="col-8 fw-semibold">{{ $book->category->nama ?? 'Umum' }}</div>
+                                <div class="col-8 fw-semibold">{{ $book->category->nama_kategori ?? 'Umum' }}</div>
                                 <div class="col-4 text-secondary">Tahun Terbit</div>
                                 <div class="col-8 fw-semibold">{{ $book->created_at->year }}</div>
                                 <div class="col-4 text-secondary">Format</div>
