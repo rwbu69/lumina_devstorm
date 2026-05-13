@@ -19,13 +19,13 @@
             'active' => request()->routeIs('admin.books.*'),
         ],
         [
-            'label' => 'Laporan',
-            'icon' => 'bi-bar-chart',
+            'label' => 'Laporan Penjualan',
+            'icon' => 'bi-file-earmark-text',
             'route' => 'admin.reports.index',
             'active' => request()->routeIs('admin.reports.*'),
         ],
         [
-            'label' => 'User',
+            'label' => 'Kelola User',
             'icon' => 'bi-people',
             'route' => 'admin.users.index',
             'active' => request()->routeIs('admin.users.*'),
@@ -34,13 +34,13 @@
 
     $brand = function () {
         return <<<'HTML'
-<div class="d-flex align-items-center gap-3">
-    <div class="rounded-circle" style="width:44px;height:44px;background:rgba(var(--bs-primary-rgb), .10);display:grid;place-items:center;">
-        <i class="bi bi-moon-stars-fill text-primary"></i>
+<div class="d-flex align-items-center gap-2">
+    <div class="rounded-circle bg-primary-subtle d-flex align-items-center justify-content-center" style="width:42px;height:42px; background-color: #0047ba !important;">
+        <i class="bi bi-moon-stars-fill text-white fs-4"></i>
     </div>
     <div class="lh-sm">
-        <div class="fw-semibold">Lumina Media</div>
-        <div class="small text-primary">Admin Panel</div>
+        <div class="fw-bold text-primary mb-0" style="font-size: 1.1rem; font-family: 'Playfair Display', serif;">Lumina Media</div>
+        <div class="small text-muted" style="font-size: 0.75rem;">Admin Panel</div>
     </div>
 </div>
 HTML;
@@ -123,8 +123,8 @@ HTML;
     <div class="mt-auto p-3">
         <form method="POST" action="{{ route('logout') }}">
             @csrf
-            <button type="submit" class="btn btn-outline-primary w-100 rounded-3">
-                <i class="bi bi-box-arrow-right me-2"></i>
+            <button type="submit" class="btn border-0 w-100 rounded-3 py-2 d-flex align-items-center justify-content-center gap-2" style="background-color: #e9effd; color: #1e40af; font-weight: 500;">
+                <i class="bi bi-box-arrow-left"></i>
                 Logout
             </button>
         </form>

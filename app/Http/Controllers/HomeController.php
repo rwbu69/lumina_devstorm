@@ -24,14 +24,5 @@ class HomeController extends Controller
             'dailyVerse' => $dailyVerse,
         ]);
     }
-
-    public function login()
-    {
-        return view('login');
-    }
-
-    public function register()
-    {
-        return view('register');
-    }
 }
+

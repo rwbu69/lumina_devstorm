@@ -16,26 +16,24 @@
 
     <style>
         :root {
-            --lm-sidebar-width: 280px;
+            --lm-sidebar-width: 260px;
             --lm-primary: #1a4fd9;
             --lm-accent: #f2c94c;
             --lm-bg: #fdfbf7;
+            --lm-sidebar-bg: #ffffff;
             --lm-text: #111827;
+            --lm-muted: #64748b;
 
             --bs-primary: var(--lm-primary);
             --bs-primary-rgb: 26, 79, 217;
-            --bs-warning: var(--lm-accent);
-            --bs-warning-rgb: 242, 201, 76;
             --bs-body-bg: var(--lm-bg);
             --bs-body-color: var(--lm-text);
-            --bs-link-color: var(--lm-primary);
-            --bs-link-hover-color: var(--lm-primary);
         }
 
         body {
-            background: var(--lm-bg);
+            background: #fdfbf7;
             color: var(--lm-text);
-            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, 'Noto Sans', 'Liberation Sans', sans-serif;
+            font-family: 'Inter', sans-serif;
         }
 
         h1, h2, h3, h4, h5, h6,
@@ -47,19 +45,27 @@
             position: fixed;
             inset: 0 auto 0 0;
             width: var(--lm-sidebar-width);
-            background: #ffffff;
-            border-right: 1px solid rgba(0, 0, 0, .06);
+            background: var(--lm-sidebar-bg);
+            border-right: 1px solid rgba(0, 0, 0, .05);
         }
-        .lm-main { margin-left: 0; }
-        .lm-nav-link { color: var(--lm-text); }
-        .lm-nav-link:hover { background: rgba(var(--bs-primary-rgb), .06); }
+        .lm-main { 
+            margin-left: 0; 
+            min-height: 100vh;
+        }
+        .lm-nav-link { 
+            color: var(--lm-muted); 
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .lm-nav-link:hover { 
+            color: var(--lm-primary);
+            background: rgba(var(--bs-primary-rgb), .05); 
+        }
         .lm-nav-link.active {
-            background: rgba(var(--bs-primary-rgb), .12);
-            border: 1px solid rgba(var(--bs-primary-rgb), .18);
-            color: var(--bs-primary);
+            background: #e0f2fe;
+            color: #0369a1;
         }
-        .lm-card { border: 1px solid rgba(0, 0, 0, .06); }
-        .lm-muted { color: rgba(17, 24, 39, .70); }
+        .lm-nav-link i { font-size: 1.1rem; }
         .lm-kpi-icon {
             width: 40px;
             height: 40px;

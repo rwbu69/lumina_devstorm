@@ -6,12 +6,18 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
+use App\Models\Order;
+use Illuminate\View\View;
 
 class ReportController extends Controller
 {
-    public function index(): Response
+    public function index(): View
     {
-        return response('Admin ReportController@index (TODO)', 200);
+        $orders = Order::with(['user', 'orderDetails.book'])
+            ->latest()
+            ->paginate(10);
+
+        return view('reports.index', compact('orders'));
     }
 
     public function exportPdf(): Response
