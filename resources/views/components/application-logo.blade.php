@@ -1,1 +1,1 @@
-<img src="{{ asset('images/logolumina.svg') }}" alt="Lumina Media" {{ $attributes }}>
+<img src="{{ asset('assets/img/lumina.jpeg') }}" {{ $attributes }}>

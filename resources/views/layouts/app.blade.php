@@ -1,5 +1,6 @@
 @props([
     'showSearch' => false,
+    'hideNavbar' => false,
 ])
 
 <!doctype html>
@@ -39,7 +40,9 @@
 </head>
 
 <body>
+@if (!$hideNavbar)
 <x-navbar :showSearch="$showSearch" />
+@endif
 
 <main>
     {{ $slot }}

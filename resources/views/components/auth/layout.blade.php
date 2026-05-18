@@ -21,19 +21,36 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 
-    <x-lumina.colors />
+    <style>
+        :root {
+            --lm-primary: #1d4ed8;
+            --lm-accent: #f2c94c;
+            --lm-bg: #FAF8F5;
+            --lm-text: #1e293b;
+
+            --bs-primary: var(--lm-primary);
+            --bs-primary-rgb: 29, 78, 216;
+            --bs-warning: var(--lm-accent);
+            --bs-warning-rgb: 242, 201, 76;
+            --bs-body-bg: var(--lm-bg);
+            --bs-body-color: var(--lm-text);
+            --bs-link-color: var(--lm-primary);
+            --bs-link-hover-color: var(--lm-primary);
+        }
 
     <style>
         body {
             font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, 'Noto Sans', 'Liberation Sans', sans-serif;
-            background: var(--lm-bg);
+            background-color: var(--lm-bg);
             color: var(--lm-text);
+            -webkit-font-smoothing: antialiased;
         }
 
         h1, h2, h3, h4, h5, h6,
         .display-1, .display-2, .display-3, .display-4, .display-5, .display-6,
         .navbar-brand {
             font-family: 'Playfair Display', serif;
+            color: #1e3a8a;
         }
     </style>
 </head>
