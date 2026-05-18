@@ -98,6 +98,15 @@
                 min-width: 980px;
             }
 
+            .report-scroll-hint {
+                display: none;
+                align-items: center;
+                gap: .5rem;
+                color: rgba(17, 24, 39, .58);
+                font-size: .82rem;
+                margin-top: .5rem;
+            }
+
             .report-card thead th {
                 background: #f8fafc;
                 color: #7a8594;
@@ -173,6 +182,7 @@
                 border-top: 1px solid rgba(15, 23, 42, .06);
                 color: rgba(17, 24, 39, .55);
                 font-size: .86rem;
+                flex-wrap: wrap;
             }
 
             .report-pager {
@@ -214,6 +224,35 @@
 
                 .report-export-btn {
                     align-self: flex-start;
+                }
+
+                .report-scroll-hint {
+                    display: inline-flex;
+                }
+
+                .report-footer {
+                    align-items: flex-start;
+                }
+            }
+
+            @media (max-width: 767.98px) {
+                .report-toolbar {
+                    padding: 12px;
+                }
+
+                .report-card .card-header,
+                .report-card .table thead th,
+                .report-card .table tbody td {
+                    padding-inline: 14px;
+                }
+
+                .report-pager {
+                    width: 100%;
+                    justify-content: space-between;
+                }
+
+                .report-pager .btn {
+                    flex: 1 1 0;
                 }
             }
         </style>
@@ -299,6 +338,10 @@
                         <div class="report-badge report-badge--secondary">
                             {{ $reports->count() }} data di halaman ini
                         </div>
+                    </div>
+                    <div class="report-scroll-hint">
+                        <i class="bi bi-arrow-left-right"></i>
+                        Geser kiri kanan untuk melihat kolom lain.
                     </div>
                 </x-slot:header>
 
