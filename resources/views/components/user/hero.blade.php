@@ -13,7 +13,8 @@
 <header class="position-relative" style="{{ $bgStyle }}">
     <nav class="navbar navbar-expand-lg navbar-dark bg-transparent position-absolute top-0 start-0 w-100">
         <div class="container py-3">
-            <a class="navbar-brand fw-semibold" href="{{ route('home') }}">
+            <a class="navbar-brand fw-semibold d-inline-flex align-items-center gap-2" href="{{ route('home') }}">
+                <x-application-logo style="width:20px;height:20px;" />
                 Lumina Media
             </a>
 

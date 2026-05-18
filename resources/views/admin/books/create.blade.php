@@ -11,11 +11,9 @@
 
     <div class="mt-4"></div>
 
-    <div class="card lm-card rounded-4">
-        <div class="card-body">
-            <div class="alert alert-info mb-0">
-                Form tambah buku akan ditempatkan di sini (placeholder UI).
-            </div>
+    <x-admin.card>
+        <div class="alert alert-info mb-0">
+            Form tambah buku akan ditempatkan di sini (placeholder UI).
         </div>
-    </div>
+    </x-admin.card>
 </x-admin.layout>

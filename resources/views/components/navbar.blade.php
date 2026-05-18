@@ -6,7 +6,7 @@
     <div class="container py-2">
         <a class="navbar-brand fw-semibold d-flex align-items-center gap-2" href="{{ route('home') }}">
             <span class="d-inline-flex align-items-center justify-content-center rounded-circle bg-primary-subtle" style="width:28px;height:28px;">
-                <i class="bi bi-moon-stars-fill text-primary"></i>
+                <x-application-logo class="d-block" style="width:auto;height:auto;" />
             </span>
             Lumina Media
         </a>
