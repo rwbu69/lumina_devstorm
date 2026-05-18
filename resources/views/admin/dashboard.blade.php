@@ -128,40 +128,51 @@
                 align-items: end;
             }
 
-            .dashboard-bar {
+            .dashboard-block-column {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
                 justify-content: end;
-                gap: .7rem;
+                gap: .65rem;
             }
 
-            .dashboard-bar-track {
+            .dashboard-block-stack {
                 width: 100%;
-                max-width: 72px;
-                height: 220px;
-                padding: 6px;
-                border-radius: 999px;
-                background: linear-gradient(180deg, rgba(21, 89, 199, .08), rgba(21, 89, 199, .03));
-                display: flex;
-                align-items: flex-end;
+                max-width: 76px;
+                display: grid;
+                grid-template-rows: repeat(5, 1fr);
+                gap: .28rem;
+                padding: .3rem;
+                border-radius: 18px;
+                background: rgba(21, 89, 199, .05);
+                min-height: 220px;
             }
 
-            .dashboard-bar-fill {
-                width: 100%;
-                border-radius: 999px;
+            .dashboard-block {
+                aspect-ratio: 1 / 1;
+                border-radius: 11px;
+                background: rgba(21, 89, 199, .08);
+                border: 1px solid rgba(21, 89, 199, .12);
+                transition: transform .2s ease, background-color .2s ease, box-shadow .2s ease;
+            }
+
+            .dashboard-block.is-active {
                 background: linear-gradient(180deg, #1559c7 0%, #5b8df4 100%);
-                box-shadow: 0 12px 24px rgba(21, 89, 199, .24);
-                min-height: 10px;
+                border-color: transparent;
+                box-shadow: 0 10px 18px rgba(21, 89, 199, .22);
             }
 
-            .dashboard-bar-label {
+            .dashboard-block-column:hover .dashboard-block.is-active {
+                transform: translateY(-2px);
+            }
+
+            .dashboard-block-label {
                 color: rgba(17, 24, 39, .72);
                 font-size: .82rem;
                 font-weight: 700;
             }
 
-            .dashboard-bar-amount {
+            .dashboard-block-amount {
                 color: rgba(17, 24, 39, .55);
                 font-size: .76rem;
             }
@@ -241,7 +252,7 @@
 
             @media (max-width: 767.98px) {
                 .dashboard-graph-plot {
-                    grid-template-columns: repeat(3, minmax(0, 1fr));
+                    grid-template-columns: repeat(2, minmax(0, 1fr));
                 }
 
                 .dashboard-table-card .card-header,
@@ -306,13 +317,21 @@
             <div class="dashboard-graph-area">
                 <div class="dashboard-graph-plot">
                     @foreach ($monthlyRevenue as $point)
-                        <div class="dashboard-bar">
-                            <div class="dashboard-bar-track">
-                                <div class="dashboard-bar-fill" style="height: {{ $point['height'] }}%"></div>
+                        @php
+                            $blockCount = 5;
+                            $activeBlocks = (int) round(($point['height'] / 100) * $blockCount);
+                            $activeBlocks = max(1, min($blockCount, $activeBlocks));
+                        @endphp
+
+                        <div class="dashboard-block-column">
+                            <div class="dashboard-block-stack" aria-label="{{ $point['label'] }} block chart">
+                                @for ($level = $blockCount; $level >= 1; $level--)
+                                    <div class="dashboard-block {{ $level <= $activeBlocks ? 'is-active' : '' }}"></div>
+                                @endfor
                             </div>
                             <div class="text-center">
-                                <div class="dashboard-bar-label">{{ $point['label'] }}</div>
-                                <div class="dashboard-bar-amount">{{ $point['amountLabel'] }}</div>
+                                <div class="dashboard-block-label">{{ $point['label'] }}</div>
+                                <div class="dashboard-block-amount">{{ $point['amountLabel'] }}</div>
                             </div>
                         </div>
                     @endforeach
