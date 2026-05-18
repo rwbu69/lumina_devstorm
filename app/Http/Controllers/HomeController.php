@@ -25,6 +25,21 @@ class HomeController extends Controller
         ]);
     }
 
+    public function userHome(DailyVerseService $dailyVerseService): View
+    {
+        $latestBooks = Book::query()
+            ->latest()
+            ->take(4)
+            ->get();
+
+        $dailyVerse = $dailyVerseService->getDailyVerse();
+
+        return view('home', [
+            'latestBooks' => $latestBooks,
+            'dailyVerse' => $dailyVerse,
+        ]);
+    }
+
     public function login()
     {
         return view('login');

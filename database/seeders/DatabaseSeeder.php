@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
             ['email' => 'admin@lumina.id'],
             [
                 'nama' => 'Admin Lumina',
+                'username' => 'admin',
                 'password' => Hash::make('password'),
                 'role' => 'admin',
                 'email_verified_at' => now(),
@@ -44,6 +45,7 @@ class DatabaseSeeder extends Seeder
             ['email' => 'user@lumina.id'],
             [
                 'nama' => 'User Lumina',
+                'username' => 'user',
                 'password' => Hash::make('password'),
                 'role' => 'user',
                 'email_verified_at' => now(),

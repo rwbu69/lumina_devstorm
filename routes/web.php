@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('welcome');
 Route::get('/login',[HomeController::class, 'login'])->name('login.index');
 Route::get('/register',[HomeController::class, 'register'])->name('register.index');
 
@@ -30,6 +30,7 @@ Route::get('/register',[HomeController::class, 'register'])->name('register.inde
 */
 
 Route::middleware('auth')->group(function () {
+    Route::get('/home', [HomeController::class, 'userHome'])->name('home');
     Route::get('/dashboard', [CatalogController::class, 'index'])->name('user.dashboard');
 
     Route::get('/catalog', [CatalogController::class, 'index'])->name('catalog.index');

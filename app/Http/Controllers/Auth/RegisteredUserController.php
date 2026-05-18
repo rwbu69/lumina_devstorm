@@ -31,13 +31,31 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'nama' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
+            'username' => [
+                'required',
+                'string',
+                'max:255',
+                'regex:/^[a-zA-Z0-9_]+$/',
+                'unique:'.User::class
+            ],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ], [
+            'name.required' => 'Nama wajib diisi.',
+            'username.required' => 'Nama Akun wajib diisi.',
+            'username.regex' => 'Username hanya boleh berisi huruf, angka, dan underscore.',
+            'username.unique' => 'Username ini sudah digunakan.',
+            'email.required' => 'Email wajib diisi.',
+            'email.email' => 'Format email tidak valid.',
+            'email.unique' => 'Email ini sudah digunakan.',
+            'password.required' => 'Password wajib diisi.',
+            'password.confirmed' => 'Konfirmasi password tidak cocok.',
         ]);
 
         $user = User::create([
-            'nama' => $request->nama,
+            'nama' => $request->name,
+            'username' => $request->username,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => 'user',
@@ -45,8 +63,6 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        Auth::login($user);
-
-        return redirect(route('user.dashboard', absolute: false));
+        return redirect()->route('login')->with('success', 'Registrasi berhasil, silahkan melakukan login');
     }
 }
