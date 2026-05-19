@@ -7,7 +7,9 @@
     };
 @endphp
 
-<x-app-layout>
+<x-app-layout :hideNavbar="true">
+    <x-user-navbar />
+    
     <div class="container py-5">
         {{-- A. Section Hero --}}
         <section class="py-4 py-lg-5">

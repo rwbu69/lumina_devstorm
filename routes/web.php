@@ -19,7 +19,9 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('welcome');
+Route::get('/login',[HomeController::class, 'login'])->name('login.index');
+Route::get('/register',[HomeController::class, 'register'])->name('register.index');
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +30,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 */
 
 Route::middleware('auth')->group(function () {
+    Route::get('/home', [HomeController::class, 'userHome'])->name('home');
     Route::get('/dashboard', [CatalogController::class, 'index'])->name('user.dashboard');
 
     Route::get('/catalog', [CatalogController::class, 'index'])->name('catalog.index');
@@ -51,7 +54,7 @@ Route::middleware('auth')->group(function () {
 
 Route::prefix('admin')
     ->as('admin.')
-    ->middleware(['auth', 'is_admin'])
+    ->middleware(['auth', 'role:admin'])
     ->group(function () {
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
@@ -69,5 +72,6 @@ Route::prefix('admin')
         Route::patch('/users/{user}/credentials', [AdminManageUserController::class, 'updateCredentials'])->name('users.updateCredentials');
         Route::delete('/users/{user}', [AdminManageUserController::class, 'destroy'])->name('users.destroy');
     });
+
 
 require __DIR__.'/auth.php';

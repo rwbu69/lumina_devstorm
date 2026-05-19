@@ -15,6 +15,7 @@ class Payment extends Model
         'file_bukti',
         'tanggal_upload',
         'status_verifikasi',
+        'metode_pembayaran',
     ];
 
     protected function casts(): array
