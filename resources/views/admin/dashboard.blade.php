@@ -98,6 +98,7 @@
             </div>
         </div>
 
+        <!-- 🔥 BAGIAN INI YANG SUDAH DIPERBAIKI -->
         <div class="col-12">
             <x-table :headers="['Pelanggan', 'Buku', 'Status', 'Jumlah']">
                 <x-slot:header>
@@ -107,30 +108,25 @@
                     </div>
                 </x-slot:header>
 
+                @forelse ($transaksiTerbaru as $item)
                 <tr>
-                    <td class="fw-semibold">Budi Santoso</td>
-                    <td class="text-secondary">Filosofi Teras</td>
-                    <td><x-badge status="Selesai" /></td>
-                    <td class="text-end fw-semibold">Rp 98.000</td>
+                    <td class="fw-semibold">{{ $item->nama_pelanggan }}</td>
+                    <td class="text-secondary">{{ $item->nama_buku }}</td>
+                    <td>
+                        <x-badge status="{{ $item->status }}" />
+                    </td>
+                    <td class="text-end fw-semibold">
+                        Rp {{ number_format($item->total_harga, 0, ',', '.') }}
+                    </td>
                 </tr>
+                @empty
                 <tr>
-                    <td class="fw-semibold">Siti Aminah</td>
-                    <td class="text-secondary">Laskar Pelangi</td>
-                    <td><x-badge status="Proses" /></td>
-                    <td class="text-end fw-semibold">Rp 85.000</td>
+                    <td colspan="4" class="text-center text-muted">
+                        Belum ada transaksi
+                    </td>
                 </tr>
-                <tr>
-                    <td class="fw-semibold">Andi Wijaya</td>
-                    <td class="text-secondary">Bumi Manusia</td>
-                    <td><x-badge status="Selesai" /></td>
-                    <td class="text-end fw-semibold">Rp 120.000</td>
-                </tr>
-                <tr>
-                    <td class="fw-semibold">Rina Kurnia</td>
-                    <td class="text-secondary">Dasar-Dasar Laravel 11</td>
-                    <td><x-badge status="Dibatalkan" /></td>
-                    <td class="text-end fw-semibold">Rp 150.000</td>
-                </tr>
+                @endforelse
+
             </x-table>
         </div>
     </div>

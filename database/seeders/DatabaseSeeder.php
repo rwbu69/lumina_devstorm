@@ -38,9 +38,52 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        $users = User::factory()->count(10)->create([
-            'role' => 'user',
-            'email_verified_at' => now(),
+        $users = collect([
+            User::query()->firstOrCreate(
+                ['email' => 'ahmad.fauzi@example.com'],
+                [
+                    'nama' => 'Ahmad Fauzi',
+                    'password' => Hash::make('password'),
+                    'role' => 'user',
+                    'email_verified_at' => now(),
+                ]
+            ),
+            User::query()->firstOrCreate(
+                ['email' => 'siti.aminah@example.com'],
+                [
+                    'nama' => 'Siti Aminah',
+                    'password' => Hash::make('password'),
+                    'role' => 'user',
+                    'email_verified_at' => now(),
+                ]
+            ),
+            User::query()->firstOrCreate(
+                ['email' => 'budi.santoso@example.com'],
+                [
+                    'nama' => 'Budi Santoso',
+                    'password' => Hash::make('password'),
+                    'role' => 'user',
+                    'email_verified_at' => now(),
+                ]
+            ),
+            User::query()->firstOrCreate(
+                ['email' => 'dewi.lestari@example.com'],
+                [
+                    'nama' => 'Dewi Lestari',
+                    'password' => Hash::make('password'),
+                    'role' => 'user',
+                    'email_verified_at' => now(),
+                ]
+            ),
+            User::query()->firstOrCreate(
+                ['email' => 'rian.hidayat@example.com'],
+                [
+                    'nama' => 'Rian Hidayat',
+                    'password' => Hash::make('password'),
+                    'role' => 'user',
+                    'email_verified_at' => now(),
+                ]
+            ),
         ]);
 
         $categories = Category::query()->get();
@@ -53,7 +96,7 @@ class DatabaseSeeder extends Seeder
             ->create();
 
         $orders = Order::factory()
-            ->count(20)
+            ->count(24)
             ->state(new Sequence(fn () => [
                 'user_id' => $users->random()->id,
             ]))
