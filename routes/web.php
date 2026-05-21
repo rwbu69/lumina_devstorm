@@ -36,7 +36,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/catalog/{book}', [CatalogController::class, 'show'])->name('catalog.show');
 
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
+    Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
+
+    Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+    Route::post('/orders/{order}/payment', [OrderController::class, 'uploadPayment'])->name('orders.uploadPayment');
+
     Route::get('/collection', [CollectionController::class, 'index'])->name('collection.index');
 
     // Breeze default profile routes
