@@ -20,8 +20,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [HomeController::class, 'index'])->name('welcome');
-Route::get('/login',[HomeController::class, 'login'])->name('login.index');
-Route::get('/register',[HomeController::class, 'register'])->name('register.index');
 
 /*
 |--------------------------------------------------------------------------
