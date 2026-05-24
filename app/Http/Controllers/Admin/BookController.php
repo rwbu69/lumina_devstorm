@@ -12,11 +12,15 @@ use Illuminate\View\View;
 
 class BookController extends Controller
 {
-    public function index(): View
-    {
-        return view('admin.books.index');
-    }
+  public function index(): View
+{
+    $books = Book::query()
+        ->with('category')
+        ->latest()
+        ->paginate(15);
 
+    return view('admin.books.index', compact('books'));
+}
     public function create(): View
     {
         return view('admin.books.create');
