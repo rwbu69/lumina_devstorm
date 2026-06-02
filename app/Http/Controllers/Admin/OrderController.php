@@ -6,17 +6,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
-<<<<<<< HEAD
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-=======
-use Illuminate\Http\Response;
->>>>>>> e71cd57c4ed2d881c38b83c8049cbc5c9463f208
 use Illuminate\View\View;
 
 class OrderController extends Controller
 {
-<<<<<<< HEAD
     public function index(Request $request): View
     {
         $query = Order::with(['user', 'payment']);
@@ -39,24 +34,12 @@ class OrderController extends Controller
         $orders = $query->latest()->paginate(10)->withQueryString();
 
         return view('admin.orders.index', compact('orders'));
-=======
-    public function index(): View
-    {
-        $orders = Order::query()
-            ->with(['user', 'orderDetails.book', 'payment'])
-            ->latest('tanggal_pesan')
-            ->paginate(10);
-
-        return view('admin.orders.index', [
-            'orders' => $orders,
-        ]);
->>>>>>> e71cd57c4ed2d881c38b83c8049cbc5c9463f208
     }
 
     public function verify(Order $order): RedirectResponse
     {
         $order->update(['status' => 'verified']);
-        
+
         if ($order->payment) {
             $order->payment->update(['status_verifikasi' => 'approved']);
         }
@@ -97,7 +80,7 @@ class OrderController extends Controller
         $orders = $query->latest()->get();
 
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.orders.pdf', compact('orders'));
-        
+
         $filename = 'laporan-pesanan-' . now()->format('Y-m-d') . '.pdf';
         return $pdf->download($filename);
     }
