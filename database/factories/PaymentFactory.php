@@ -23,6 +23,7 @@ class PaymentFactory extends Factory
             'file_bukti' => 'payments/'.Str::uuid().'.jpg',
             'tanggal_upload' => fake()->dateTimeBetween('-6 months', 'now'),
             'status_verifikasi' => fake()->randomElement(['pending', 'approved', 'rejected']),
+            'metode_pembayaran' => fake()->randomElement(['transfer_bank', 'cod', 'ewallet', 'virtual_account']),
         ];
     }
 }

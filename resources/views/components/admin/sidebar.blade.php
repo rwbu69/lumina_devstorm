@@ -31,20 +31,6 @@
             'active' => request()->routeIs('admin.users.*'),
         ],
     ];
-
-    $brand = function () {
-        return <<<'HTML'
-<div class="d-flex align-items-center gap-3">
-    <div class="rounded-circle" style="width:44px;height:44px;background:rgba(var(--bs-primary-rgb), .10);display:grid;place-items:center;">
-        <i class="bi bi-moon-stars-fill text-primary"></i>
-    </div>
-    <div class="lh-sm">
-        <div class="fw-semibold">Lumina Media</div>
-        <div class="small text-primary">Admin Panel</div>
-    </div>
-</div>
-HTML;
-    };
 @endphp
 
 {{-- Mobile: top bar + offcanvas --}}
@@ -54,7 +40,8 @@ HTML;
             <i class="bi bi-list"></i>
         </button>
 
-        <a class="navbar-brand fw-semibold mb-0" href="{{ route('admin.dashboard') }}">
+        <a class="navbar-brand fw-semibold mb-0 d-inline-flex align-items-center gap-2" href="{{ route('admin.dashboard') }}">
+            <x-application-logo style="width:20px;height:20px;" />
             Lumina Media
         </a>
 
@@ -74,7 +61,15 @@ HTML;
     </div>
     <div class="offcanvas-body p-0">
         <div class="p-4">
-            {!! $brand() !!}
+            <div class="d-flex align-items-center gap-3">
+                <div class="rounded-circle" style="width:44px;height:44px;background:rgba(var(--bs-primary-rgb), .10);display:grid;place-items:center;overflow:hidden;">
+                    <x-application-logo style="width:24px;height:24px;display:block;margin:0;padding:0;" />
+                </div>
+                <div class="lh-sm">
+                    <div class="fw-semibold">Lumina Media</div>
+                    <div class="small text-primary">Admin Panel</div>
+                </div>
+            </div>
         </div>
 
         <div class="px-3 pb-3">
@@ -106,7 +101,15 @@ HTML;
 {{-- Desktop: fixed sidebar --}}
 <aside class="lm-sidebar d-none d-lg-flex flex-column">
     <div class="p-4">
-        {!! $brand() !!}
+        <div class="d-flex align-items-center gap-3">
+            <div class="rounded-circle" style="width:44px;height:44px;background:rgba(var(--bs-primary-rgb), .10);display:grid;place-items:center;overflow:hidden;">
+                <x-application-logo style="width:auto;height:auto;" />
+            </div>
+            <div class="lh-sm">
+                <div class="fw-semibold">Lumina Media</div>
+                <div class="small text-primary">Admin Panel</div>
+            </div>
+        </div>
     </div>
 
     <div class="px-3">
