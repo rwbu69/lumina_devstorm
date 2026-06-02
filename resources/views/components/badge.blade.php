@@ -12,7 +12,12 @@
         default => 'secondary',
     };
 
-    $label = $status !== '' ? $status : 'Status';
+    $label = match ($normalized) {
+        'verified', 'approved', 'selesai' => 'Berhasil',
+        'pending', 'proses' => 'Proses',
+        'rejected', 'cancelled', 'batal' => 'Dibatalkan',
+        default => $status !== '' ? $status : 'Status',
+    };
 @endphp
 
 <span {{ $attributes->merge(['class' => 'badge text-bg-'.$variant]) }}>

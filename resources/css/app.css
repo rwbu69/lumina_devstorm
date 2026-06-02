@@ -1,3 +1,11 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-lumina-blue: rgb(var(--lumina-blue-rgb));
+  --color-lumina-gold: rgb(var(--lumina-gold-rgb));
+  --color-lumina-cream: rgb(var(--lumina-cream-rgb));
+  --color-lumina-white: rgb(var(--lumina-white-rgb));
+  --color-lumina-black: rgb(var(--lumina-black-rgb));
+  --color-lumina-red: rgb(var(--lumina-red-rgb));
+  --font-sans: 'Figtree', sans-serif;
+}

@@ -95,5 +95,5 @@
                 </div>
             </form>
         </div>
-    </div>
+    </x-admin.card>
 </x-admin.layout>
