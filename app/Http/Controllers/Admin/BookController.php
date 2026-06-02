@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Book;
+use App\Models\Category;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -14,7 +15,11 @@ class BookController extends Controller
 {
     public function index(): View
     {
-        $books = Book::with('category')->latest()->paginate(10);
+        $books = Book::query()
+            ->with('category')
+            ->latest()
+            ->paginate(15);
+
         return view('admin.books.index', compact('books'));
     }
 
@@ -45,6 +50,10 @@ class BookController extends Controller
 
     public function destroy(Book $book): RedirectResponse
     {
-        return redirect()->route('admin.books.index');
+        $book->orderDetails()->delete();
+        $book->delete();
+
+        return redirect()->route('admin.books.index')
+            ->with('success', "Buku \"{$book->judul}\" berhasil dihapus.");
     }
 }

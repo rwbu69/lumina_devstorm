@@ -11,27 +11,16 @@ use Illuminate\Http\RedirectResponse;
 
 class LoginController extends Controller
 {
-    /**
-     * Get the login username to be used by the controller.
-     *
-     * @return string
-     */
     public function username()
     {
         return 'username';
     }
 
-    /**
-     * Display the login view.
-     */
     public function create(): View
     {
         return view('auth.login');
     }
 
-    /**
-     * Handle an incoming authentication request.
-     */
     public function store(Request $request): RedirectResponse
     {
         $usernameField = $this->username();
@@ -54,7 +43,7 @@ class LoginController extends Controller
 
             $redirectTo = match ($request->user()?->role) {
                 'admin' => route('admin.dashboard', absolute: false),
-                default => route('home', absolute: false),
+                default => route('catalog.index', absolute: false), // DIUBAH: home → catalog.index
             };
 
             return redirect()->intended($redirectTo);
@@ -65,9 +54,6 @@ class LoginController extends Controller
         ]);
     }
 
-    /**
-     * Destroy an authenticated session.
-     */
     public function destroy(Request $request): RedirectResponse
     {
         Auth::guard('web')->logout();

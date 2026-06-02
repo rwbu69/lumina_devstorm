@@ -9,6 +9,13 @@
         </a>
     </x-admin.section-header>
 
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show rounded-4 mt-3" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
     <div class="mt-4"></div>
 
     <x-table :headers="['Judul', 'Penulis', 'Kategori', 'Harga', 'Aksi']">
@@ -16,26 +23,44 @@
         <tr>
             <td class="fw-semibold">{{ $book->judul }}</td>
             <td class="text-secondary">{{ $book->penulis }}</td>
-            <td><span class="badge text-bg-light border">{{ $book->category?->name ?? '-' }}</span></td>
+            <td><span class="badge text-bg-light border">{{ $book->category->nama ?? '-' }}</span></td>
             <td class="text-end fw-semibold">Rp {{ number_format($book->harga, 0, ',', '.') }}</td>
             <td class="text-end">
                 <a href="{{ route('admin.books.edit', $book->id) }}" class="btn btn-sm btn-light border">Edit</a>
+                <button
+                    type="button"
+                    class="btn btn-sm btn-outline-danger"
+                    data-bs-toggle="modal"
+                    data-bs-target="#deleteModal-{{ $book->id }}"
+                >
+                    Hapus
+                </button>
 
-                <form action="{{ route('admin.books.destroy', $book->id) }}" method="POST" class="d-inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus buku ini?');">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-sm btn-outline-danger">Hapus</button>
-                </form>
+                <x-confirm-modal
+                    :id="'deleteModal-' . $book->id"
+                    title="Konfirmasi Hapus"
+                    :message="'Apakah kamu yakin ingin menghapus buku &quot;' . $book->judul . '&quot;? Tindakan ini tidak dapat dibatalkan.'"
+                    :action="route('admin.books.destroy', $book->id)"
+                    method="DELETE"
+                    theme="danger"
+                />
             </td>
         </tr>
         @empty
-        <tr>
-            <td colspan="5" class="text-center">Belum ada data buku.</td>
-        </tr>
         @endforelse
+
+        <x-slot:emptyState>
+            <div class="text-center py-4">
+                <i class="bi bi-book fs-1 text-secondary"></i>
+                <div class="fw-semibold mt-2">Belum ada buku</div>
+                <div class="text-secondary small">Tambahkan buku pertama untuk ditampilkan di sini.</div>
+            </div>
+        </x-slot:emptyState>
     </x-table>
 
-    <div class="mt-4">
-        {{ $books->links() }}
-    </div>
+    @if($books->hasPages())
+        <div class="mt-3">
+            {{ $books->links() }}
+        </div>
+    @endif
 </x-admin.layout>
