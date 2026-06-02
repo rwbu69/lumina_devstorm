@@ -12,25 +12,30 @@
     <div class="mt-4"></div>
 
     <x-table :headers="['Judul', 'Penulis', 'Kategori', 'Harga', 'Aksi']">
+        @forelse($books as $book)
         <tr>
-            <td class="fw-semibold">Dasar-Dasar Laravel 11</td>
-            <td class="text-secondary">Dewi Prameswari</td>
-            <td><span class="badge text-bg-light border">Teknologi</span></td>
-            <td class="text-end fw-semibold">Rp 150.000</td>
+            <td class="fw-semibold">{{ $book->judul }}</td>
+            <td class="text-secondary">{{ $book->penulis }}</td>
+            <td><span class="badge text-bg-light border">{{ $book->category?->name ?? '-' }}</span></td>
+            <td class="text-end fw-semibold">Rp {{ number_format($book->harga, 0, ',', '.') }}</td>
             <td class="text-end">
-                <a href="#" class="btn btn-sm btn-light border">Edit</a>
-                <a href="#" class="btn btn-sm btn-outline-danger">Hapus</a>
+                <a href="{{ route('admin.books.edit', $book->id) }}" class="btn btn-sm btn-light border">Edit</a>
+
+                <form action="{{ route('admin.books.destroy', $book->id) }}" method="POST" class="d-inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus buku ini?');">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Hapus</button>
+                </form>
             </td>
         </tr>
+        @empty
         <tr>
-            <td class="fw-semibold">Strategi Bisnis Digital</td>
-            <td class="text-secondary">Rizky Maulana</td>
-            <td><span class="badge text-bg-light border">Bisnis</span></td>
-            <td class="text-end fw-semibold">Rp 95.000</td>
-            <td class="text-end">
-                <a href="#" class="btn btn-sm btn-light border">Edit</a>
-                <a href="#" class="btn btn-sm btn-outline-danger">Hapus</a>
-            </td>
+            <td colspan="5" class="text-center">Belum ada data buku.</td>
         </tr>
+        @endforelse
     </x-table>
+
+    <div class="mt-4">
+        {{ $books->links() }}
+    </div>
 </x-admin.layout>

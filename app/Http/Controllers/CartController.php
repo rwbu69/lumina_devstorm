@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Response;
+use Illuminate\View\View;
 
 class CartController extends Controller
 {
-    public function index(): Response
+    public function index(): View
     {
-        return response('CartController@index (TODO)', 200);
+        return view('cart.index');
     }
 }
