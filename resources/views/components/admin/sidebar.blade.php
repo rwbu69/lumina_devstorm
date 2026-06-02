@@ -41,7 +41,7 @@
         </button>
 
         <a class="navbar-brand fw-semibold mb-0 d-inline-flex align-items-center gap-2" href="{{ route('admin.dashboard') }}">
-            <img src="{{ asset('favicon.svg') }}" style="width:20px;height:20px;" alt="Logo" />
+            <img src="{{ asset('images/logolumina.svg') }}" style="width:20px;height:20px;" alt="Logo" />
             Lumina Media
         </a>
 
@@ -63,7 +63,7 @@
         <div class="p-4">
             <div class="d-flex align-items-center gap-3">
                 <div class="rounded-circle" style="width:44px;height:44px;background:rgba(var(--bs-primary-rgb), .10);display:grid;place-items:center;overflow:hidden;">
-                    <img src="{{ asset('favicon.svg') }}" style="width:24px;height:24px;display:block;margin:0;padding:0;" alt="Logo" />
+                    <img src="{{ asset('images/logolumina.svg') }}" style="width:24px;height:24px;display:block;margin:0;padding:0;" alt="Logo" />
                 </div>
                 <div class="lh-sm">
                     <div class="fw-semibold">Lumina Media</div>
@@ -104,7 +104,7 @@
         <div class="d-flex align-items-center justify-content-between gap-2">
             <div class="d-flex align-items-center gap-3">
                 <div class="rounded-circle" style="width:44px;height:44px;background:rgba(var(--bs-primary-rgb), .10);display:grid;place-items:center;overflow:hidden;flex-shrink:0;">
-                    <img src="{{ asset('favicon.svg') }}" style="width:24px;height:24px;display:block;margin:0;padding:0;" alt="Logo" />
+                    <img src="{{ asset('images/logolumina.svg') }}" style="width:24px;height:24px;display:block;margin:0;padding:0;" alt="Logo" />
                 </div>
                 <div class="lh-sm sidebar-text">
                     <div class="fw-semibold">Lumina Media</div>

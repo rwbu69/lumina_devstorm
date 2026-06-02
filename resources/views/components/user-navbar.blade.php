@@ -21,39 +21,35 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16 items-center">
             
-            <!-- Left Side: Logo & Brand + Search Bar -->
+            <!-- Left Side: Logo & Brand -->
             <div class="flex items-center space-x-6 flex-grow max-w-xl">
                 <!-- Brand Logo & Teks -->
                 <a class="flex items-center space-x-2 text-indigo-900 hover:text-indigo-700 transition-colors flex-shrink-0" href="{{ auth()->check() ? route('home') : route('welcome') }}">
-                    <span class="inline-flex items-center justify-content-center rounded-full bg-indigo-50 text-indigo-600 w-8 h-8 shadow-sm">
-                        <i class="bi bi-moon-stars-fill text-sm"></i>
-                    </span>
+                    <img src="{{ asset('images/logolumina.svg') }}" alt="Logo Lumina" class="w-8 h-8">
                     <span class="font-bold text-lg tracking-tight font-serif">Lumina Media</span>
                 </a>
-
-                <!-- Search Bar -->
-                <div class="relative w-full hidden sm:block">
-                    <form action="{{ auth()->check() ? route('catalog.index') : route('login') }}" method="GET">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-                            <i class="bi bi-search text-slate-400"></i>
-                        </span>
-                        <input type="text" name="q" placeholder="Cari buku..." class="w-full pl-10 pr-4 py-1.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all bg-slate-50/50 hover:bg-slate-50 focus:bg-white">
-                    </form>
-                </div>
             </div>
 
             <!-- Right Side: Nav Links, Cart Icon, Profile Avatar -->
             <div class="flex items-center space-x-6">
                 <!-- Navigation Links -->
                 <div class="hidden md:flex items-center space-x-6">
-                    <a href="{{ auth()->check() ? route('home') : route('welcome') }}" class="text-indigo-600 font-semibold text-sm transition-colors">Beranda</a>
-                    <a href="{{ auth()->check() ? route('catalog.index') : route('login') }}" class="text-slate-600 hover:text-indigo-600 font-medium text-sm transition-colors">Katalog</a>
-                    <a href="{{ auth()->check() ? route('collection.index') : route('login') }}" class="text-slate-600 hover:text-indigo-600 font-medium text-sm transition-colors">Koleksi Saya</a>
-                    <a href="#" class="text-slate-600 hover:text-indigo-600 font-medium text-sm transition-colors">Kontak</a>
+                    @auth
+                        <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'text-indigo-600 font-semibold' : 'text-slate-600 hover:text-indigo-600 font-medium' }} text-sm transition-colors">Beranda</a>
+                        <a href="{{ route('catalog.index') }}" class="{{ request()->routeIs('catalog.*') ? 'text-indigo-600 font-semibold' : 'text-slate-600 hover:text-indigo-600 font-medium' }} text-sm transition-colors">Katalog</a>
+                        <a href="{{ route('collection.index') }}" class="{{ request()->routeIs('collection.*') ? 'text-indigo-600 font-semibold' : 'text-slate-600 hover:text-indigo-600 font-medium' }} text-sm transition-colors">Koleksi Saya</a>
+                        <a href="{{ route('kontak') }}" class="{{ request()->routeIs('kontak') ? 'text-indigo-600 font-semibold' : 'text-slate-600 hover:text-indigo-600 font-medium' }} text-sm transition-colors">Kontak</a>
+                        <a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'text-indigo-600 font-semibold' : 'text-slate-600 hover:text-indigo-600 font-medium' }} text-sm transition-colors">Tentang Kami</a>
+                    @else
+                        <a href="{{ route('welcome') }}" class="{{ request()->routeIs('welcome') ? 'text-indigo-600 font-semibold' : 'text-slate-600 hover:text-indigo-600 font-medium' }} text-sm transition-colors">Beranda</a>
+                        <a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'text-indigo-600 font-semibold' : 'text-slate-600 hover:text-indigo-600 font-medium' }} text-sm transition-colors">Tentang Kami</a>
+                        <a href="{{ route('kontak') }}" class="{{ request()->routeIs('kontak') ? 'text-indigo-600 font-semibold' : 'text-slate-600 hover:text-indigo-600 font-medium' }} text-sm transition-colors">Kontak</a>
+                    @endauth
                 </div>
 
+                @auth
                 <!-- Shopping Cart Icon -->
-                <a href="{{ auth()->check() ? route('cart.index') : route('login') }}" class="text-slate-500 hover:text-indigo-600 transition-colors relative p-1.5 rounded-xl hover:bg-slate-50">
+                <a href="{{ route('cart.index') }}" class="text-slate-500 hover:text-indigo-600 transition-colors relative p-1.5 rounded-xl hover:bg-slate-50">
                     <i class="bi bi-cart3 text-xl"></i>
                     @php
                         $cartCount = session('cart') ? count(session('cart')) : 0;
@@ -62,6 +58,7 @@
                         <span class="absolute top-1 right-1 w-2.5 h-2.5 bg-rose-500 rounded-full border border-white"></span>
                     @endif
                 </a>
+                @endauth
 
                 <!-- Profile & Dropdown -->
                 <div class="relative">
