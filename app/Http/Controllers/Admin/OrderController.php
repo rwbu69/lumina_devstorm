@@ -14,7 +14,7 @@ class OrderController extends Controller
 {
     public function index(Request $request): View
     {
-        $query = Order::with(['user', 'payment']);
+        $query = Order::with(['user', 'payment', 'orderDetails.book']);
 
         // Filter by status if provided
         if ($request->has('status') && $request->status !== 'semua') {

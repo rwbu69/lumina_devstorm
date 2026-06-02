@@ -5,7 +5,7 @@
 
 <div class="d-flex align-items-start justify-content-between gap-3 flex-wrap">
     <div>
-        <h1 class="h3 fw-bold mb-1 text-primary text-bold">{{ $title }}</h1>
+        <h1 class="h2 fw-bold mb-1 text-primary text-bold">{{ $title }}</h1>
         @if ($subtitle)
             <div class="lm-muted">{{ $subtitle }}</div>
         @endif

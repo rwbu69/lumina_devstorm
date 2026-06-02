@@ -43,13 +43,58 @@ class ManageUserController extends Controller
             ->pluck('book')
             ->unique('id');
 
-        return view('admin.users.show', compact('user', 'books'));
+        $allBooks = \App\Models\Book::all();
+
+        return view('admin.users.show', compact('user', 'books', 'allBooks'));
+    }
+
+    public function update(Request $request, User $user): RedirectResponse
+    {
+        $validated = $request->validate([
+            'nama' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+            'role' => 'required|in:admin,user',
+        ]);
+
+        $user->update($validated);
+        return back()->with('success', 'Profil pengguna berhasil diperbarui.');
     }
 
     public function updateCredentials(Request $request, User $user): RedirectResponse
     {
-        // Implementation for updating credentials
-        return back()->with('success', 'Kredensial berhasil diperbarui.');
+        $request->validate([
+            'password' => 'required|min:8|confirmed'
+        ]);
+
+        $user->update([
+            'password' => bcrypt($request->password)
+        ]);
+
+        return back()->with('success', 'Password berhasil diperbarui.');
+    }
+
+    public function addAccess(Request $request, User $user): RedirectResponse
+    {
+        $request->validate([
+            'book_id' => 'required|exists:books,id'
+        ]);
+
+        $book = \App\Models\Book::findOrFail($request->book_id);
+
+        // Create a verified order to grant access
+        $order = $user->orders()->create([
+            'total_tagihan' => 0,
+            'status' => 'verified',
+            'tanggal_pesan' => now(),
+        ]);
+
+        $order->orderDetails()->create([
+            'book_id' => $book->id,
+            'jumlah' => 1,
+            'harga_saat_beli' => 0,
+        ]);
+
+        return back()->with('success', 'Akses buku berhasil ditambahkan.');
     }
 
     public function destroy(User $user): RedirectResponse

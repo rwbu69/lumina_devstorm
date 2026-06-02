@@ -13,15 +13,9 @@
     };
 
     $label = match ($normalized) {
-<<<<<<< HEAD
-        'verified', 'berhasil' => 'Berhasil',
+        'verified', 'berhasil', 'approved', 'selesai' => 'Berhasil',
         'pending', 'proses' => 'Proses',
-        'cancelled', 'dibatalkan' => 'Dibatalkan',
-=======
-        'verified', 'approved', 'selesai' => 'Berhasil',
-        'pending', 'proses' => 'Proses',
-        'rejected', 'cancelled', 'batal' => 'Dibatalkan',
->>>>>>> e71cd57c4ed2d881c38b83c8049cbc5c9463f208
+        'cancelled', 'dibatalkan', 'rejected', 'batal' => 'Dibatalkan',
         default => $status !== '' ? $status : 'Status',
     };
 @endphp

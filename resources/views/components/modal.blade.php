@@ -39,7 +39,6 @@ $maxWidth = [
         tabindex="-1"
         aria-labelledby="{{ $labelId }}"
         aria-hidden="true"
-        data-bs-backdrop="static"
     >
         <div class="modal-dialog modal-dialog-centered {{ $dialogSize }}">
             <div class="modal-content border-0 rounded-4">

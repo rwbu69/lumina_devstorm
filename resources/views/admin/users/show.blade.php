@@ -1,7 +1,8 @@
 <x-admin.layout>
     <nav aria-label="breadcrumb" class="mb-2">
         <ol class="breadcrumb mb-0" style="font-size: 0.78rem;">
-            <li class="breadcrumb-item"><a href="{{ route('admin.users.index') }}" class="text-decoration-none text-muted">Kelola User</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('admin.users.index') }}"
+                    class="text-decoration-none text-muted">Kelola User</a></li>
             <li class="breadcrumb-item active text-dark fw-medium" aria-current="page">{{ $user->nama }}</li>
         </ol>
     </nav>
@@ -13,11 +14,14 @@
             <p class="text-muted mb-0" style="font-size: 0.82rem;">Profil dan akses pengguna {{ $user->nama }}</p>
         </div>
         <div class="d-flex gap-2">
-            <button class="btn btn-white bg-white border rounded-3 px-3 py-1 shadow-sm d-flex align-items-center gap-2 btn-sm" style="font-size: 0.82rem;">
+            <button
+                class="btn btn-white bg-white border rounded-3 px-3 py-1 shadow-sm d-flex align-items-center gap-2 btn-sm"
+                style="font-size: 0.82rem;" data-bs-toggle="modal" data-bs-target="#modalResetPassword">
                 <i class="bi bi-shield-lock text-muted small"></i>
                 <span class="fw-medium">Reset Password</span>
             </button>
-            <button class="btn btn-primary px-3 py-1 rounded-3 shadow-sm d-flex align-items-center gap-2 fw-bold btn-sm" style="font-size: 0.82rem;">
+            <button class="btn btn-primary px-3 py-1 rounded-3 shadow-sm d-flex align-items-center gap-2 fw-bold btn-sm"
+                style="font-size: 0.82rem;" data-bs-toggle="modal" data-bs-target="#modalUbahProfil">
                 <i class="bi bi-pencil-square small"></i>
                 <span>Ubah Profil</span>
             </button>
@@ -30,7 +34,7 @@
             <div class="d-flex gap-4 align-items-center">
                 {{-- Avatar --}}
                 <div class="bg-light rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
-                     style="width: 72px; height: 72px; background-color: #F3F4F6;">
+                    style="width: 72px; height: 72px; background-color: #F3F4F6;">
                     <i class="bi bi-person-fill text-muted" style="font-size: 2rem;"></i>
                 </div>
 
@@ -38,30 +42,30 @@
                 <div class="flex-grow-1">
                     <div class="row g-3">
                         <div class="col-md-4">
-                            <div class="text-uppercase fw-bold text-muted mb-1" style="font-size: 0.65rem; letter-spacing: 0.06em;">Nama Lengkap</div>
+                            <div class="text-uppercase fw-bold text-muted mb-1"
+                                style="font-size: 0.65rem; letter-spacing: 0.06em;">Nama Lengkap</div>
                             <div class="fw-bold text-dark" style="font-size: 0.9rem;">{{ $user->nama }}</div>
                         </div>
                         <div class="col-md-4">
-                            <div class="text-uppercase fw-bold text-muted mb-1" style="font-size: 0.65rem; letter-spacing: 0.06em;">Email</div>
+                            <div class="text-uppercase fw-bold text-muted mb-1"
+                                style="font-size: 0.65rem; letter-spacing: 0.06em;">Email</div>
                             <div class="fw-medium text-dark" style="font-size: 0.85rem;">{{ $user->email }}</div>
                         </div>
                         <div class="col-md-4">
-                            <div class="text-uppercase fw-bold text-muted mb-1" style="font-size: 0.65rem; letter-spacing: 0.06em;">Peran Akses</div>
-                            <span class="badge rounded-pill px-3 py-1 fw-bold" style="background-color: #E8F0FE; color: #1a4fd9; font-size: 0.72rem;">
+                            <div class="text-uppercase fw-bold text-muted mb-1"
+                                style="font-size: 0.65rem; letter-spacing: 0.06em;">Peran Akses</div>
+                            <span class="badge rounded-pill px-3 py-1 fw-bold"
+                                style="background-color: #E8F0FE; color: #1a4fd9; font-size: 0.72rem;">
                                 {{ strtoupper($user->role) }}
                             </span>
                         </div>
                         <div class="col-md-4">
-                            <div class="text-uppercase fw-bold text-muted mb-1" style="font-size: 0.65rem; letter-spacing: 0.06em;">Tanggal Bergabung</div>
-                            <div class="fw-medium text-dark" style="font-size: 0.85rem;">{{ $user->created_at->format('d F Y') }}</div>
+                            <div class="text-uppercase fw-bold text-muted mb-1"
+                                style="font-size: 0.65rem; letter-spacing: 0.06em;">Tanggal Bergabung</div>
+                            <div class="fw-medium text-dark" style="font-size: 0.85rem;">
+                                {{ $user->created_at->format('d F Y') }}</div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="text-uppercase fw-bold text-muted mb-1" style="font-size: 0.65rem; letter-spacing: 0.06em;">Password</div>
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="fw-bold text-dark" style="font-size: 0.85rem; letter-spacing: 0.1em;">••••••••••••</span>
-                                <i class="bi bi-eye text-primary small" style="cursor: pointer;"></i>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </div>
@@ -72,7 +76,9 @@
     <div class="mb-3">
         <div class="d-flex justify-content-between align-items-center mb-2">
             <h6 class="fw-bold text-dark mb-0">Akses Buku</h6>
-            <button class="btn btn-sm px-3 py-1 rounded-3 fw-bold d-flex align-items-center gap-1" style="background-color: #E8F0FE; color: #1a4fd9; font-size: 0.78rem;">
+            <button class="btn btn-sm px-3 py-1 rounded-3 fw-bold d-flex align-items-center gap-1"
+                style="background-color: #E8F0FE; color: #1a4fd9; font-size: 0.78rem;" data-bs-toggle="modal"
+                data-bs-target="#modalTambahAkses">
                 <i class="bi bi-journal-plus small"></i>
                 <span>Tambah Akses</span>
             </button>
@@ -86,21 +92,28 @@
                             <div class="card border rounded-3 bg-light h-100" style="border-color: #eee !important;">
                                 <div class="card-body p-2">
                                     <div class="d-flex gap-2 align-items-start">
-                                        <div class="rounded-2 overflow-hidden flex-shrink-0" style="width: 42px; height: 58px; background-color: #e5e7eb;">
-                                            @if($book->cover_image)
-                                                <img src="{{ asset('storage/' . $book->cover_image) }}" class="w-100 h-100" style="object-fit: cover;">
+                                        <div class="rounded-2 overflow-hidden flex-shrink-0"
+                                            style="width: 42px; height: 58px; background-color: #e5e7eb;">
+                                            @if ($book->cover_image)
+                                                <img src="{{ asset('storage/' . $book->cover_image) }}"
+                                                    class="w-100 h-100" style="object-fit: cover;">
                                             @else
-                                                <div class="w-100 h-100 d-flex align-items-center justify-content-center text-muted">
+                                                <div
+                                                    class="w-100 h-100 d-flex align-items-center justify-content-center text-muted">
                                                     <i class="bi bi-book small"></i>
                                                 </div>
                                             @endif
                                         </div>
                                         <div class="flex-grow-1 overflow-hidden">
-                                            <div class="fw-bold text-dark text-truncate" style="font-size: 0.8rem;">{{ $book->judul }}</div>
-                                            <div class="text-muted text-truncate" style="font-size: 0.7rem;">{{ $book->id_buku ?? 'BUKU-' . $book->id }}</div>
+                                            <div class="fw-bold text-dark text-truncate" style="font-size: 0.8rem;">
+                                                {{ $book->judul }}</div>
+                                            <div class="text-muted text-truncate" style="font-size: 0.7rem;">
+                                                {{ $book->id_buku ?? 'BUKU-' . $book->id }}</div>
                                             <div class="d-flex justify-content-between align-items-center mt-1">
-                                                <span class="text-success fw-bold" style="font-size: 0.68rem;">● AKTIF</span>
-                                                <button class="btn btn-link text-danger p-0 border-0" style="font-size: 0.75rem;">
+                                                <span class="text-success fw-bold" style="font-size: 0.68rem;">●
+                                                    AKTIF</span>
+                                                <button class="btn btn-link text-danger p-0 border-0"
+                                                    style="font-size: 0.75rem;">
                                                     <i class="bi bi-trash"></i>
                                                 </button>
                                             </div>
@@ -125,23 +138,178 @@
         <div class="card-body px-4 py-3 d-flex justify-content-between align-items-center">
             <div>
                 <div class="fw-bold text-danger mb-0" style="font-size: 0.85rem;">Hapus Akun Pengguna</div>
-                <div class="text-danger opacity-75" style="font-size: 0.75rem;">Tindakan ini permanen. Semua data akan dihapus.</div>
+                <div class="text-danger opacity-75" style="font-size: 0.75rem;">Tindakan ini permanen. Semua data akan
+                    dihapus.</div>
             </div>
-            <form action="{{ route('admin.users.destroy', $user) }}" method="POST"
-                  onsubmit="return confirm('Apakah Anda yakin ingin menghapus user ini?')">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn btn-outline-danger px-3 py-1 rounded-3 fw-bold bg-white btn-sm" style="font-size: 0.8rem;">
-                    Hapus Akun
-                </button>
-            </form>
+            <button type="button" class="btn btn-outline-danger px-3 py-1 rounded-3 fw-bold bg-white btn-sm"
+                style="font-size: 0.8rem;" data-bs-toggle="modal" data-bs-target="#deleteUserModal">
+                Hapus Akun
+            </button>
+        </div>
+    </div>
+
+    <x-confirm-modal id="deleteUserModal" title="Hapus Akun Pengguna" :message="'Apakah Anda yakin ingin menghapus akun \'' .
+        $user->nama .
+        '\'? Tindakan ini permanen dan semua data akan dihapus.'" :action="route('admin.users.destroy', $user)"
+        method="DELETE" theme="danger" />
+
+    {{-- Modal Reset Password --}}
+    <div class="modal fade" id="modalResetPassword" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+                <div class="modal-header border-bottom-0 bg-light px-4 py-3">
+                    <h5 class="modal-title fw-bold text-primary" style="font-size: 1.1rem;">Reset Password</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route('admin.users.updateCredentials', $user) }}" method="POST">
+                    @csrf
+                    @method('PATCH')
+                    <div class="modal-body px-4 py-4" style="background-color: #F8FAFC;">
+                        <div class="mb-3">
+                            <label class="form-label x-small text-muted fw-bold mb-1">Password Baru</label>
+                            <div class="input-group">
+                                <input type="password" name="password" id="inputResetPassword" class="form-control"
+                                    required minlength="8" placeholder="Masukkan password baru">
+                                <button class="btn btn-outline-secondary bg-white" type="button"
+                                    id="btnToggleResetPassword">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="mb-0">
+                            <label class="form-label x-small text-muted fw-bold mb-1">Konfirmasi Password</label>
+                            <input type="password" name="password_confirmation" id="inputConfirmPassword"
+                                class="form-control" required minlength="8" placeholder="Ulangi password baru">
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top-0 px-4 py-3 bg-white">
+                        <button type="button" class="btn btn-light border px-4 py-2 rounded-3 fw-bold small"
+                            data-bs-dismiss="modal">Batal</button>
+                        <button type="submit"
+                            class="btn btn-primary px-4 py-2 rounded-3 fw-bold small shadow-sm">Simpan
+                            Password</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {{-- Modal Ubah Profil --}}
+    <div class="modal fade" id="modalUbahProfil" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+                <div class="modal-header border-bottom-0 bg-light px-4 py-3">
+                    <h5 class="modal-title fw-bold text-primary" style="font-size: 1.1rem;">Ubah Profil</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route('admin.users.update', $user) }}" method="POST">
+                    @csrf
+                    @method('PATCH')
+                    <div class="modal-body px-4 py-4" style="background-color: #F8FAFC;">
+                        <div class="mb-3">
+                            <label class="form-label x-small text-muted fw-bold mb-1">Nama Lengkap</label>
+                            <input type="text" name="nama" class="form-control" value="{{ $user->nama }}"
+                                required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label x-small text-muted fw-bold mb-1">Email</label>
+                            <input type="email" name="email" class="form-control" value="{{ $user->email }}"
+                                required>
+                        </div>
+                        <div class="mb-0">
+                            <label class="form-label x-small text-muted fw-bold mb-1">Peran Akses</label>
+                            <select name="role" class="form-select" required>
+                                <option value="user" {{ $user->role == 'user' ? 'selected' : '' }}>USER</option>
+                                <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>ADMIN</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top-0 px-4 py-3 bg-white">
+                        <button type="button" class="btn btn-light border px-4 py-2 rounded-3 fw-bold small"
+                            data-bs-dismiss="modal">Batal</button>
+                        <button type="submit"
+                            class="btn btn-primary px-4 py-2 rounded-3 fw-bold small shadow-sm">Simpan Profil</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {{-- Modal Tambah Akses --}}
+    <div class="modal fade" id="modalTambahAkses" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4">
+                <div class="modal-header border-bottom-0 bg-light px-4 py-3">
+                    <h5 class="modal-title fw-bold text-primary" style="font-size: 1.1rem;">Tambah Akses Buku</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route('admin.users.addAccess', $user) }}" method="POST">
+                    @csrf
+                    <div class="modal-body px-4 py-4" style="background-color: #F8FAFC;">
+                        <p class="small text-muted mb-3">Pilih buku untuk diberikan akses. Buku yang ditambahkan akan
+                            dianggap telah berhasil dibayar oleh user ini.</p>
+                        <div class="mb-0">
+                            <label class="form-label x-small text-muted fw-bold mb-1">Pilih Buku</label>
+                            <select name="book_id" class="form-select" required>
+                                <option value="">Pilih Buku...</option>
+                                @foreach ($allBooks as $bookItem)
+                                    <option value="{{ $bookItem->id }}">{{ $bookItem->judul }} (Rp
+                                        {{ number_format($bookItem->harga, 0, ',', '.') }})</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top-0 px-4 py-3 bg-white">
+                        <button type="button" class="btn btn-light border px-4 py-2 rounded-3 fw-bold small"
+                            data-bs-dismiss="modal">Batal</button>
+                        <button type="submit"
+                            class="btn btn-primary px-4 py-2 rounded-3 fw-bold small shadow-sm">Izinkan Akses</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
     @push('styles')
-    <style>
-        .cursor-pointer { cursor: pointer; }
-        .breadcrumb-item + .breadcrumb-item::before { content: ">"; opacity: 0.5; }
-    </style>
+        <style>
+            .cursor-pointer {
+                cursor: pointer;
+            }
+
+            .breadcrumb-item+.breadcrumb-item::before {
+                content: ">";
+                opacity: 0.5;
+            }
+
+            .x-small {
+                font-size: 0.75rem;
+            }
+        </style>
+    @endpush
+
+    @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+
+
+                // Toggle Input Password di Modal Reset
+                const btnToggleReset = document.getElementById('btnToggleResetPassword');
+                const inputReset = document.getElementById('inputResetPassword');
+                const inputConfirm = document.getElementById('inputConfirmPassword');
+
+                btnToggleReset.addEventListener('click', function() {
+                    const type = inputReset.getAttribute('type') === 'password' ? 'text' : 'password';
+                    inputReset.setAttribute('type', type);
+                    inputConfirm.setAttribute('type', type);
+
+                    const icon = this.querySelector('i');
+                    if (type === 'text') {
+                        icon.classList.replace('bi-eye', 'bi-eye-slash');
+                    } else {
+                        icon.classList.replace('bi-eye-slash', 'bi-eye');
+                    }
+                });
+            });
+        </script>
     @endpush
 </x-admin.layout>

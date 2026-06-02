@@ -41,7 +41,7 @@
         </button>
 
         <a class="navbar-brand fw-semibold mb-0 d-inline-flex align-items-center gap-2" href="{{ route('admin.dashboard') }}">
-            <x-application-logo style="width:20px;height:20px;" />
+            <img src="{{ asset('favicon.svg') }}" style="width:20px;height:20px;" alt="Logo" />
             Lumina Media
         </a>
 
@@ -63,7 +63,7 @@
         <div class="p-4">
             <div class="d-flex align-items-center gap-3">
                 <div class="rounded-circle" style="width:44px;height:44px;background:rgba(var(--bs-primary-rgb), .10);display:grid;place-items:center;overflow:hidden;">
-                    <x-application-logo style="width:24px;height:24px;display:block;margin:0;padding:0;" />
+                    <img src="{{ asset('favicon.svg') }}" style="width:24px;height:24px;display:block;margin:0;padding:0;" alt="Logo" />
                 </div>
                 <div class="lh-sm">
                     <div class="fw-semibold">Lumina Media</div>
@@ -101,14 +101,19 @@
 {{-- Desktop: fixed sidebar --}}
 <aside class="lm-sidebar d-none d-lg-flex flex-column">
     <div class="p-4">
-        <div class="d-flex align-items-center gap-3">
-            <div class="rounded-circle" style="width:44px;height:44px;background:rgba(var(--bs-primary-rgb), .10);display:grid;place-items:center;overflow:hidden;">
-                <x-application-logo style="width:auto;height:auto;" />
+        <div class="d-flex align-items-center justify-content-between gap-2">
+            <div class="d-flex align-items-center gap-3">
+                <div class="rounded-circle" style="width:44px;height:44px;background:rgba(var(--bs-primary-rgb), .10);display:grid;place-items:center;overflow:hidden;flex-shrink:0;">
+                    <img src="{{ asset('favicon.svg') }}" style="width:24px;height:24px;display:block;margin:0;padding:0;" alt="Logo" />
+                </div>
+                <div class="lh-sm sidebar-text">
+                    <div class="fw-semibold">Lumina Media</div>
+                    <div class="small text-primary">Admin Panel</div>
+                </div>
             </div>
-            <div class="lh-sm">
-                <div class="fw-semibold">Lumina Media</div>
-                <div class="small text-primary">Admin Panel</div>
-            </div>
+            <button class="btn btn-sm btn-link text-muted p-0 text-decoration-none" id="sidebarToggleBtn">
+                <i class="bi bi-layout-sidebar"></i>
+            </button>
         </div>
     </div>
 
@@ -126,9 +131,9 @@
     <div class="mt-auto p-3">
         <form method="POST" action="{{ route('logout') }}">
             @csrf
-            <button type="submit" class="btn btn-outline-primary w-100 rounded-3">
-                <i class="bi bi-box-arrow-right me-2"></i>
-                Logout
+            <button type="submit" class="btn btn-outline-primary w-100 rounded-3 btn-logout d-flex align-items-center gap-2 justify-content-center">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Logout</span>
             </button>
         </form>
     </div>

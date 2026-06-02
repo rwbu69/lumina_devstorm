@@ -24,6 +24,14 @@ return Application::configure(basePath: dirname(__DIR__))
 
             return route('login');
         });
+
+        $middleware->redirectUsersTo(function (Request $request): string {
+            if ($request->user()?->role === 'admin') {
+                return route('admin.dashboard');
+            }
+
+            return route('catalog.index');
+        });
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

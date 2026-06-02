@@ -74,6 +74,8 @@ Route::prefix('admin')
 
         Route::get('/users', [AdminManageUserController::class, 'index'])->name('users.index');
         Route::get('/users/{user}', [AdminManageUserController::class, 'show'])->name('users.show');
+        Route::patch('/users/{user}', [AdminManageUserController::class, 'update'])->name('users.update');
+        Route::post('/users/{user}/access', [AdminManageUserController::class, 'addAccess'])->name('users.addAccess');
         Route::patch('/users/{user}/credentials', [AdminManageUserController::class, 'updateCredentials'])->name('users.updateCredentials');
         Route::delete('/users/{user}', [AdminManageUserController::class, 'destroy'])->name('users.destroy');
     });
