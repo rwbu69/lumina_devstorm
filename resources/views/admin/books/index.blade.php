@@ -176,7 +176,13 @@
                             <tr class="border-bottom">
                                 <td class="px-3 py-3" style="background-color: #F8FAFC;">
                                     <div class="d-flex align-items-center gap-3">
-                                        <div class="book-cover">COVER</div>
+                                        @if($book->cover_buku)
+                                            <div class="book-cover overflow-hidden bg-transparent border border-slate-200" style="padding: 0;">
+                                                <img src="{{ asset('storage/' . $book->cover_buku) }}" alt="Cover" class="w-100 h-100" style="object-fit: cover;">
+                                            </div>
+                                        @else
+                                            <div class="book-cover">COVER</div>
+                                        @endif
                                         <span class="fw-bold text-dark" style="font-size: 1rem;">{{ $book->judul }}</span>
                                     </div>
                                 </td>
@@ -277,12 +283,18 @@
                                 <label class="form-label x-small text-muted fw-bold mb-1">Sinopsis</label>
                                 <textarea name="sinopsis" class="form-control" rows="3"></textarea>
                             </div>
-                            <div class="col-md-12">
-                                <label class="form-label x-small text-muted fw-bold mb-1">Upload Cover Baru</label>
-                                <input type="file" name="file_buku" class="form-control" accept="image/*" onchange="previewImage(this, 'previewTambah')">
+                            <div class="col-md-6">
+                                <label class="form-label x-small text-muted fw-bold mb-1">Upload Cover Buku</label>
+                                <input type="file" name="cover_buku" class="form-control" accept="image/jpeg,image/png,image/webp,image/jpg" onchange="previewImage(this, 'previewTambah')">
+                                <small class="text-muted d-block mt-1">Format: JPG, PNG, WEBP (Maks 2MB)</small>
                                 <div class="mt-2">
                                     <img id="previewTambah" src="" class="img-thumbnail rounded-3" style="max-height: 120px; object-fit: cover; display:none;">
                                 </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label x-small text-muted fw-bold mb-1">Upload File E-Book (PDF)</label>
+                                <input type="file" name="file_buku" class="form-control" accept="application/pdf">
+                                <small class="text-muted d-block mt-1">Format: PDF (Maks 10MB)</small>
                             </div>
                         </div>
                     </div>
@@ -347,12 +359,21 @@
                                     <label class="form-label x-small text-muted fw-bold mb-1">Sinopsis</label>
                                     <textarea name="sinopsis" class="form-control" rows="3">{{ $book->sinopsis }}</textarea>
                                 </div>
-                                <div class="col-md-12">
+                                <div class="col-md-6">
                                     <label class="form-label x-small text-muted fw-bold mb-1">Upload Cover Baru (Opsional)</label>
-                                    <input type="file" name="file_buku" class="form-control" accept="image/*" onchange="previewImage(this, 'previewEdit{{ $book->id }}')">
+                                    <input type="file" name="cover_buku" class="form-control" accept="image/jpeg,image/png,image/webp,image/jpg" onchange="previewImage(this, 'previewEdit{{ $book->id }}')">
+                                    <small class="text-muted d-block mt-1">Format: JPG, PNG, WEBP (Maks 2MB)</small>
                                     <div class="mt-2">
-                                        <img id="previewEdit{{ $book->id }}" src="{{ $book->file_buku ? asset('storage/' . $book->file_buku) : '' }}" class="img-thumbnail rounded-3" style="max-height: 120px; object-fit: cover; {{ $book->file_buku ? '' : 'display:none;' }}">
+                                        <img id="previewEdit{{ $book->id }}" src="{{ $book->cover_buku ? asset('storage/' . $book->cover_buku) : '' }}" class="img-thumbnail rounded-3" style="max-height: 120px; object-fit: cover; {{ $book->cover_buku ? '' : 'display:none;' }}">
                                     </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label x-small text-muted fw-bold mb-1">Upload File E-Book PDF Baru (Opsional)</label>
+                                    <input type="file" name="file_buku" class="form-control" accept="application/pdf">
+                                    <small class="text-muted d-block mt-1">Format: PDF (Maks 10MB)</small>
+                                    @if($book->file_buku)
+                                        <div class="mt-2 text-success small"><i class="bi bi-check-circle-fill me-1"></i> File PDF tersedia.</div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -378,8 +399,10 @@
                 }
                 reader.readAsDataURL(input.files[0]);
             } else {
-                preview.src = '';
-                preview.style.display = 'none';
+                if (!preview.src.includes('storage')) {
+                    preview.src = '';
+                    preview.style.display = 'none';
+                }
             }
         }
     </script>

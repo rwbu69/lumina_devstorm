@@ -49,11 +49,16 @@ class BookController extends Controller
             'harga' => 'required|numeric|min:0',
             'stok' => 'required|integer|min:0',
             'sinopsis' => 'nullable|string',
-            'file_buku' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'file_buku' => 'nullable|file|mimes:pdf|max:10240',
+            'cover_buku' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
         if ($request->hasFile('file_buku')) {
             $validated['file_buku'] = $request->file('file_buku')->store('books', 'public');
+        }
+
+        if ($request->hasFile('cover_buku')) {
+            $validated['cover_buku'] = $request->file('cover_buku')->store('covers', 'public');
         }
 
         Book::create($validated);
@@ -80,7 +85,8 @@ class BookController extends Controller
             'harga' => 'required|numeric|min:0',
             'stok' => 'required|integer|min:0',
             'sinopsis' => 'nullable|string',
-            'file_buku' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'file_buku' => 'nullable|file|mimes:pdf|max:10240',
+            'cover_buku' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
         if ($request->hasFile('file_buku')) {
@@ -88,6 +94,13 @@ class BookController extends Controller
                 \Illuminate\Support\Facades\Storage::disk('public')->delete($book->file_buku);
             }
             $validated['file_buku'] = $request->file('file_buku')->store('books', 'public');
+        }
+
+        if ($request->hasFile('cover_buku')) {
+            if ($book->cover_buku) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($book->cover_buku);
+            }
+            $validated['cover_buku'] = $request->file('cover_buku')->store('covers', 'public');
         }
 
         $book->update($validated);

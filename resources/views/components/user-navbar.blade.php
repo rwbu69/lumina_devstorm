@@ -17,7 +17,7 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-<nav class="bg-white border-b border-slate-200 sticky top-0 z-50 font-sans shadow-sm" x-data="{ open: false }">
+<nav class="bg-white border-b border-slate-200 sticky top-0 z-[1050] font-sans shadow-sm" x-data="{ open: false }">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16 items-center">
             
@@ -49,15 +49,36 @@
 
                 @auth
                 <!-- Shopping Cart Icon -->
-                <a href="{{ route('cart.index') }}" class="text-slate-500 hover:text-indigo-600 transition-colors relative p-1.5 rounded-xl hover:bg-slate-50">
-                    <i class="bi bi-cart3 text-xl"></i>
-                    @php
-                        $cartCount = session('cart') ? count(session('cart')) : 0;
-                    @endphp
-                    @if ($cartCount > 0)
-                        <span class="absolute top-1 right-1 w-2.5 h-2.5 bg-rose-500 rounded-full border border-white"></span>
-                    @endif
-                </a>
+                <div class="relative" x-data="{ 
+                    count: {{ session('cart') ? count(session('cart')) : 0 }}, 
+                    animate: false,
+                    showHover: false
+                }"
+                @cart-updated.window="count = $event.detail.count; animate = true; setTimeout(() => animate = false, 300); showHover = true; setTimeout(() => showHover = false, 3000)">
+                    <a href="{{ route('cart.index') }}" 
+                       @mouseenter="showHover = true" @mouseleave="showHover = false"
+                       class="text-slate-500 hover:text-indigo-600 transition-all duration-300 relative p-1.5 rounded-xl hover:bg-slate-50 flex items-center justify-center"
+                       :class="animate ? 'scale-125 text-indigo-600' : ''">
+                        <i class="bi bi-cart3 text-xl"></i>
+                        <template x-if="count > 0">
+                            <span class="absolute -top-1 -right-1 w-4 h-4 bg-rose-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full border border-white shadow-sm transition-transform duration-300" x-text="count"
+                                  :class="animate ? 'scale-150' : 'scale-100'"></span>
+                        </template>
+                    </a>
+                    
+                    <!-- Hover Menu / Notification -->
+                    <div x-show="showHover && count > 0" 
+                         x-transition:enter="transition ease-out duration-200"
+                         x-transition:enter-start="opacity-0 translate-y-2"
+                         x-transition:enter-end="opacity-100 translate-y-0"
+                         x-transition:leave="transition ease-in duration-150"
+                         x-transition:leave-start="opacity-100 translate-y-0"
+                         x-transition:leave-end="opacity-0 translate-y-2"
+                         class="absolute right-0 top-full mt-2 w-48 bg-slate-800 text-white text-xs font-medium rounded-lg shadow-xl p-3 text-center z-50 pointer-events-none" style="display: none;">
+                        Ada <span class="font-bold text-rose-400" x-text="count"></span> buku di keranjang Anda.
+                        <div class="absolute -top-1 right-3 w-2 h-2 bg-slate-800 rotate-45"></div>
+                    </div>
+                </div>
                 @endauth
 
                 <!-- Profile & Dropdown -->
@@ -78,7 +99,7 @@
                              x-transition:leave="transition ease-in duration-75"
                              x-transition:leave-start="transform opacity-100 scale-100"
                              x-transition:leave-end="transform opacity-0 scale-95"
-                             class="absolute right-0 top-full mt-3 w-56 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden z-50"
+                             class="absolute right-0 top-full mt-3 w-56 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden z-[1050]"
                              style="display: none;">
                             
                             <!-- Account Info -->

@@ -38,6 +38,23 @@ class CatalogController extends Controller
         ]);
     }
 
+    public function searchPreview(Request $request)
+    {
+        $q = $request->input('q');
+        if (!$q) {
+            return response()->json([]);
+        }
+
+        $books = Book::query()
+            ->with('category')
+            ->where('judul', 'like', "%{$q}%")
+            ->orWhere('penulis', 'like', "%{$q}%")
+            ->take(5)
+            ->get();
+
+        return response()->json($books);
+    }
+
     public function show(Book $book, CartService $cartService): View
     {
         $book->load('category');

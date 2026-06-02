@@ -38,6 +38,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [CatalogController::class, 'index'])->name('user.dashboard');
 
     Route::get('/catalog', [CatalogController::class, 'index'])->name('catalog.index');
+    Route::get('/catalog/search-preview', [CatalogController::class, 'searchPreview'])->name('catalog.searchPreview');
     Route::get('/catalog/{book}', [CatalogController::class, 'show'])->name('catalog.show');
 
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
@@ -49,6 +50,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/orders/{order}/payment', [OrderController::class, 'uploadPayment'])->name('orders.uploadPayment');
 
     Route::get('/collection', [CollectionController::class, 'index'])->name('collection.index');
+    Route::get('/collection/{book}/download', [CollectionController::class, 'download'])->name('collection.download');
+    Route::get('/collection/{book}/read', [CollectionController::class, 'read'])->name('collection.read');
 
     // Breeze default profile routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
