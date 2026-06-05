@@ -24,13 +24,17 @@ Route::get('/register', [HomeController::class, 'register'])->name('register.ind
 */
 
 Route::middleware('auth')->group(function () {
+
     Route::get('/dashboard', [CatalogController::class, 'index'])->name('user.dashboard');
 
     Route::get('/catalog', [CatalogController::class, 'index'])->name('catalog.index');
     Route::get('/catalog/{book}', [CatalogController::class, 'show'])->name('catalog.show');
 
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
+
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+
     Route::get('/collection', [CollectionController::class, 'index'])->name('collection.index');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -60,8 +64,6 @@ Route::prefix('admin')
         Route::get('/reports/export-pdf', [AdminReportController::class, 'exportPdf'])->name('reports.exportPdf');
 
         Route::get('/users', [AdminManageUserController::class, 'index'])->name('users.index');
-
-        // TAMBAHKAN INI
         Route::get('/users/{user}', [AdminManageUserController::class, 'show'])->name('users.show');
 
         Route::patch('/users/{user}/credentials', [AdminManageUserController::class, 'updateCredentials'])->name('users.updateCredentials');
