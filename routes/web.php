@@ -13,13 +13,9 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Public Routes (Guest only)
-|--------------------------------------------------------------------------
-*/
-
-Route::get('/', [HomeController::class, 'index'])->name('welcome');
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/login', [HomeController::class, 'login'])->name('login.index');
+Route::get('/register', [HomeController::class, 'register'])->name('register.index');
 
 /*
 |--------------------------------------------------------------------------
@@ -28,23 +24,15 @@ Route::get('/', [HomeController::class, 'index'])->name('welcome');
 */
 
 Route::middleware('auth')->group(function () {
-    Route::get('/home', [HomeController::class, 'userHome'])->name('home');
     Route::get('/dashboard', [CatalogController::class, 'index'])->name('user.dashboard');
 
     Route::get('/catalog', [CatalogController::class, 'index'])->name('catalog.index');
     Route::get('/catalog/{book}', [CatalogController::class, 'show'])->name('catalog.show');
 
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-    Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
-    Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
-
-    Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
-    Route::post('/orders/{order}/payment', [OrderController::class, 'uploadPayment'])->name('orders.uploadPayment');
-
     Route::get('/collection', [CollectionController::class, 'index'])->name('collection.index');
 
-    // Breeze default profile routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -60,11 +48,10 @@ Route::prefix('admin')
     ->as('admin.')
     ->middleware(['auth', 'role:admin'])
     ->group(function () {
+
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
         Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
-        Route::patch('/orders/{order}/verify', [AdminOrderController::class, 'verify'])->name('orders.verify');
-        Route::patch('/orders/{order}/reject', [AdminOrderController::class, 'reject'])->name('orders.reject');
         Route::get('/orders/export-pdf', [AdminOrderController::class, 'exportPdf'])->name('orders.exportPdf');
 
         Route::resource('/books', AdminBookController::class);
@@ -73,12 +60,13 @@ Route::prefix('admin')
         Route::get('/reports/export-pdf', [AdminReportController::class, 'exportPdf'])->name('reports.exportPdf');
 
         Route::get('/users', [AdminManageUserController::class, 'index'])->name('users.index');
+
+        // TAMBAHKAN INI
         Route::get('/users/{user}', [AdminManageUserController::class, 'show'])->name('users.show');
-        Route::patch('/users/{user}', [AdminManageUserController::class, 'update'])->name('users.update');
-        Route::post('/users/{user}/access', [AdminManageUserController::class, 'addAccess'])->name('users.addAccess');
+
         Route::patch('/users/{user}/credentials', [AdminManageUserController::class, 'updateCredentials'])->name('users.updateCredentials');
+
         Route::delete('/users/{user}', [AdminManageUserController::class, 'destroy'])->name('users.destroy');
     });
-
 
 require __DIR__.'/auth.php';
