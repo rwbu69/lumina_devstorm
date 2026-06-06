@@ -1,157 +1,103 @@
 <x-auth.layout title="Masuk">
-    <div class="card border-0 shadow-lg overflow-hidden glass-card rounded-5" style="max-width: 420px; margin: auto; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.5);">
-        <div class="card-body p-4 p-md-5">
-            <x-auth.header
-                title="Masuk"
-                subtitle="Selamat datang kembali di Lumina"
-            />
+    <div class="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden px-8 py-10">
+        <x-auth.header
+            title="Masuk"
+            subtitle="Selamat datang kembali"
+        />
 
-            @if (session('status'))
-                <div class="alert alert-success border-0 rounded-4" role="alert">
-                    {{ session('status') }}
-                </div>
-            @endif
+        @if (session('status'))
+            <div class="mb-4 bg-emerald-50 text-emerald-600 border border-emerald-200 px-4 py-3 rounded-xl text-sm font-medium">
+                {{ session('status') }}
+            </div>
+        @endif
 
-            <form method="POST" action="{{ route('login') }}">
-                @csrf
+        <form method="POST" action="{{ route('login') }}" novalidate>
+            @csrf
 
-                <!-- Nama Akun (Username) -->
-                <div class="mb-4">
-                    <label for="username" class="form-label fw-semibold mb-1 text-dark" style="font-size: 0.9rem;">Nama Akun</label>
-                    <div class="input-group border rounded-4 overflow-hidden shadow-sm transition-all focus-ring-div" style="border-color: #cbd5e1 !important; background: #fff;">
-                        <span class="input-group-text bg-white border-0 ps-3">
-                            <i class="bi bi-person text-primary"></i>
-                        </span>
-                        <input
-                            id="username"
-                            type="text"
-                            name="username"
-                            value="{{ old('username') }}"
-                            class="form-control border-0 py-2 ps-2 @error('username') is-invalid @enderror"
-                            placeholder="Masukkan nama akun"
-                            required
-                            autofocus
-                            style="box-shadow: none; font-size: 0.95rem;"
-                        />
+            <!-- Nama Akun (Username) -->
+            <div class="mb-5">
+                <label for="username" class="block font-serif font-semibold mb-2 text-[#1e3a8a] text-[15px]">Nama Akun</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                        <x-heroicon-o-user class="text-slate-500 size-6" />
                     </div>
-                    @error('username')
-                        <div class="text-danger small mt-1 ps-2 fw-medium"><i class="bi bi-exclamation-circle-fill me-1"></i>{{ $message }}</div>
-                    @enderror
+                    <input
+                        id="username"
+                        type="text"
+                        name="username"
+                        value="{{ old('username') }}"
+                        class="block w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-xl text-[15px] placeholder-slate-400 focus:outline-none focus:border-[#1a4fd9] focus:ring-1 focus:ring-[#1a4fd9] transition-all @error('username') border-rose-500 @enderror"
+                        placeholder="Masukkan nama akun Anda"
+                        required
+                        maxlength="255"
+                        autofocus
+                    />
                 </div>
+                <div class="text-slate-500 text-[13px] mt-1.5 ml-1">Nama akun yang Anda daftarkan.</div>
+                @error('username')
+                    <div class="text-rose-500 text-xs mt-1.5 pl-1 font-medium"><x-heroicon-o-exclamation-circle class="mr-1 size-5" />{{ $message }}</div>
+                @enderror
+            </div>
 
-                <!-- Kata Sandi (Password) -->
-                <div class="mb-4">
-                    <label for="password" class="form-label fw-semibold mb-1 text-dark" style="font-size: 0.9rem;">Kata Sandi</label>
-                    <div class="input-group border rounded-4 overflow-hidden shadow-sm transition-all focus-ring-div" style="border-color: #cbd5e1 !important; background: #fff;">
-                        <span class="input-group-text bg-white border-0 ps-3">
-                            <i class="bi bi-lock text-primary"></i>
-                        </span>
-                        <input
-                            id="password"
-                            type="password"
-                            name="password"
-                            class="form-control border-0 py-2 ps-2 @error('password') is-invalid @enderror"
-                            placeholder="Masukkan kata sandi"
-                            required
-                            style="box-shadow: none; font-size: 0.95rem;"
-                        />
+            <!-- Kata Sandi (Password) -->
+            <div class="mb-8">
+                <label for="password" class="block font-serif font-semibold mb-2 text-[#1e3a8a] text-[15px]">Kata Sandi</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                        <x-heroicon-o-lock-closed class="text-slate-500 size-6" />
                     </div>
-                    @error('password')
-                        <div class="text-danger small mt-1 ps-2 fw-medium"><i class="bi bi-exclamation-circle-fill me-1"></i>{{ $message }}</div>
-                    @enderror
+                    <input
+                        id="password"
+                        type="password"
+                        name="password"
+                        class="block w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-xl text-[15px] placeholder-slate-400 focus:outline-none focus:border-[#1a4fd9] focus:ring-1 focus:ring-[#1a4fd9] transition-all @error('password') border-rose-500 @enderror"
+                        placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
+                        required
+                        minlength="8"
+                    />
                 </div>
+                <div class="text-slate-500 text-[13px] mt-1.5 ml-1">Masukkan kata sandi yang sesuai.</div>
+                @error('password')
+                    <div class="text-rose-500 text-xs mt-1.5 pl-1 font-medium"><x-heroicon-o-exclamation-circle class="mr-1 size-5" />{{ $message }}</div>
+                @enderror
+            </div>
 
-                <!-- Submit Button -->
-                <button type="submit" class="btn btn-primary w-100 py-2 fs-6 fw-bold rounded-4 mb-4 btn-glow-primary" style="background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%); border: none; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); color: white;">
-                    Masuk Sekarang <i class="bi bi-arrow-right-short ms-1 fs-5 align-middle"></i>
-                </button>
+            <!-- Submit Button -->
+            <button type="submit" class="w-full py-3.5 px-4 rounded-xl text-[15px] font-semibold text-white bg-[#1a4fd9] hover:bg-[#1e3a8a] focus:outline-none focus:ring-4 focus:ring-blue-500/30 transition-all mb-8">
+                Masuk
+            </button>
 
-                <!-- Footer Link -->
-                <div class="text-center mt-3">
-                    <span class="text-secondary opacity-75">Belum punya akun?</span>
-                    <a href="{{ route('register') }}" class="text-decoration-none fw-bold text-primary hover-underline">Daftar di sini</a>
-                </div>
-            </form>
-        </div>
+            <!-- Footer Link -->
+            <div class="text-center">
+                <span class="text-slate-500 text-[15px]">Belum punya akun?</span>
+                <a href="{{ route('register') }}" class="font-semibold text-[#1a4fd9] hover:text-[#1e3a8a] hover:underline transition-colors text-[15px] ml-1">Daftar di sini</a>
+            </div>
+        </form>
     </div>
 
-    <style>
-        .focus-ring-div:focus-within {
-            border-color: #1d4ed8 !important;
-            box-shadow: 0 0 0 4px rgba(29, 78, 216, 0.15) !important;
-            transform: translateY(-1px);
-        }
-        .btn-glow-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(29, 78, 216, 0.3) !important;
-            background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%) !important;
-        }
-        .hover-underline:hover {
-            text-decoration: underline !important;
-        }
-        .glass-card {
-            transition: all 0.3s ease;
-        }
-        .glass-card:hover {
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08) !important;
-        }
-    </style>
     @if (session('success'))
-        <!-- Custom Self-Contained Toast with Inline Styles for CSS Isolation & Zero Dependencies -->
-        <div id="success-toast" style="
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            z-index: 99999;
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
-            padding: 16px 20px;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            min-width: 320px;
-            font-family: 'Inter', sans-serif;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        ">
-            <div style="
-                background: white;
-                color: #059669;
-                border-radius: 50%;
-                width: 32px;
-                height: 32px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                flex-shrink: 0;
-                box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-            ">
-                <i class="bi bi-check-lg" style="font-size: 1.2rem; font-weight: bold;"></i>
+        <div id="success-toast" class="fixed bottom-6 right-6 z-50 bg-gradient-to-br from-emerald-500 to-emerald-600 text-white px-5 py-4 rounded-xl shadow-lg flex items-center gap-4 min-w-[320px] font-sans opacity-0 translate-y-5 transition-all duration-300 ease-out">
+            <div class="bg-white text-emerald-600 rounded-full w-8 h-8 flex items-center justify-center shrink-0 shadow-sm">
+                <x-heroicon-o-check class="font-bold size-6" />
             </div>
-            <div style="flex-grow: 1;">
-                <div style="font-weight: 700; font-size: 0.95rem; margin-bottom: 2px;">Registrasi Sukses</div>
-                <div style="font-size: 0.85rem; opacity: 0.95;">{{ session('success') }}</div>
+            <div class="flex-grow">
+                <div class="font-bold text-sm mb-0.5">Registrasi Sukses</div>
+                <div class="text-xs opacity-95">{{ session('success') }}</div>
             </div>
         </div>
 
         <script>
             (function() {
-                // Instant execution to bypass DOMContentLoaded timing issues
                 const toast = document.getElementById('success-toast');
                 if (toast) {
-                    // Animate entry after a brief timeout
                     setTimeout(function() {
-                        toast.style.opacity = '1';
-                        toast.style.transform = 'translateY(0)';
+                        toast.classList.remove('opacity-0', 'translate-y-5');
+                        toast.classList.add('opacity-100', 'translate-y-0');
                     }, 150);
 
-                    // Auto dismiss after 3 seconds
                     setTimeout(function() {
-                        toast.style.opacity = '0';
-                        toast.style.transform = 'translateY(20px)';
+                        toast.classList.remove('opacity-100', 'translate-y-0');
+                        toast.classList.add('opacity-0', 'translate-y-5');
                         setTimeout(function() {
                             toast.remove();
                         }, 400);

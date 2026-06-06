@@ -22,6 +22,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        \Illuminate\Pagination\Paginator::useTailwind();
+
         RateLimiter::for('login', function (Request $request) {
             return Limit::perMinute(5)->by($request->input('username') . '|' . $request->ip());
         });

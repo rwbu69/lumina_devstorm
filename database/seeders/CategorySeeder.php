@@ -14,11 +14,11 @@ class CategorySeeder extends Seeder
         $now = now();
 
         Category::query()->insert([
-            ['nama_kategori' => 'Fiksi', 'created_at' => $now, 'updated_at' => $now],
-            ['nama_kategori' => 'Non-Fiksi', 'created_at' => $now, 'updated_at' => $now],
-            ['nama_kategori' => 'Teknologi', 'created_at' => $now, 'updated_at' => $now],
-            ['nama_kategori' => 'Bisnis', 'created_at' => $now, 'updated_at' => $now],
-            ['nama_kategori' => 'Religi', 'created_at' => $now, 'updated_at' => $now],
+            ['nama_kategori' => 'Teologi Sistematika', 'created_at' => $now, 'updated_at' => $now],
+            ['nama_kategori' => 'Sejarah Gereja', 'created_at' => $now, 'updated_at' => $now],
+            ['nama_kategori' => 'Studi Alkitab', 'created_at' => $now, 'updated_at' => $now],
+            ['nama_kategori' => 'Spiritualitas', 'created_at' => $now, 'updated_at' => $now],
+            ['nama_kategori' => 'Apologetika', 'created_at' => $now, 'updated_at' => $now],
         ]);
     }
 }

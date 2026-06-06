@@ -18,7 +18,9 @@ class Book extends Model
         'harga',
         'stok',
         'file_buku',
+        'cover_buku',
         'sinopsis',
+        'format',
     ];
 
     protected function casts(): array

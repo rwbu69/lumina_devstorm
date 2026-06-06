@@ -23,13 +23,20 @@ class CartController extends Controller
         ]);
     }
 
-    public function store(Request $request, CartService $cartService): RedirectResponse
+    public function store(Request $request, CartService $cartService)
     {
         $request->validate([
             'book_id' => ['required', 'exists:books,id'],
         ]);
 
         $cartService->add((int) $request->input('book_id'));
+
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'cart_count' => count(session('cart', []))
+            ]);
+        }
 
         return redirect()->route('cart.index')->with('success', 'Buku rohani berhasil ditambahkan ke keranjang!');
     }

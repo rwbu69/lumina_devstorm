@@ -22,7 +22,7 @@ class BookController extends Controller
 
         $totalJudul = Book::count();
         $stokRendah = Book::where('stok', '<', 50)->count();
-        
+
         $terjualBulanIni = \App\Models\OrderDetail::whereHas('order', function ($query) {
             $query->where('status', 'verified')
                   ->whereMonth('tanggal_pesan', now()->month)
@@ -50,14 +50,19 @@ class BookController extends Controller
             'harga' => 'required|numeric|min:0',
             'stok' => 'required|integer|min:0',
             'sinopsis' => 'nullable|string',
-            'format' => 'required|string|in:fisik,digital', 
-            'file_buku' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120', 
+            'format' => 'required|string|in:fisik,digital',
+            'file_buku' => 'nullable|file|mimes:pdf|max:10240',
+            'cover_buku' => 'required|image|mimes:jpeg,png,jpg,webp,webp|max:5120',
         ]);
 
         $data = $request->only(['judul', 'penulis', 'category_id', 'harga', 'stok', 'sinopsis', 'format']);
 
         if ($request->hasFile('file_buku')) {
             $data['file_buku'] = $request->file('file_buku')->store('books', 'public');
+        }
+
+        if ($request->hasFile('cover_buku')) {
+            $data['cover_buku'] = $request->file('cover_buku')->store('covers', 'public');
         }
 
         Book::create($data);
@@ -85,8 +90,9 @@ class BookController extends Controller
             'harga' => 'required|numeric|min:0',
             'stok' => 'required|integer|min:0',
             'sinopsis' => 'nullable|string',
-            'format' => 'required|string|in:fisik,digital', 
-            'file_buku' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120', 
+            'format' => 'required|string|in:fisik,digital',
+            'file_buku' => 'nullable|file|mimes:pdf|max:10240',
+            'cover_buku' => 'nullable|image|mimes:jpeg,png,jpg,webp,webp|max:5120',
         ]);
 
         $data = $request->only(['judul', 'penulis', 'category_id', 'harga', 'stok', 'sinopsis', 'format']);
@@ -96,6 +102,13 @@ class BookController extends Controller
                 \Illuminate\Support\Facades\Storage::disk('public')->delete($book->file_buku);
             }
             $data['file_buku'] = $request->file('file_buku')->store('books', 'public');
+        }
+
+        if ($request->hasFile('cover_buku')) {
+            if ($book->cover_buku) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($book->cover_buku);
+            }
+            $data['cover_buku'] = $request->file('cover_buku')->store('covers', 'public');
         }
 
         $book->update($data);
