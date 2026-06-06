@@ -162,7 +162,7 @@
     </div>
 
     {{-- Alpine Modals Container --}}
-    <div x-data="{ activeModal: null }" @open-modal.window="activeModal = $event.detail" @close-modal.window="activeModal = null" @keydown.escape.window="activeModal = null">
+    <div x-data="{ activeModal: {!! $errors->any() && !old('_method') ? "'modalTambahBuku'" : (old('_method') === 'PUT' ? "'modalEditBuku-".old('id')."'" : 'null') !!} }" @open-modal.window="activeModal = $event.detail" @close-modal.window="activeModal = null" @keydown.escape.window="activeModal = null">
 
         {{-- Modal Tambah Buku --}}
         <div x-show="activeModal === 'modalTambahBuku'" style="display: none;" class="fixed inset-0 z-[1050] overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
@@ -181,45 +181,97 @@
                         </button>
                     </div>
 
-                    <form action="{{ route('admin.books.store') }}" method="POST" enctype="multipart/form-data" class="max-h-[75vh] overflow-y-auto">
+                    <form action="{{ route('admin.books.store') }}" method="POST" enctype="multipart/form-data" class="max-h-[75vh] overflow-y-auto"
+                          novalidate x-data="{
+                              judul: '{{ old('judul') }}',
+                              penulis: '{{ old('penulis') }}',
+                              category_id: '{{ old('category_id') }}',
+                              new_category_name: '{{ old('new_category_name') }}',
+                              format: '{{ old('format', 'digital') }}',
+                              harga: '{{ old('harga') }}',
+                              stok: '{{ old('stok', 0) }}',
+                              errors: {},
+                              validate() {
+                                  this.errors = {};
+                                  if(!this.judul) this.errors.judul = 'Judul buku harus diisi.';
+                                  if(!this.penulis) this.errors.penulis = 'Penulis harus diisi.';
+                                  if(!this.category_id) this.errors.category_id = 'Kategori harus dipilih.';
+                                  if(this.category_id === 'new' && !this.new_category_name) this.errors.new_category_name = 'Nama kategori baru harus diisi.';
+                                  if(!this.format) this.errors.format = 'Format buku harus dipilih.';
+                                  if(this.harga === '' || this.harga < 0) this.errors.harga = 'Harga minimal 0.';
+                                  if(this.stok === '' || this.stok < 0) this.errors.stok = 'Stok minimal 0.';
+                                  
+                                  const cover = this.$refs.coverInput;
+                                  if(!cover || !cover.files || cover.files.length === 0) this.errors.cover_buku = 'Cover buku harus diunggah.';
+                                  
+                                  return Object.keys(this.errors).length === 0;
+                              }
+                          }" @submit="if(!validate()) $event.preventDefault()">
                         @csrf
                         <div class="p-6 md:p-8">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Judul Buku</label>
-                                    <input type="text" name="judul" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors" required>
+                                    <input type="text" name="judul" x-model="judul" @input="delete errors.judul" :class="errors.judul ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-200'" class="w-full px-4 py-3 bg-slate-50 border rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors">
+                                    <template x-if="errors.judul"><p class="text-rose-500 text-xs mt-1" x-text="errors.judul"></p></template>
+                                    @error('judul') <p x-show="!errors.judul" class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
                                 </div>
                                 <div>
                                     <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Penulis</label>
-                                    <input type="text" name="penulis" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors" required>
+                                    <input type="text" name="penulis" x-model="penulis" @input="delete errors.penulis" :class="errors.penulis ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-200'" class="w-full px-4 py-3 bg-slate-50 border rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors">
+                                    <template x-if="errors.penulis"><p class="text-rose-500 text-xs mt-1" x-text="errors.penulis"></p></template>
+                                    @error('penulis') <p x-show="!errors.penulis" class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
                                 </div>
                                 <div>
                                     <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Kategori</label>
-                                    <select name="category_id" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors" required>
-                                        <option value="">Pilih Kategori...</option>
+                                    <select name="category_id" x-model="category_id" @change="delete errors.category_id" :class="errors.category_id ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-200'" class="w-full px-4 py-3 bg-slate-50 border rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors">
+                                        <option value="" disabled hidden>Pilih Kategori...</option>
                                         @foreach($categories ?? [] as $cat)
                                             <option value="{{ $cat->id }}">{{ $cat->nama }}</option>
                                         @endforeach
+                                        <option value="new" class="font-bold text-lumina-blue bg-blue-50">+ Buat Kategori Baru</option>
                                     </select>
+                                    <template x-if="errors.category_id"><p class="text-rose-500 text-xs mt-1" x-text="errors.category_id"></p></template>
+                                    @error('category_id') <p x-show="!errors.category_id" class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
+                                    
+                                    <div x-show="category_id === 'new'" x-cloak class="mt-3" x-transition>
+                                        <input type="text" name="new_category_name" x-model="new_category_name" @input="delete errors.new_category_name" :class="errors.new_category_name ? 'border-rose-500 ring-1 ring-rose-500' : 'border-lumina-blue/30'" placeholder="Ketik nama kategori baru..." class="w-full px-4 py-3 bg-white border rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors shadow-inner">
+                                        <template x-if="errors.new_category_name"><p class="text-rose-500 text-xs mt-1" x-text="errors.new_category_name"></p></template>
+                                        @error('new_category_name') <p x-show="!errors.new_category_name" class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
+                                    </div>
                                 </div>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Harga</label>
-                                        <input type="number" name="harga" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors" min="0" required>
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Stok</label>
-                                        <input type="number" name="stok" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors" min="0" required>
-                                    </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Format Buku</label>
+                                    <select name="format" x-model="format" @change="delete errors.format" :class="errors.format ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-200'" class="w-full px-4 py-3 bg-slate-50 border rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors">
+                                        <option value="digital">Buku Digital (E-Book)</option>
+                                        <option value="fisik" disabled>Buku Fisik</option>
+                                    </select>
+                                    <template x-if="errors.format"><p class="text-rose-500 text-xs mt-1" x-text="errors.format"></p></template>
+                                    @error('format') <p x-show="!errors.format" class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Harga</label>
+                                    <input type="number" name="harga" x-model.number="harga" @input="delete errors.harga" :class="errors.harga ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-200'" class="w-full px-4 py-3 bg-slate-50 border rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors" min="0">
+                                    <template x-if="errors.harga"><p class="text-rose-500 text-xs mt-1" x-text="errors.harga"></p></template>
+                                    @error('harga') <p x-show="!errors.harga" class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Stok</label>
+                                    <input type="number" name="stok" x-model.number="stok" @input="delete errors.stok" :class="errors.stok ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-200'" class="w-full px-4 py-3 bg-slate-50 border rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors" min="0">
+                                    <template x-if="errors.stok"><p class="text-rose-500 text-xs mt-1" x-text="errors.stok"></p></template>
+                                    @error('stok') <p x-show="!errors.stok" class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
                                 </div>
                                 <div class="md:col-span-2">
                                     <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Sinopsis</label>
-                                    <textarea name="sinopsis" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors" rows="3"></textarea>
+                                    <textarea name="sinopsis" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors" rows="3">{{ old('sinopsis') }}</textarea>
+                                    @error('sinopsis') <p class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
                                 </div>
                                 <div x-data="{ previewUrl: null }">
                                     <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Upload Cover Buku</label>
-                                    <input type="file" name="cover_buku" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-lumina-blue/10 file:text-lumina-blue hover:file:bg-lumina-blue/20 border border-slate-200 rounded-xl bg-slate-50 focus:outline-none focus:border-lumina-blue transition-all p-1.5 cursor-pointer" accept="image/jpeg,image/png,image/webp,image/jpg" @change="previewUrl = URL.createObjectURL($event.target.files[0])">
+                                    <input type="file" x-ref="coverInput" name="cover_buku" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-lumina-blue/10 file:text-lumina-blue hover:file:bg-lumina-blue/20 border rounded-xl bg-slate-50 focus:outline-none focus:border-lumina-blue transition-all p-1.5 cursor-pointer" :class="errors.cover_buku ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-200'" accept="image/jpeg,image/png,image/webp,image/jpg" @change="previewUrl = URL.createObjectURL($event.target.files[0]); delete errors.cover_buku">
                                     <small class="text-slate-400 text-xs mt-2 block">Format: JPG, PNG, WEBP (Maks 2MB)</small>
+                                    <template x-if="errors.cover_buku"><p class="text-rose-500 text-xs mt-1" x-text="errors.cover_buku"></p></template>
+                                    @error('cover_buku') <p x-show="!errors.cover_buku" class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
                                     <template x-if="previewUrl">
                                         <div class="mt-4">
                                             <img :src="previewUrl" class="h-32 rounded-xl object-cover border border-slate-200 shadow-sm">
@@ -230,6 +282,7 @@
                                     <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Upload File E-Book (PDF)</label>
                                     <input type="file" name="file_buku" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-rose-500/10 file:text-rose-600 hover:file:bg-rose-500/20 border border-slate-200 rounded-xl bg-slate-50 focus:outline-none focus:border-rose-500 transition-all p-1.5 cursor-pointer" accept="application/pdf">
                                     <small class="text-slate-400 text-xs mt-2 block">Format: PDF (Maks 10MB)</small>
+                                    @error('file_buku') <p class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
                                 </div>
                             </div>
                         </div>
@@ -291,36 +344,84 @@
                             </button>
                         </div>
 
-                        <form action="{{ route('admin.books.update', $book->id) }}" method="POST" enctype="multipart/form-data" class="max-h-[75vh] overflow-y-auto">
+                        <form action="{{ route('admin.books.update', $book->id) }}" method="POST" enctype="multipart/form-data" class="max-h-[75vh] overflow-y-auto"
+                              novalidate x-data="{
+                                  judul: '{{ addslashes(old('judul', $book->judul)) }}',
+                                  penulis: '{{ addslashes(old('penulis', $book->penulis)) }}',
+                                  category_id: '{{ old('category_id', $book->category_id) }}',
+                                  new_category_name: '{{ old('new_category_name') }}',
+                                  format: '{{ old('format', $book->format ?? 'digital') }}',
+                                  harga: '{{ old('harga', (int)$book->harga) }}',
+                                  stok: '{{ old('stok', $book->stok) }}',
+                                  errors: {},
+                                  validate() {
+                                      this.errors = {};
+                                      if(!this.judul) this.errors.judul = 'Judul buku harus diisi.';
+                                      if(!this.penulis) this.errors.penulis = 'Penulis harus diisi.';
+                                      if(!this.category_id) this.errors.category_id = 'Kategori harus dipilih.';
+                                      if(this.category_id === 'new' && !this.new_category_name) this.errors.new_category_name = 'Nama kategori baru harus diisi.';
+                                      if(!this.format) this.errors.format = 'Format buku harus dipilih.';
+                                      if(this.harga === '' || this.harga < 0) this.errors.harga = 'Harga minimal 0.';
+                                      if(this.stok === '' || this.stok < 0) this.errors.stok = 'Stok minimal 0.';
+                                      
+                                      return Object.keys(this.errors).length === 0;
+                                  }
+                              }" @submit="if(!validate()) $event.preventDefault()">
                             @csrf
                             @method('PUT')
                             <div class="p-6 md:p-8">
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
                                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Judul Buku</label>
-                                        <input type="text" name="judul" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors" value="{{ $book->judul }}" required>
+                                        <input type="text" name="judul" x-model="judul" @input="delete errors.judul" :class="errors.judul ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-200'" class="w-full px-4 py-3 bg-slate-50 border rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors">
+                                        <template x-if="errors.judul"><p class="text-rose-500 text-xs mt-1" x-text="errors.judul"></p></template>
+                                        @error('judul') <p x-show="!errors.judul" class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
                                     </div>
                                     <div>
                                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Penulis</label>
-                                        <input type="text" name="penulis" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors" value="{{ $book->penulis }}" required>
+                                        <input type="text" name="penulis" x-model="penulis" @input="delete errors.penulis" :class="errors.penulis ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-200'" class="w-full px-4 py-3 bg-slate-50 border rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors">
+                                        <template x-if="errors.penulis"><p class="text-rose-500 text-xs mt-1" x-text="errors.penulis"></p></template>
+                                        @error('penulis') <p x-show="!errors.penulis" class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
                                     </div>
                                     <div>
                                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Kategori</label>
-                                        <select name="category_id" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors" required>
-                                            <option value="">Pilih Kategori...</option>
+                                        <select name="category_id" x-model="category_id" @change="delete errors.category_id" :class="errors.category_id ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-200'" class="w-full px-4 py-3 bg-slate-50 border rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors">
+                                            <option value="" disabled hidden>Pilih Kategori...</option>
                                             @foreach($categories ?? [] as $cat)
-                                                <option value="{{ $cat->id }}" {{ $book->category_id == $cat->id ? 'selected' : '' }}>{{ $cat->nama }}</option>
+                                                <option value="{{ $cat->id }}">{{ $cat->nama }}</option>
                                             @endforeach
+                                            <option value="new" class="font-bold text-lumina-blue bg-blue-50">+ Buat Kategori Baru</option>
                                         </select>
+                                        <template x-if="errors.category_id"><p class="text-rose-500 text-xs mt-1" x-text="errors.category_id"></p></template>
+                                        @error('category_id') <p x-show="!errors.category_id" class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
+                                        
+                                        <div x-show="category_id === 'new'" x-cloak class="mt-3" x-transition>
+                                            <input type="text" name="new_category_name" x-model="new_category_name" @input="delete errors.new_category_name" :class="errors.new_category_name ? 'border-rose-500 ring-1 ring-rose-500' : 'border-lumina-blue/30'" placeholder="Ketik nama kategori baru..." class="w-full px-4 py-3 bg-white border rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors shadow-inner">
+                                            <template x-if="errors.new_category_name"><p class="text-rose-500 text-xs mt-1" x-text="errors.new_category_name"></p></template>
+                                            @error('new_category_name') <p x-show="!errors.new_category_name" class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Format Buku</label>
+                                        <select name="format" x-model="format" @change="delete errors.format" :class="errors.format ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-200'" class="w-full px-4 py-3 bg-slate-50 border rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors">
+                                            <option value="digital">Buku Digital (E-Book)</option>
+                                            <option value="fisik" disabled>Buku Fisik</option>
+                                        </select>
+                                        <template x-if="errors.format"><p class="text-rose-500 text-xs mt-1" x-text="errors.format"></p></template>
+                                        @error('format') <p x-show="!errors.format" class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
                                     </div>
                                     <div class="grid grid-cols-2 gap-4">
                                         <div>
                                             <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Harga</label>
-                                            <input type="number" name="harga" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors" value="{{ (int)$book->harga }}" min="0" required>
+                                            <input type="number" name="harga" x-model.number="harga" @input="delete errors.harga" :class="errors.harga ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-200'" class="w-full px-4 py-3 bg-slate-50 border rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors" min="0">
+                                            <template x-if="errors.harga"><p class="text-rose-500 text-xs mt-1" x-text="errors.harga"></p></template>
+                                            @error('harga') <p x-show="!errors.harga" class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
                                         </div>
                                         <div>
                                             <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Stok</label>
-                                            <input type="number" name="stok" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors" value="{{ $book->stok }}" min="0" required>
+                                            <input type="number" name="stok" x-model.number="stok" @input="delete errors.stok" :class="errors.stok ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-200'" class="w-full px-4 py-3 bg-slate-50 border rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors" min="0">
+                                            <template x-if="errors.stok"><p class="text-rose-500 text-xs mt-1" x-text="errors.stok"></p></template>
+                                            @error('stok') <p x-show="!errors.stok" class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
                                         </div>
                                     </div>
                                     <div class="md:col-span-2">
@@ -331,6 +432,7 @@
                                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Upload Cover Baru (Opsional)</label>
                                         <input type="file" name="cover_buku" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-lumina-blue/10 file:text-lumina-blue hover:file:bg-lumina-blue/20 border border-slate-200 rounded-xl bg-slate-50 focus:outline-none focus:border-lumina-blue transition-all p-1.5 cursor-pointer" accept="image/jpeg,image/png,image/webp,image/jpg" @change="previewUrl = URL.createObjectURL($event.target.files[0])">
                                         <small class="text-slate-400 text-xs mt-2 block">Format: JPG, PNG, WEBP (Maks 2MB)</small>
+                                        @error('cover_buku') <p class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
                                         <template x-if="previewUrl">
                                             <div class="mt-4">
                                                 <img :src="previewUrl" class="h-32 rounded-xl object-cover border border-slate-200 shadow-sm">

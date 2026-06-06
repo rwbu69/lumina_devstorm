@@ -15,9 +15,9 @@
         <section class="py-8 md:py-12">
             <div class="flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
                 <div class="lg:w-1/2">
-                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-serif font-semibold text-lumina-blue mb-6 tracking-tight">Pusat Literatur Kristen</h1>
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-serif font-semibold text-lumina-blue mb-6 tracking-tight">{{ \App\Models\Setting::getValue('hero_title', 'Pusat Literatur Kristen') }}</h1>
                     <p class="text-slate-500 text-lg md:text-xl mb-8 leading-relaxed">
-                        Temukan koleksi buku rohani berkualitas, dari teologi mendalam hingga renungan harian yang memberkati kehidupan spiritual Anda.
+                        {{ \App\Models\Setting::getValue('hero_subtitle', 'Temukan koleksi buku rohani berkualitas, dari teologi mendalam hingga renungan harian yang memberkati kehidupan spiritual Anda.') }}
                     </p>
 
                     <div class="flex flex-wrap gap-4">

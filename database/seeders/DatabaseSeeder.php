@@ -27,6 +27,17 @@ class DatabaseSeeder extends Seeder
         $this->call(CategorySeeder::class);
 
         User::query()->firstOrCreate(
+            ['email' => 'superadmin@lumina.id'],
+            [
+                'nama' => 'Superadmin Lumina',
+                'username' => 'superadmin',
+                'password' => Hash::make('password'),
+                'role' => 'superadmin',
+                'email_verified_at' => now(),
+            ]
+        );
+
+        User::query()->firstOrCreate(
             ['email' => 'admin@lumina.id'],
             [
                 'nama' => 'Admin Lumina',

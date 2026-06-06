@@ -41,10 +41,9 @@ class LoginController extends Controller
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
 
-            $redirectTo = match ($request->user()?->role) {
-                'admin' => route('admin.dashboard', absolute: false),
-                default => route('catalog.index', absolute: false), // DIUBAH: home → catalog.index
-            };
+            $redirectTo = $request->user()?->isAdmin() 
+                ? route('admin.dashboard', absolute: false) 
+                : route('catalog.index', absolute: false);
 
             return redirect()->intended($redirectTo);
         }
