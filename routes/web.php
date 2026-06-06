@@ -34,7 +34,8 @@ Route::get('/kontak', function () {
 */
 
 Route::middleware('auth')->group(function () {
-    Route::get('/home', [HomeController::class, 'userHome'])->name('home');
+    // Menyelaraskan halaman login user agar mengarah ke fungsi index yang sama
+    Route::get('/home', [HomeController::class, 'index'])->name('user.home');
     Route::get('/dashboard', [CatalogController::class, 'index'])->name('user.dashboard');
 
     Route::get('/catalog', [CatalogController::class, 'index'])->name('catalog.index');
