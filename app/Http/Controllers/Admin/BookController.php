@@ -17,7 +17,7 @@ class BookController extends Controller
     {
         $books = Book::query()
             ->with('category')
-            ->latest()
+            ->orderBy('id', 'desc')
             ->paginate(15);
 
         $totalJudul = Book::count();
@@ -37,26 +37,30 @@ class BookController extends Controller
 
     public function create(): View
     {
-        return view('admin.books.create');
+        $categories = Category::all();
+        return view('admin.books.create', compact('categories'));
     }
 
     public function store(Request $request): RedirectResponse
     {
-        $validated = $request->validate([
+        $request->validate([
             'judul' => 'required|string|max:255',
             'penulis' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
             'harga' => 'required|numeric|min:0',
             'stok' => 'required|integer|min:0',
             'sinopsis' => 'nullable|string',
-            'file_buku' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'format' => 'required|string|in:fisik,digital', 
+            'file_buku' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120', 
         ]);
 
+        $data = $request->only(['judul', 'penulis', 'category_id', 'harga', 'stok', 'sinopsis', 'format']);
+
         if ($request->hasFile('file_buku')) {
-            $validated['file_buku'] = $request->file('file_buku')->store('books', 'public');
+            $data['file_buku'] = $request->file('file_buku')->store('books', 'public');
         }
 
-        Book::create($validated);
+        Book::create($data);
 
         return redirect()->route('admin.books.index')->with('success', 'Buku berhasil ditambahkan!');
     }
@@ -68,35 +72,43 @@ class BookController extends Controller
 
     public function edit(Book $book): View
     {
-        return view('admin.books.edit', compact('book'));
+        $categories = Category::all();
+        return view('admin.books.edit', compact('book', 'categories'));
     }
 
     public function update(Request $request, Book $book): RedirectResponse
     {
-        $validated = $request->validate([
+        $request->validate([
             'judul' => 'required|string|max:255',
             'penulis' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
             'harga' => 'required|numeric|min:0',
             'stok' => 'required|integer|min:0',
             'sinopsis' => 'nullable|string',
-            'file_buku' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'format' => 'required|string|in:fisik,digital', 
+            'file_buku' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120', 
         ]);
+
+        $data = $request->only(['judul', 'penulis', 'category_id', 'harga', 'stok', 'sinopsis', 'format']);
 
         if ($request->hasFile('file_buku')) {
             if ($book->file_buku) {
                 \Illuminate\Support\Facades\Storage::disk('public')->delete($book->file_buku);
             }
-            $validated['file_buku'] = $request->file('file_buku')->store('books', 'public');
+            $data['file_buku'] = $request->file('file_buku')->store('books', 'public');
         }
 
-        $book->update($validated);
+        $book->update($data);
 
         return redirect()->route('admin.books.index')->with('success', 'Buku berhasil diperbarui!');
     }
 
     public function destroy(Book $book): RedirectResponse
     {
+        if ($book->file_buku) {
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($book->file_buku);
+        }
+
         $book->orderDetails()->delete();
         $book->delete();
 

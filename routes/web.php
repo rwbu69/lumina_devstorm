@@ -19,7 +19,8 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', [HomeController::class, 'index'])->name('welcome');
+// Mengarahkan halaman utama ke HomeController fungsi index untuk Task 236
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 /*
 |--------------------------------------------------------------------------
@@ -28,7 +29,8 @@ Route::get('/', [HomeController::class, 'index'])->name('welcome');
 */
 
 Route::middleware('auth')->group(function () {
-    Route::get('/home', [HomeController::class, 'userHome'])->name('home');
+    // Menyelaraskan halaman login user agar mengarah ke fungsi index yang sama
+    Route::get('/home', [HomeController::class, 'index'])->name('user.home');
     Route::get('/dashboard', [CatalogController::class, 'index'])->name('user.dashboard');
 
     Route::get('/catalog', [CatalogController::class, 'index'])->name('catalog.index');
