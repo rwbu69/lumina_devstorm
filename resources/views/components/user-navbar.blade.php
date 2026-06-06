@@ -31,9 +31,9 @@
             </div>
 
             <!-- Right Side: Nav Links, Cart Icon, Profile Avatar -->
-            <div class="flex items-center space-x-6">
+            <div class="flex items-center space-x-4">
                 <!-- Navigation Links -->
-                <div class="hidden md:flex items-center space-x-6">
+                <div class="hidden md:flex items-center space-x-4">
                     @auth
                         <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'text-indigo-600 font-semibold' : 'text-slate-600 hover:text-indigo-600 font-medium' }} text-sm transition-colors">Beranda</a>
                         <a href="{{ route('catalog.index') }}" class="{{ request()->routeIs('catalog.*') ? 'text-indigo-600 font-semibold' : 'text-slate-600 hover:text-indigo-600 font-medium' }} text-sm transition-colors">Katalog</a>
@@ -58,11 +58,11 @@
                     <a href="{{ route('cart.index') }}" 
                        @mouseenter="showHover = true" @mouseleave="showHover = false"
                        class="text-slate-500 hover:text-indigo-600 transition-all duration-300 relative p-1.5 rounded-xl hover:bg-slate-50 flex items-center justify-center"
-                       :class="animate ? 'scale-125 text-indigo-600' : ''">
-                        <i class="bi bi-cart3 text-xl"></i>
+                       :class="animate ? 'scale-105 text-indigo-600 bg-indigo-50' : ''">
+                        <x-heroicon-o-shopping-cart class="size-6" />
                         <template x-if="count > 0">
-                            <span class="absolute -top-1 -right-1 w-4 h-4 bg-rose-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full border border-white shadow-sm transition-transform duration-300" x-text="count"
-                                  :class="animate ? 'scale-150' : 'scale-100'"></span>
+                            <span class="absolute -top-1 -right-1 w-4 h-4 text-white text-[10px] font-bold flex items-center justify-center rounded-full border border-white shadow-sm transition-all duration-300" x-text="count"
+                                  :class="animate ? 'scale-110 bg-rose-600' : 'scale-100 bg-rose-500'"></span>
                         </template>
                     </a>
                     
@@ -112,10 +112,10 @@
                             <!-- Menu Items -->
                             <div class="py-1">
                                 <a href="{{ route('profile.edit') }}" class="flex items-center px-4 py-2.5 text-slate-700 hover:bg-slate-50 text-sm font-medium transition-colors">
-                                    <i class="bi bi-person me-3 text-slate-400"></i> Profil Saya
+                                    <x-heroicon-o-user class="mr-3 text-slate-400 size-5" /> Profil Saya
                                 </a>
                                 <a href="{{ route('collection.index') }}" class="flex items-center px-4 py-2.5 text-slate-700 hover:bg-slate-50 text-sm font-medium transition-colors">
-                                    <i class="bi bi-journal-bookmark me-3 text-slate-400"></i> Buku Saya
+                                    <x-heroicon-o-bookmark class="mr-3 text-slate-400 size-5" /> Buku Saya
                                 </a>
                             </div>
 
@@ -124,7 +124,7 @@
                                 <form method="POST" action="{{ route('logout') }}" id="logout-form">
                                     @csrf
                                     <button type="submit" class="w-full flex items-center px-4 py-2.5 text-rose-600 hover:bg-rose-50 text-sm font-bold transition-colors text-left">
-                                        <i class="bi bi-box-arrow-right me-3 text-rose-500"></i> Keluar
+                                        <x-heroicon-o-arrow-right-on-rectangle class="mr-3 text-rose-500 size-5" /> Keluar
                                     </button>
                                 </form>
                             </div>

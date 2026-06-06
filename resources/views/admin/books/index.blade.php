@@ -1,239 +1,158 @@
 <x-admin.layout :title="'Lumina Media - Kelola Buku'">
-    @push('styles')
-        <style>
-            .books-shell {
-                
-                border-radius: 20px;
-                padding: 16px;
-            }
-
-            .books-card {
-                border: 1px solid rgba(15, 23, 42, .05);
-                border-radius: 16px;
-                background: #ffffff;
-                box-shadow: 0 4px 12px rgba(15, 23, 42, .04);
-            }
-
-            .books-title {
-                color: #1a4fd9;
-                font-size: 1.75rem;
-                font-weight: 800;
-                letter-spacing: -0.03em;
-                margin-bottom: 0.15rem;
-            }
-            
-            .stat-card {
-                padding: 1.5rem;
-                transition: transform 0.2s;
-            }
-            
-            .stat-card:hover {
-                transform: translateY(-4px);
-            }
-            
-            .stat-icon {
-                width: 42px;
-                height: 42px;
-                border-radius: 12px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 1.25rem;
-            }
-            
-            .book-cover {
-                width: 48px;
-                height: 64px;
-                background-color: #000;
-                color: #fff;
-                border-radius: 6px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 0.6rem;
-                font-weight: bold;
-                letter-spacing: 1px;
-            }
-            
-            .stock-badge {
-                padding: 0.35rem 0.75rem;
-                border-radius: 20px;
-                font-size: 0.75rem;
-                font-weight: 700;
-            }
-            
-            .stock-high { background-color: #d1fae5; color: #065f46; }
-            .stock-med { background-color: #fef3c7; color: #92400e; }
-            .stock-low { background-color: #fee2e2; color: #991b1b; }
-        </style>
-    @endpush
-
-    <div class="books-shell">
-        <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="bg-[#FDFBF7] min-h-full">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
             <div>
-                <h1 class="books-title">Kelola Buku</h1>
-                <p class="text-secondary fw-medium mb-0" style="font-size: 0.95rem; color: #1a4fd9 !important;">Kelola dan atur stok buku pada Lumina Media</p>
+                <h1 class="text-3xl font-serif font-bold text-lumina-blue mb-1.5">Kelola Buku</h1>
+                <p class="text-slate-500 font-medium">Kelola dan atur stok buku pada Lumina Media</p>
             </div>
-            <button class="btn btn-primary px-3 py-2 rounded-3 fw-bold btn-sm" style="background-color: #1a4fd9; border: none;" data-bs-toggle="modal" data-bs-target="#modalTambahBuku">
-                Tambah Buku
+            <button x-data @click="$dispatch('open-modal', 'modalTambahBuku')" class="inline-flex items-center justify-center bg-lumina-blue hover:bg-blue-800 text-white px-5 py-2.5 rounded-xl font-bold shadow-sm transition-all whitespace-nowrap">
+                <x-heroicon-o-plus class="mr-2 size-5" /> Tambah Buku
             </button>
         </div>
 
         @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show rounded-4 mb-4 border-0 shadow-sm" role="alert">
-                <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <div class="bg-emerald-50 border border-emerald-200 text-emerald-700 px-6 py-4 rounded-2xl shadow-sm mb-8 flex items-center relative" x-data="{ show: true }" x-show="show" x-transition>
+                <x-heroicon-s-check-circle class="mr-3 size-6" />
+                <span class="font-medium mr-auto">{{ session('success') }}</span>
+                <button @click="show = false" class="text-emerald-500 hover:text-emerald-700 transition-colors">
+                    <x-heroicon-o-x-mark class="size-5" />
+                </button>
             </div>
         @endif
 
-        <div class="row g-4 mb-5">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <!-- Total Judul -->
-            <div class="col-md-3">
-                <div class="books-card stat-card">
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-                        <span class="text-secondary fw-semibold">Total Judul</span>
-                        <div class="stat-icon" style="background-color: #eff6ff; color: #3b82f6;">
-                            <i class="bi bi-journals"></i>
-                        </div>
+            <x-admin.card>
+                <div class="flex items-start justify-between mb-4">
+                    <span class="text-slate-500 font-bold text-sm tracking-wide">Total Judul</span>
+                    <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-500 flex items-center justify-center">
+                        <x-heroicon-o-square-3-stack-3d class="size-6" />
                     </div>
-                    <h2 class="fw-bold text-dark mb-0">{{ number_format($totalJudul, 0, ',', '.') }}</h2>
                 </div>
-            </div>
+                <h2 class="font-bold text-slate-800 text-2xl">{{ number_format($totalJudul, 0, ',', '.') }}</h2>
+            </x-admin.card>
             
             <!-- Stok Rendah -->
-            <div class="col-md-3">
-                <div class="books-card stat-card">
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-                        <span class="text-secondary fw-semibold">Stok Rendah</span>
-                        <div class="stat-icon" style="background-color: #fffbeb; color: #d97706;">
-                            <i class="bi bi-exclamation-triangle"></i>
-                        </div>
+            <x-admin.card>
+                <div class="flex items-start justify-between mb-4">
+                    <span class="text-slate-500 font-bold text-sm tracking-wide">Stok Rendah</span>
+                    <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center">
+                        <x-heroicon-o-exclamation-triangle class="size-6" />
                     </div>
-                    <h2 class="fw-bold text-dark mb-0">{{ number_format($stokRendah, 0, ',', '.') }}</h2>
                 </div>
-            </div>
+                <h2 class="font-bold text-slate-800 text-2xl">{{ number_format($stokRendah, 0, ',', '.') }}</h2>
+            </x-admin.card>
 
             <!-- Terjual Bulan ini -->
-            <div class="col-md-3">
-                <div class="books-card stat-card">
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-                        <span class="text-secondary fw-semibold">Terjual (Bulan ini)</span>
-                        <div class="stat-icon" style="background-color: #ecfdf5; color: #10b981;">
-                            <i class="bi bi-graph-up-arrow"></i>
-                        </div>
+            <x-admin.card>
+                <div class="flex items-start justify-between mb-4">
+                    <span class="text-slate-500 font-bold text-sm tracking-wide">Terjual (Bulan ini)</span>
+                    <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-500 flex items-center justify-center">
+                        <x-heroicon-o-chart-bar class="size-6" />
                     </div>
-                    <h2 class="fw-bold text-dark mb-0">{{ number_format($terjualBulanIni, 0, ',', '.') }}</h2>
                 </div>
-            </div>
+                <h2 class="font-bold text-slate-800 text-2xl">{{ number_format($terjualBulanIni, 0, ',', '.') }}</h2>
+            </x-admin.card>
 
             <!-- Valuasi Stok -->
-            <div class="col-md-3">
-                <div class="books-card stat-card">
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-                        <span class="text-secondary fw-semibold">Valuasi Stok</span>
-                        <div class="stat-icon" style="background-color: #eff6ff; color: #3b82f6;">
-                            <i class="bi bi-cash-stack"></i>
-                        </div>
+            <x-admin.card>
+                <div class="flex items-start justify-between mb-4">
+                    <span class="text-slate-500 font-bold text-sm tracking-wide">Valuasi Stok</span>
+                    <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-500 flex items-center justify-center">
+                        <x-heroicon-o-banknotes class="size-6" />
                     </div>
-                    @php
-                        $valuasiFormat = $valuasiStok;
-                        $suffix = '';
-                        if ($valuasiStok >= 1000000000) {
-                            $valuasiFormat = round($valuasiStok / 1000000000, 1);
-                            $suffix = 'M';
-                        } elseif ($valuasiStok >= 1000000) {
-                            $valuasiFormat = round($valuasiStok / 1000000, 1);
-                            $suffix = 'Jt';
-                        }
-                    @endphp
-                    <h2 class="fw-bold text-dark mb-0">Rp {{ $valuasiFormat }}{{ $suffix }}</h2>
                 </div>
-            </div>
+                <h2 class="font-bold text-slate-800 text-2xl">Rp {{ number_format($valuasiStok, 0, ',', '.') }}</h2>
+            </x-admin.card>
         </div>
 
-        <x-admin.table class="books-card overflow-hidden">
+        <x-admin.table>
             <x-slot:header>
-                <div class="d-flex justify-content-between align-items-center p-3 border-bottom" style="background-color: #F8FAFC;">
-                    <h5 class="fw-bold text-primary mb-0" style="color: #1a4fd9 !important;"><i class="bi bi-list-ul me-2"></i>Daftar Inventaris Buku</h5>
-                    <div class="d-flex gap-2">
-                        <button class="btn btn-light bg-white border text-secondary"><i class="bi bi-filter"></i></button>
-                        <button class="btn btn-light bg-white border text-secondary"><i class="bi bi-download"></i></button>
+                <div class="flex items-center justify-between">
+                    <h5 class="font-bold text-lumina-blue flex items-center text-lg"><x-heroicon-o-list-bullet class="mr-2 size-6" />Daftar Inventaris Buku</h5>
+                    <div class="flex gap-2">
+                        <button class="w-10 h-10 rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-lumina-blue transition-colors flex items-center justify-center"><x-heroicon-o-funnel class="size-6" /></button>
+                        <button class="w-10 h-10 rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-lumina-blue transition-colors flex items-center justify-center"><x-heroicon-o-arrow-down-tray class="size-6" /></button>
                     </div>
                 </div>
             </x-slot:header>
 
             <x-slot:head>
-                    <tr>
-                        <th class="px-3 py-3 text-uppercase text-muted fw-bold border-0" style="background-color: #F8FAFC; font-size: 0.75rem; letter-spacing: 1px;">Judul Buku</th>
-                        <th class="px-3 py-3 text-uppercase text-muted fw-bold border-0" style="background-color: #F8FAFC; font-size: 0.75rem; letter-spacing: 1px;">Penulis</th>
-                        <th class="px-3 py-3 text-uppercase text-muted fw-bold border-0" style="background-color: #F8FAFC; font-size: 0.75rem; letter-spacing: 1px;">Stok</th>
-                        <th class="px-3 py-3 text-uppercase text-muted fw-bold border-0" style="background-color: #F8FAFC; font-size: 0.75rem; letter-spacing: 1px;">Harga</th>
-                        <th class="px-3 py-3 text-uppercase text-muted fw-bold border-0 text-end" style="background-color: #F8FAFC; font-size: 0.75rem; letter-spacing: 1px;">Aksi</th>
-                    </tr>
-                </x-slot:head>
+                <tr>
+                    <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider w-2/5">Judul Buku</th>
+                    <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Penulis</th>
+                    <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Stok</th>
+                    <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Harga</th>
+                    <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Aksi</th>
+                </tr>
+            </x-slot:head>
 
-                @foreach($books as $book)
-                            <tr class="border-bottom">
-                                <td class="px-3 py-3" style="background-color: #F8FAFC;">
-                                    <div class="d-flex align-items-center gap-3">
-                                        @if($book->cover_buku)
-                                            <div class="book-cover overflow-hidden bg-transparent border border-slate-200" style="padding: 0;">
-                                                <img src="{{ asset('storage/' . $book->cover_buku) }}" alt="Cover" class="w-100 h-100" style="object-fit: cover;">
-                                            </div>
-                                        @else
-                                            <div class="book-cover">COVER</div>
-                                        @endif
-                                        <span class="fw-bold text-dark" style="font-size: 1rem;">{{ $book->judul }}</span>
-                                    </div>
-                                </td>
-                                <td class="px-3 py-3 text-muted fw-medium" style="background-color: #F8FAFC; font-size: 0.85rem;">{{ strtoupper($book->penulis) }}</td>
-                                <td class="px-3 py-3" style="background-color: #F8FAFC;">
-                                    @php
-                                        $stockClass = 'stock-high';
-                                        if ($book->stok < 20) $stockClass = 'stock-low';
-                                        elseif ($book->stok < 50) $stockClass = 'stock-med';
-                                    @endphp
-                                    <span class="stock-badge {{ $stockClass }}">{{ $book->stok ?? 0 }}</span>
-                                </td>
-                                <td class="px-3 py-3 fw-bold text-primary" style="background-color: #F8FAFC; font-size: 0.9rem; color: #1a4fd9 !important;">
-                                    Rp {{ number_format($book->harga, 0, ',', '.') }}
-                                </td>
-                                <td class="px-3 py-3 text-end" style="background-color: #F8FAFC;">
-                                    <div class="d-flex justify-content-end gap-2">
-                                        <button type="button" class="btn btn-white border btn-xs px-3 py-1 rounded-2 fw-bold text-muted shadow-sm bg-white" style="font-size: 0.7rem;" data-bs-toggle="modal" data-bs-target="#modalEditBuku-{{ $book->id }}">
-                                            Ubah
-                                        </button>
-                                        <button type="button" class="btn btn-outline-danger btn-xs px-3 py-1 rounded-2 fw-bold border-0" style="font-size: 0.7rem;" data-bs-toggle="modal" data-bs-target="#deleteModal-{{ $book->id }}">
-                                            Hapus
-                                        </button>
-                                    </div>
+            @foreach($books as $book)
+                <tr class="hover:bg-slate-50/50 transition-colors group border-b border-slate-100 last:border-0" x-data>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-4">
+                            @if($book->cover_buku)
+                                <div class="w-12 h-16 rounded-lg overflow-hidden border border-slate-200 shrink-0">
+                                    <img src="{{ asset('storage/' . $book->cover_buku) }}" alt="Cover" class="w-full h-full object-cover">
+                                </div>
+                            @else
+                                <div class="w-12 h-16 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center shrink-0">
+                                    <span class="text-[0.6rem] font-bold text-slate-400">COVER</span>
+                                </div>
+                            @endif
+                            <span class="font-bold text-slate-800 text-sm group-hover:text-lumina-blue transition-colors">{{ $book->judul }}</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 text-sm font-semibold text-slate-500">{{ strtoupper($book->penulis) }}</td>
+                    <td class="px-6 py-4">
+                        @php
+                            $stockClass = 'bg-emerald-100 text-emerald-700 border-emerald-200';
+                            if ($book->stok < 20) $stockClass = 'bg-rose-100 text-rose-700 border-rose-200';
+                            elseif ($book->stok < 50) $stockClass = 'bg-amber-100 text-amber-700 border-amber-200';
+                        @endphp
+                        <span class="px-3 py-1 text-xs font-bold rounded-full border {{ $stockClass }}">{{ $book->stok ?? 0 }}</span>
+                    </td>
+                    <td class="px-6 py-4 font-bold text-lumina-blue">
+                        Rp {{ number_format($book->harga, 0, ',', '.') }}
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center justify-end gap-2 transition-opacity">
+                            <button @click="$dispatch('open-modal', 'modalEditBuku-{{ $book->id }}')" class="px-3 py-1.5 bg-white border border-slate-200 text-slate-600 hover:text-lumina-blue hover:border-lumina-blue/30 hover:bg-blue-50 rounded-lg text-xs font-bold transition-all shadow-sm">
+                                Ubah
+                            </button>
+                            <button @click="$dispatch('open-modal', 'deleteModal-{{ $book->id }}')" class="px-3 py-1.5 bg-white border border-rose-200 text-rose-500 hover:bg-rose-50 rounded-lg text-xs font-bold transition-all shadow-sm">
+                                Hapus
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            @endforeach
 
-                                </td>
-                            </tr>
-                @endforeach
-
-                <x-slot:emptyState>
-                    <div class="text-center py-4">
-                        <i class="bi bi-book fs-1 text-secondary opacity-50"></i>
-                        <div class="fw-bold mt-3 text-dark fs-5">Belum ada buku</div>
-                        <div class="text-muted mt-1">Tambahkan buku pertama untuk ditampilkan di sini.</div>
+            <x-slot:emptyState>
+                <div class="flex flex-col items-center justify-center">
+                    <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
+                        <x-heroicon-o-book-open class="size-10 text-slate-300" />
                     </div>
-                </x-slot:emptyState>
+                    <div class="font-bold text-slate-800 text-lg mb-1">Belum ada buku</div>
+                    <div class="text-slate-500 text-sm">Tambahkan buku pertama untuk ditampilkan di sini.</div>
+                </div>
+            </x-slot:emptyState>
+
             <x-slot:pagination>
                 @if($books->hasPages())
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="text-secondary small">Menampilkan {{ $books->firstItem() }}-{{ $books->lastItem() }} dari {{ $books->total() }} buku</span>
-                        <div class="d-flex gap-2">
+                    <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+                        <span class="text-slate-500 text-sm">Menampilkan <span class="font-semibold text-slate-700">{{ $books->firstItem() }}-{{ $books->lastItem() }}</span> dari <span class="font-semibold text-slate-700">{{ $books->total() }}</span> buku</span>
+                        <div class="flex gap-2">
                             @if ($books->onFirstPage())
-                                <button class="btn btn-light bg-white border text-muted px-3 py-1 rounded-3 small" disabled>Sebelumnya</button>
+                                <span class="px-4 py-2 border border-slate-200 text-slate-400 bg-slate-50 rounded-xl text-sm font-semibold cursor-not-allowed">Sebelumnya</span>
                             @else
-                                <a href="{{ $books->previousPageUrl() }}" class="btn btn-light bg-white border text-primary fw-medium px-3 py-1 rounded-3 small">Sebelumnya</a>
+                                <a href="{{ $books->previousPageUrl() }}" class="px-4 py-2 border border-slate-200 text-slate-700 bg-white hover:bg-slate-50 rounded-xl text-sm font-semibold transition-colors shadow-sm">Sebelumnya</a>
                             @endif
 
                             @if ($books->hasMorePages())
-                                <a href="{{ $books->nextPageUrl() }}" class="btn btn-light bg-white border text-primary fw-medium px-3 py-1 rounded-3 small">Selanjutnya</a>
+                                <a href="{{ $books->nextPageUrl() }}" class="px-4 py-2 border border-slate-200 text-slate-700 bg-white hover:bg-slate-50 rounded-xl text-sm font-semibold transition-colors shadow-sm">Selanjutnya</a>
                             @else
-                                <button class="btn btn-light bg-white border text-muted px-3 py-1 rounded-3 small" disabled>Selanjutnya</button>
+                                <span class="px-4 py-2 border border-slate-200 text-slate-400 bg-slate-50 rounded-xl text-sm font-semibold cursor-not-allowed">Selanjutnya</span>
                             @endif
                         </div>
                     </div>
@@ -242,169 +161,202 @@
         </x-admin.table>
     </div>
 
-    {{-- Modal Tambah Buku --}}
-    <div class="modal fade" id="modalTambahBuku" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content border-0 shadow-lg rounded-4">
-                <div class="modal-header border-bottom-0 bg-light px-4 py-3">
-                    <h5 class="modal-title fw-bold text-primary" style="font-size: 1.1rem;">Tambah Buku</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form action="{{ route('admin.books.store') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <div class="modal-body px-4 py-4" style="background-color: #F8FAFC;">
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="form-label x-small text-muted fw-bold mb-1">Judul Buku</label>
-                                <input type="text" name="judul" class="form-control" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label x-small text-muted fw-bold mb-1">Penulis</label>
-                                <input type="text" name="penulis" class="form-control" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label x-small text-muted fw-bold mb-1">Kategori</label>
-                                <select name="category_id" class="form-select" required>
-                                    <option value="">Pilih Kategori...</option>
-                                    @foreach($categories ?? [] as $cat)
-                                        <option value="{{ $cat->id }}">{{ $cat->nama }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="form-label x-small text-muted fw-bold mb-1">Harga</label>
-                                <input type="number" name="harga" class="form-control" min="0" required>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="form-label x-small text-muted fw-bold mb-1">Stok</label>
-                                <input type="number" name="stok" class="form-control" min="0" required>
-                            </div>
-                            <div class="col-md-12">
-                                <label class="form-label x-small text-muted fw-bold mb-1">Sinopsis</label>
-                                <textarea name="sinopsis" class="form-control" rows="3"></textarea>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label x-small text-muted fw-bold mb-1">Upload Cover Buku</label>
-                                <input type="file" name="cover_buku" class="form-control" accept="image/jpeg,image/png,image/webp,image/jpg" onchange="previewImage(this, 'previewTambah')">
-                                <small class="text-muted d-block mt-1">Format: JPG, PNG, WEBP (Maks 2MB)</small>
-                                <div class="mt-2">
-                                    <img id="previewTambah" src="" class="img-thumbnail rounded-3" style="max-height: 120px; object-fit: cover; display:none;">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label x-small text-muted fw-bold mb-1">Upload File E-Book (PDF)</label>
-                                <input type="file" name="file_buku" class="form-control" accept="application/pdf">
-                                <small class="text-muted d-block mt-1">Format: PDF (Maks 10MB)</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer border-top-0 px-4 py-3 bg-white">
-                        <button type="button" class="btn btn-light border px-4 py-2 rounded-3 fw-bold small" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-primary px-4 py-2 rounded-3 fw-bold small shadow-sm">Simpan Buku</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+    {{-- Alpine Modals Container --}}
+    <div x-data="{ activeModal: null }" @open-modal.window="activeModal = $event.detail" @close-modal.window="activeModal = null" @keydown.escape.window="activeModal = null">
 
-    @foreach($books as $book)
-        <x-confirm-modal
-            :id="'deleteModal-' . $book->id"
-            title="Konfirmasi Hapus"
-            :message="'Apakah kamu yakin ingin menghapus buku \'' . $book->judul . '\'? Tindakan ini tidak dapat dibatalkan.'"
-            :action="route('admin.books.destroy', $book->id)"
-            method="DELETE"
-            theme="danger"
-        />
+        {{-- Modal Tambah Buku --}}
+        <div x-show="activeModal === 'modalTambahBuku'" style="display: none;" class="fixed inset-0 z-[1050] overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+            <div x-show="activeModal === 'modalTambahBuku'" x-transition.opacity class="fixed inset-0 bg-slate-900/50" @click="activeModal = null"></div>
 
-        {{-- Modal Edit Buku --}}
-        <div class="modal fade" id="modalEditBuku-{{ $book->id }}" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
-                <div class="modal-content border-0 shadow-lg rounded-4">
-                    <div class="modal-header border-bottom-0 bg-light px-4 py-3">
-                        <h5 class="modal-title fw-bold text-primary" style="font-size: 1.1rem;">Ubah Buku</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="flex min-h-full items-center justify-center p-4">
+                <div x-show="activeModal === 'modalTambahBuku'" 
+                     x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" 
+                     x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" 
+                     class="relative transform bg-white rounded-3xl text-left shadow-lg transition-all w-full max-w-4xl overflow-hidden">
+                    
+                    <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+                        <h5 class="text-xl font-bold text-lumina-blue">Tambah Buku</h5>
+                        <button type="button" @click="activeModal = null" class="text-slate-400 hover:text-rose-500 p-1 transition-colors">
+                            <x-heroicon-o-x-mark class="size-5" />
+                        </button>
                     </div>
-                    <form action="{{ route('admin.books.update', $book->id) }}" method="POST" enctype="multipart/form-data">
+
+                    <form action="{{ route('admin.books.store') }}" method="POST" enctype="multipart/form-data" class="max-h-[75vh] overflow-y-auto">
                         @csrf
-                        @method('PUT')
-                        <div class="modal-body px-4 py-4" style="background-color: #F8FAFC;">
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label class="form-label x-small text-muted fw-bold mb-1">Judul Buku</label>
-                                    <input type="text" name="judul" class="form-control" value="{{ $book->judul }}" required>
+                        <div class="p-6 md:p-8">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Judul Buku</label>
+                                    <input type="text" name="judul" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors" required>
                                 </div>
-                                <div class="col-md-6">
-                                    <label class="form-label x-small text-muted fw-bold mb-1">Penulis</label>
-                                    <input type="text" name="penulis" class="form-control" value="{{ $book->penulis }}" required>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Penulis</label>
+                                    <input type="text" name="penulis" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors" required>
                                 </div>
-                                <div class="col-md-6">
-                                    <label class="form-label x-small text-muted fw-bold mb-1">Kategori</label>
-                                    <select name="category_id" class="form-select" required>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Kategori</label>
+                                    <select name="category_id" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors" required>
                                         <option value="">Pilih Kategori...</option>
                                         @foreach($categories ?? [] as $cat)
-                                            <option value="{{ $cat->id }}" {{ $book->category_id == $cat->id ? 'selected' : '' }}>{{ $cat->nama }}</option>
+                                            <option value="{{ $cat->id }}">{{ $cat->nama }}</option>
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-md-3">
-                                    <label class="form-label x-small text-muted fw-bold mb-1">Harga</label>
-                                    <input type="number" name="harga" class="form-control" value="{{ (int)$book->harga }}" min="0" required>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="form-label x-small text-muted fw-bold mb-1">Stok</label>
-                                    <input type="number" name="stok" class="form-control" value="{{ $book->stok }}" min="0" required>
-                                </div>
-                                <div class="col-md-12">
-                                    <label class="form-label x-small text-muted fw-bold mb-1">Sinopsis</label>
-                                    <textarea name="sinopsis" class="form-control" rows="3">{{ $book->sinopsis }}</textarea>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label x-small text-muted fw-bold mb-1">Upload Cover Baru (Opsional)</label>
-                                    <input type="file" name="cover_buku" class="form-control" accept="image/jpeg,image/png,image/webp,image/jpg" onchange="previewImage(this, 'previewEdit{{ $book->id }}')">
-                                    <small class="text-muted d-block mt-1">Format: JPG, PNG, WEBP (Maks 2MB)</small>
-                                    <div class="mt-2">
-                                        <img id="previewEdit{{ $book->id }}" src="{{ $book->cover_buku ? asset('storage/' . $book->cover_buku) : '' }}" class="img-thumbnail rounded-3" style="max-height: 120px; object-fit: cover; {{ $book->cover_buku ? '' : 'display:none;' }}">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Harga</label>
+                                        <input type="number" name="harga" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors" min="0" required>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Stok</label>
+                                        <input type="number" name="stok" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors" min="0" required>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <label class="form-label x-small text-muted fw-bold mb-1">Upload File E-Book PDF Baru (Opsional)</label>
-                                    <input type="file" name="file_buku" class="form-control" accept="application/pdf">
-                                    <small class="text-muted d-block mt-1">Format: PDF (Maks 10MB)</small>
-                                    @if($book->file_buku)
-                                        <div class="mt-2 text-success small"><i class="bi bi-check-circle-fill me-1"></i> File PDF tersedia.</div>
-                                    @endif
+                                <div class="md:col-span-2">
+                                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Sinopsis</label>
+                                    <textarea name="sinopsis" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors" rows="3"></textarea>
+                                </div>
+                                <div x-data="{ previewUrl: null }">
+                                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Upload Cover Buku</label>
+                                    <input type="file" name="cover_buku" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-lumina-blue/10 file:text-lumina-blue hover:file:bg-lumina-blue/20 border border-slate-200 rounded-xl bg-slate-50 focus:outline-none focus:border-lumina-blue transition-all p-1.5 cursor-pointer" accept="image/jpeg,image/png,image/webp,image/jpg" @change="previewUrl = URL.createObjectURL($event.target.files[0])">
+                                    <small class="text-slate-400 text-xs mt-2 block">Format: JPG, PNG, WEBP (Maks 2MB)</small>
+                                    <template x-if="previewUrl">
+                                        <div class="mt-4">
+                                            <img :src="previewUrl" class="h-32 rounded-xl object-cover border border-slate-200 shadow-sm">
+                                        </div>
+                                    </template>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Upload File E-Book (PDF)</label>
+                                    <input type="file" name="file_buku" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-rose-500/10 file:text-rose-600 hover:file:bg-rose-500/20 border border-slate-200 rounded-xl bg-slate-50 focus:outline-none focus:border-rose-500 transition-all p-1.5 cursor-pointer" accept="application/pdf">
+                                    <small class="text-slate-400 text-xs mt-2 block">Format: PDF (Maks 10MB)</small>
                                 </div>
                             </div>
                         </div>
-                        <div class="modal-footer border-top-0 px-4 py-3 bg-white">
-                            <button type="button" class="btn btn-light border px-4 py-2 rounded-3 fw-bold small" data-bs-dismiss="modal">Batal</button>
-                            <button type="submit" class="btn btn-primary px-4 py-2 rounded-3 fw-bold small shadow-sm">Simpan Perubahan</button>
+                        <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/50 flex justify-end gap-3 sticky bottom-0">
+                            <button type="button" @click="activeModal = null" class="px-6 py-2.5 bg-white border border-slate-200 text-slate-700 font-bold rounded-xl shadow-sm hover:bg-slate-50 transition-colors">Batal</button>
+                            <button type="submit" class="px-6 py-2.5 bg-lumina-blue hover:bg-blue-800 text-white font-bold rounded-xl shadow-sm transition-colors">Simpan Buku</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-    @endforeach
 
-    @push('scripts')
-    <script>
-        function previewImage(input, previewId) {
-            const preview = document.getElementById(previewId);
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
-                }
-                reader.readAsDataURL(input.files[0]);
-            } else {
-                if (!preview.src.includes('storage')) {
-                    preview.src = '';
-                    preview.style.display = 'none';
-                }
-            }
-        }
-    </script>
-    @endpush
+        {{-- Modals for existing books (Edit / Delete) --}}
+        @foreach($books as $book)
+            {{-- Modal Delete --}}
+            <div x-show="activeModal === 'deleteModal-{{ $book->id }}'" style="display: none;" class="fixed inset-0 z-[1050] overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                <div x-show="activeModal === 'deleteModal-{{ $book->id }}'" x-transition.opacity class="fixed inset-0 bg-slate-900/50" @click="activeModal = null"></div>
+
+                <div class="flex min-h-full items-center justify-center p-4">
+                    <div x-show="activeModal === 'deleteModal-{{ $book->id }}'" 
+                         x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" 
+                         x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" 
+                         class="relative transform bg-white rounded-3xl text-left shadow-lg transition-all w-full max-w-lg overflow-hidden">
+                        
+                        <div class="p-8 text-center">
+                            <div class="w-16 h-16 rounded-full bg-rose-100 text-rose-500 flex items-center justify-center mx-auto mb-5">
+                                <x-heroicon-o-exclamation-triangle class="size-10" />
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-800 mb-2">Konfirmasi Hapus</h3>
+                            <p class="text-slate-500 mb-6">Apakah kamu yakin ingin menghapus buku <span class="font-bold text-slate-700">"{{ $book->judul }}"</span>? Tindakan ini tidak dapat dibatalkan.</p>
+                            
+                            <div class="flex justify-center gap-3">
+                                <button type="button" @click="activeModal = null" class="px-6 py-2.5 bg-white border border-slate-200 text-slate-700 font-bold rounded-xl shadow-sm hover:bg-slate-50 transition-colors w-full">Batal</button>
+                                <form action="{{ route('admin.books.destroy', $book->id) }}" method="POST" class="w-full">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="w-full px-6 py-2.5 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-xl shadow-sm transition-colors">Ya, Hapus</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Modal Edit Buku --}}
+            <div x-show="activeModal === 'modalEditBuku-{{ $book->id }}'" style="display: none;" class="fixed inset-0 z-[1050] overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                <div x-show="activeModal === 'modalEditBuku-{{ $book->id }}'" x-transition.opacity class="fixed inset-0 bg-slate-900/50" @click="activeModal = null"></div>
+
+                <div class="flex min-h-full items-center justify-center p-4">
+                    <div x-show="activeModal === 'modalEditBuku-{{ $book->id }}'" 
+                         x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" 
+                         x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" 
+                         class="relative transform bg-white rounded-3xl text-left shadow-lg transition-all w-full max-w-4xl overflow-hidden">
+                        
+                        <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+                            <h5 class="text-xl font-bold text-lumina-blue">Ubah Buku</h5>
+                            <button type="button" @click="activeModal = null" class="text-slate-400 hover:text-rose-500 p-1 transition-colors">
+                                <x-heroicon-o-x-mark class="size-5" />
+                            </button>
+                        </div>
+
+                        <form action="{{ route('admin.books.update', $book->id) }}" method="POST" enctype="multipart/form-data" class="max-h-[75vh] overflow-y-auto">
+                            @csrf
+                            @method('PUT')
+                            <div class="p-6 md:p-8">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Judul Buku</label>
+                                        <input type="text" name="judul" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors" value="{{ $book->judul }}" required>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Penulis</label>
+                                        <input type="text" name="penulis" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors" value="{{ $book->penulis }}" required>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Kategori</label>
+                                        <select name="category_id" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors" required>
+                                            <option value="">Pilih Kategori...</option>
+                                            @foreach($categories ?? [] as $cat)
+                                                <option value="{{ $cat->id }}" {{ $book->category_id == $cat->id ? 'selected' : '' }}>{{ $cat->nama }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Harga</label>
+                                            <input type="number" name="harga" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors" value="{{ (int)$book->harga }}" min="0" required>
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Stok</label>
+                                            <input type="number" name="stok" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors" value="{{ $book->stok }}" min="0" required>
+                                        </div>
+                                    </div>
+                                    <div class="md:col-span-2">
+                                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Sinopsis</label>
+                                        <textarea name="sinopsis" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors" rows="3">{{ $book->sinopsis }}</textarea>
+                                    </div>
+                                    <div x-data="{ previewUrl: '{{ $book->cover_buku ? asset('storage/' . $book->cover_buku) : '' }}' }">
+                                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Upload Cover Baru (Opsional)</label>
+                                        <input type="file" name="cover_buku" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-lumina-blue/10 file:text-lumina-blue hover:file:bg-lumina-blue/20 border border-slate-200 rounded-xl bg-slate-50 focus:outline-none focus:border-lumina-blue transition-all p-1.5 cursor-pointer" accept="image/jpeg,image/png,image/webp,image/jpg" @change="previewUrl = URL.createObjectURL($event.target.files[0])">
+                                        <small class="text-slate-400 text-xs mt-2 block">Format: JPG, PNG, WEBP (Maks 2MB)</small>
+                                        <template x-if="previewUrl">
+                                            <div class="mt-4">
+                                                <img :src="previewUrl" class="h-32 rounded-xl object-cover border border-slate-200 shadow-sm">
+                                            </div>
+                                        </template>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Upload File E-Book Baru (Opsional)</label>
+                                        <input type="file" name="file_buku" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-rose-500/10 file:text-rose-600 hover:file:bg-rose-500/20 border border-slate-200 rounded-xl bg-slate-50 focus:outline-none focus:border-rose-500 transition-all p-1.5 cursor-pointer" accept="application/pdf">
+                                        <small class="text-slate-400 text-xs mt-2 block">Format: PDF (Maks 10MB)</small>
+                                        @if($book->file_buku)
+                                            <div class="mt-3 flex items-center text-emerald-600 text-sm font-semibold bg-emerald-50 px-3 py-2 rounded-lg border border-emerald-100">
+                                                <x-heroicon-s-check-circle class="mr-2 size-5" /> File PDF saat ini tersedia.
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/50 flex justify-end gap-3 sticky bottom-0">
+                                <button type="button" @click="activeModal = null" class="px-6 py-2.5 bg-white border border-slate-200 text-slate-700 font-bold rounded-xl shadow-sm hover:bg-slate-50 transition-colors">Batal</button>
+                                <button type="submit" class="px-6 py-2.5 bg-lumina-blue hover:bg-blue-800 text-white font-bold rounded-xl shadow-sm transition-colors">Simpan Perubahan</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        @endforeach
+    </div>
 </x-admin.layout>

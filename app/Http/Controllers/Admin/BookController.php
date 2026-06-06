@@ -62,11 +62,7 @@ class BookController extends Controller
         }
 
         if ($request->hasFile('cover_buku')) {
-            $validated['cover_buku'] = $request->file('cover_buku')->store('covers', 'public');
-        }
-
-        if ($request->hasFile('cover_buku')) {
-            $validated['cover_buku'] = $request->file('cover_buku')->store('covers', 'public');
+            $data['cover_buku'] = $request->file('cover_buku')->store('covers', 'public');
         }
 
         Book::create($data);
@@ -112,14 +108,7 @@ class BookController extends Controller
             if ($book->cover_buku) {
                 \Illuminate\Support\Facades\Storage::disk('public')->delete($book->cover_buku);
             }
-            $validated['cover_buku'] = $request->file('cover_buku')->store('covers', 'public');
-        }
-
-        if ($request->hasFile('cover_buku')) {
-            if ($book->cover_buku) {
-                \Illuminate\Support\Facades\Storage::disk('public')->delete($book->cover_buku);
-            }
-            $validated['cover_buku'] = $request->file('cover_buku')->store('covers', 'public');
+            $data['cover_buku'] = $request->file('cover_buku')->store('covers', 'public');
         }
 
         $book->update($data);

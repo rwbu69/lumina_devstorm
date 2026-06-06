@@ -1,7 +1,7 @@
 <x-app-layout :hideNavbar="true">
     <x-user-navbar />
     
-    <div class="min-h-screen bg-[#FDFDFC] font-sans">
+    <div class="min-h-screen bg-[#FDFBF7] font-sans">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
             
             {{-- Section 1: Hero --}}
@@ -30,27 +30,27 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24 mt-24 max-w-5xl mx-auto items-start">
                     <div class="bg-white p-12 rounded-[2rem] border border-slate-100 shadow-sm h-full">
                         <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center mb-8">
-                            <i class="bi bi-eye text-2xl"></i>
+                            <x-heroicon-o-eye class="size-8" />
                         </div>
                         <h3 class="text-3xl font-serif text-slate-800 mb-6">Visi</h3>
                         <p class="text-slate-600 italic text-lg leading-relaxed">"Lorem Ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vel sapien sit amet erat vestibulum tristique."</p>
                     </div>
                     <div class="bg-white p-12 rounded-[2rem] border border-slate-100 shadow-sm h-full">
                         <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center mb-8">
-                            <i class="bi bi-bullseye text-2xl"></i>
+                            <x-heroicon-o-viewfinder-circle class="size-8" />
                         </div>
                         <h3 class="text-3xl font-serif text-slate-800 mb-6">Misi</h3>
                         <ul class="space-y-4 text-slate-600 text-lg font-light">
                             <li class="flex items-start">
-                                <i class="bi bi-check2 text-indigo-600 mt-1.5 mr-4"></i>
+                                <x-heroicon-o-check class="text-indigo-600 mt-1.5 mr-4 size-5" />
                                 <span>Lorem Ipsum dolor sit amet, consectetur adipiscing elit.</span>
                             </li>
                             <li class="flex items-start">
-                                <i class="bi bi-check2 text-indigo-600 mt-1.5 mr-4"></i>
+                                <x-heroicon-o-check class="text-indigo-600 mt-1.5 mr-4 size-5" />
                                 <span>Curabitur vel sapien sit amet erat vestibulum tristique.</span>
                             </li>
                             <li class="flex items-start">
-                                <i class="bi bi-check2 text-indigo-600 mt-1.5 mr-4"></i>
+                                <x-heroicon-o-check class="text-indigo-600 mt-1.5 mr-4 size-5" />
                                 <span>Proin gravida, mi id convallis rhoncus, nulla.</span>
                             </li>
                         </ul>
@@ -70,21 +70,21 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-16">
                         <div class="flex flex-col items-center group">
                             <div class="w-20 h-20 bg-slate-50 group-hover:bg-indigo-50 transition-colors rounded-full flex items-center justify-center mb-8">
-                                <i class="bi bi-book text-3xl text-indigo-900 group-hover:text-indigo-600 transition-colors"></i>
+                                <x-heroicon-o-book-open class="size-10 text-indigo-900 group-hover:text-indigo-600 transition-colors" />
                             </div>
                             <h4 class="text-2xl font-serif text-slate-800 mb-4">Nilai 1</h4>
                             <p class="text-slate-500 font-light leading-relaxed">Penjelasan singkat mengenai nilai pertama yang menjadi pondasi utama kami.</p>
                         </div>
                         <div class="flex flex-col items-center group">
                             <div class="w-20 h-20 bg-slate-50 group-hover:bg-amber-50 transition-colors rounded-full flex items-center justify-center mb-8">
-                                <i class="bi bi-stars text-3xl text-amber-700 group-hover:text-amber-600 transition-colors"></i>
+                                <x-heroicon-o-star class="size-10 text-amber-700 group-hover:text-amber-600 transition-colors" />
                             </div>
                             <h4 class="text-2xl font-serif text-slate-800 mb-4">Nilai 2</h4>
                             <p class="text-slate-500 font-light leading-relaxed">Penjelasan singkat mengenai nilai kedua yang memandu setiap langkah kami.</p>
                         </div>
                         <div class="flex flex-col items-center group">
                             <div class="w-20 h-20 bg-slate-50 group-hover:bg-indigo-50 transition-colors rounded-full flex items-center justify-center mb-8">
-                                <i class="bi bi-lamp text-3xl text-indigo-900 group-hover:text-indigo-600 transition-colors"></i>
+                                <x-heroicon-o-light-bulb class="size-10 text-indigo-900 group-hover:text-indigo-600 transition-colors" />
                             </div>
                             <h4 class="text-2xl font-serif text-slate-800 mb-4">Nilai 3</h4>
                             <p class="text-slate-500 font-light leading-relaxed">Penjelasan singkat mengenai nilai ketiga yang menjadi tujuan akhir kami.</p>

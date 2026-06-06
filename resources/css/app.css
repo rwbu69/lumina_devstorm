@@ -1,12 +1,13 @@
 @import "tailwindcss";
+@source "../views";
 
 @theme {
-  --color-lumina-blue: rgb(var(--lumina-blue-rgb));
-  --color-lumina-gold: rgb(var(--lumina-gold-rgb));
-  --color-lumina-cream: rgb(var(--lumina-cream-rgb));
-  --color-lumina-white: rgb(var(--lumina-white-rgb));
-  --color-lumina-black: rgb(var(--lumina-black-rgb));
-  --color-lumina-red: rgb(var(--lumina-red-rgb));
+  --color-lumina-blue: #1a4fd9;
+  --color-lumina-gold: #f2c94c;
+  --color-lumina-cream: #fdfbf7;
+  --color-lumina-white: #ffffff;
+  --color-lumina-black: #111827;
+  --color-lumina-red: #ef4444;
   --font-sans: 'Figtree', sans-serif;
   
   --animate-fade-up: fade-up 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
@@ -22,17 +23,10 @@
         @apply animate-fade-up;
     }
 
-    /* Modal Tailwind Animations over Bootstrap */
-    .modal.fade .modal-dialog {
-        @apply opacity-0! transition-opacity duration-[250ms] ease-out;
-    }
-    .modal.show .modal-dialog {
-        @apply opacity-100!;
-    }
-    .modal.fade .modal-content {
-        @apply scale-95! transition-transform duration-[300ms] ease-[cubic-bezier(0.34,1.56,0.64,1)];
-    }
-    .modal.show .modal-content {
-        @apply scale-100!;
+}
+
+@layer utilities {
+    .bg-lumina-blue {
+        background-color: var(--color-lumina-blue);
     }
 }

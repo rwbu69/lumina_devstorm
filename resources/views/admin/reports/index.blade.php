@@ -1,200 +1,180 @@
-<x-admin.layout>
-    <div style=" border-radius: 20px; padding: 16px;">
-        <div class="d-flex justify-content-between align-items-center mb-4">
+<x-admin.layout :title="'Lumina Media - Laporan Penjualan'">
+    <div class="bg-[#FDFBF7] min-h-full">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
             <div>
-                <h1 class="fw-bold mb-0" style="color: #1a4fd9; font-size: 1.75rem; font-weight: 800; letter-spacing: -0.03em;">Laporan Penjualan</h1>
-                <p class="text-secondary fw-medium mb-0" style="font-size: 0.95rem; color: #1a4fd9 !important;">Kelola dan pantau seluruh data transaksi penjualan dalam periode berjalan.</p>
+                <h1 class="text-3xl font-serif font-bold text-lumina-blue mb-1.5">Laporan Penjualan</h1>
+                <p class="text-slate-500 font-medium">Kelola dan pantau seluruh data transaksi penjualan dalam periode berjalan.</p>
             </div>
-            <a href="{{ route('admin.reports.exportPdf', request()->query()) }}" class="btn btn-primary d-flex align-items-center gap-2 px-3 py-2 rounded-3 shadow-sm fw-bold btn-sm">
-                <i class="bi bi-file-earmark-pdf-fill"></i>
-                <span>Ekspor PDF</span>
+            <a href="{{ route('admin.reports.exportPdf', request()->query()) }}" class="inline-flex items-center justify-center bg-lumina-blue hover:bg-blue-800 text-white px-5 py-2.5 rounded-xl font-bold shadow-sm transition-all whitespace-nowrap">
+                <x-heroicon-s-document-text class="mr-2 size-6" /> Ekspor PDF
             </a>
         </div>
 
         {{-- Filters & Search --}}
-        <div class="card border-0 shadow-sm rounded-4 mb-4 bg-white">
-        <div class="card-body px-3 py-3">
+        <div class="bg-white border border-slate-200 shadow-sm rounded-3xl mb-8 p-4">
             <form action="{{ route('admin.reports.index') }}" method="GET" id="filterForm">
-                <div class="d-flex align-items-center gap-3">
-
-                    {{-- Search icon + input (flex-grow) --}}
-                    <div class="d-flex align-items-center gap-2 flex-grow-1 text-muted">
-                        <i class="bi bi-search" style="font-size: 0.85rem; flex-shrink: 0;"></i>
+                <div class="flex flex-col md:flex-row items-center gap-4">
+                    
+                    {{-- Search --}}
+                    <div class="flex items-center gap-3 px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus-within:border-lumina-blue focus-within:ring-2 focus-within:ring-lumina-blue/20 transition-all flex-grow w-full md:w-auto">
+                        <x-heroicon-o-magnifying-glass class="text-slate-400 size-6 shrink-0" />
                         <input type="text" name="search"
-                               class="form-control border-0 shadow-none p-0 bg-transparent"
+                               class="bg-transparent border-0 w-full focus:ring-0 p-0 text-sm font-medium text-slate-700 placeholder-slate-400"
                                placeholder="Cari Order ID atau pelanggan..."
-                               value="{{ request('search') }}"
-                               style="font-size: 0.85rem; height: auto; line-height: 1.4;">
+                               value="{{ request('search') }}">
                     </div>
 
-                    {{-- Vertical divider --}}
-                    <div style="width: 1px; height: 22px; background: #E5E7EB; flex-shrink: 0;"></div>
-
-                    {{-- Status Select --}}
-                    <div class="d-flex align-items-center gap-1" style="flex-shrink: 0; cursor: pointer;">
-                        <select name="status"
-                                class="form-select border-0 shadow-none p-0 pe-4 bg-transparent"
-                                style="font-size: 0.85rem; height: auto; width: auto; min-width: 110px; cursor: pointer; background-position: right 0 center;"
-                                onchange="this.form.submit()">
+                    <div class="flex items-center gap-3 w-full md:w-auto">
+                        {{-- Status Select --}}
+                        <select name="status" class="px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:border-lumina-blue focus:ring-2 focus:ring-lumina-blue/20 transition-all text-sm font-medium text-slate-700 outline-none cursor-pointer" onchange="this.form.submit()">
                             <option value="semua" {{ request('status', 'semua') == 'semua' ? 'selected' : '' }}>Semua Status</option>
                             <option value="verified" {{ request('status') == 'verified' ? 'selected' : '' }}>Berhasil</option>
                             <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>Dibatalkan</option>
                         </select>
+
+                        {{-- Date Picker --}}
+                        <div class="relative">
+                            <button type="button" id="datePickerTrigger" class="w-12 h-12 flex items-center justify-center rounded-xl border transition-colors {{ request('start_date') ? 'bg-lumina-blue border-lumina-blue text-white' : 'bg-slate-50 border-slate-200 text-slate-500 hover:text-lumina-blue hover:bg-white' }}" title="{{ request('start_date') ? request('start_date') . ' – ' . request('end_date') : 'Pilih Rentang Tanggal' }}">
+                                <x-heroicon-o-calendar-days class="size-6" />
+                            </button>
+                            <input type="text" id="dateRangePicker" class="absolute w-0 h-0 opacity-0 pointer-events-none">
+                            <input type="hidden" name="start_date" id="start_date" value="{{ request('start_date') }}">
+                            <input type="hidden" name="end_date" id="end_date" value="{{ request('end_date') }}">
+                        </div>
+
+                        {{-- Sort Dropdown (Alpine) --}}
+                        <div class="relative" x-data="{ open: false }">
+                            <button type="button" @click="open = !open" @click.away="open = false" class="w-12 h-12 flex items-center justify-center rounded-xl border transition-colors {{ (request('sort') && request('sort') !== 'latest') ? 'bg-lumina-blue border-lumina-blue text-white' : 'bg-slate-50 border-slate-200 text-slate-500 hover:text-lumina-blue hover:bg-white' }}">
+                                <x-heroicon-o-funnel class="size-6" />
+                            </button>
+                            
+                            <div x-show="open" style="display: none;" x-transition.opacity class="absolute right-0 mt-2 w-48 bg-white border border-slate-200 shadow-lg rounded-2xl overflow-hidden z-50">
+                                <a href="#" @click.prevent="setSort('latest'); open = false" class="block px-4 py-2.5 text-sm font-medium transition-colors {{ !request('sort') || request('sort') == 'latest' ? 'bg-lumina-blue text-white' : 'text-slate-700 hover:bg-slate-50' }}">Terbaru</a>
+                                <a href="#" @click.prevent="setSort('oldest'); open = false" class="block px-4 py-2.5 text-sm font-medium transition-colors {{ request('sort') == 'oldest' ? 'bg-lumina-blue text-white' : 'text-slate-700 hover:bg-slate-50' }}">Terlama</a>
+                                <div class="border-t border-slate-100 my-1"></div>
+                                <a href="#" @click.prevent="setSort('highest'); open = false" class="block px-4 py-2.5 text-sm font-medium transition-colors {{ request('sort') == 'highest' ? 'bg-lumina-blue text-white' : 'text-slate-700 hover:bg-slate-50' }}">Harga Tertinggi</a>
+                                <a href="#" @click.prevent="setSort('lowest'); open = false" class="block px-4 py-2.5 text-sm font-medium transition-colors {{ request('sort') == 'lowest' ? 'bg-lumina-blue text-white' : 'text-slate-700 hover:bg-slate-50' }}">Harga Terendah</a>
+                            </div>
+                            <input type="hidden" name="sort" id="sortInput" value="{{ request('sort', 'latest') }}">
+                        </div>
+
+                        {{-- Reset Button --}}
+                        @php
+                            $hasActiveFilter = request()->filled('search')
+                                || request()->filled('start_date')
+                                || (request()->filled('status') && request('status') !== 'semua')
+                                || (request()->filled('sort') && request('sort') !== 'latest');
+                        @endphp
+                        @if($hasActiveFilter)
+                            <a href="{{ route('admin.reports.index') }}" class="w-12 h-12 flex items-center justify-center rounded-xl bg-rose-50 border border-rose-200 text-rose-500 hover:bg-rose-500 hover:text-white transition-colors" title="Reset semua filter">
+                                <x-heroicon-o-x-mark class="size-5" />
+                            </a>
+                        @endif
                     </div>
-
-                    {{-- Vertical divider --}}
-                    <div style="width: 1px; height: 22px; background: #E5E7EB; flex-shrink: 0;"></div>
-
-                    {{-- Date Picker trigger --}}
-                    <button type="button" id="datePickerTrigger"
-                            class="btn p-0 d-flex align-items-center justify-content-center border-0 bg-transparent"
-                            style="width: 28px; height: 28px; flex-shrink: 0; color: {{ request('start_date') ? '#1a4fd9' : '#9CA3AF' }};"
-                            title="{{ request('start_date') ? request('start_date') . ' – ' . request('end_date') : 'Pilih Rentang Tanggal' }}">
-                        <i class="bi bi-calendar" style="font-size: 1rem;"></i>
-                    </button>
-                    <input type="text" id="dateRangePicker" style="position: absolute; width: 0; height: 0; opacity: 0; pointer-events: none;">
-                    <input type="hidden" name="start_date" id="start_date" value="{{ request('start_date') }}">
-                    <input type="hidden" name="end_date" id="end_date" value="{{ request('end_date') }}">
-
-                    {{-- Sort / Filter trigger --}}
-                    <div class="dropdown" style="flex-shrink: 0;">
-                        <button type="button"
-                                class="btn p-0 d-flex align-items-center justify-content-center border-0 bg-transparent"
-                                style="width: 28px; height: 28px; color: #9CA3AF;"
-                                data-bs-toggle="dropdown">
-                            <i class="bi bi-filter" style="font-size: 1.15rem;"></i>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end shadow rounded-3 border-0 mt-2 p-2" style="min-width: 155px; font-size: 0.85rem; font-family: inherit;">
-                            <li><a class="dropdown-item rounded-2 py-2 {{ !request('sort') || request('sort') == 'latest' ? 'active' : '' }}" href="#" onclick="setSort('latest'); return false;">Terbaru</a></li>
-                            <li><a class="dropdown-item rounded-2 py-2 {{ request('sort') == 'oldest' ? 'active' : '' }}" href="#" onclick="setSort('oldest'); return false;">Terlama</a></li>
-                            <li><hr class="dropdown-divider my-1 mx-1"></li>
-                            <li><a class="dropdown-item rounded-2 py-2 {{ request('sort') == 'highest' ? 'active' : '' }}" href="#" onclick="setSort('highest'); return false;">Harga Tertinggi</a></li>
-                            <li><a class="dropdown-item rounded-2 py-2 {{ request('sort') == 'lowest' ? 'active' : '' }}" href="#" onclick="setSort('lowest'); return false;">Harga Terendah</a></li>
-                        </ul>
-                        <input type="hidden" name="sort" id="sortInput" value="{{ request('sort', 'latest') }}">
-                    </div>
-
-                    {{-- Reset Button (conditional) --}}
-                    @php
-                        $hasActiveFilter = request()->filled('search')
-                            || request()->filled('start_date')
-                            || (request()->filled('status') && request('status') !== 'semua')
-                            || (request()->filled('sort') && request('sort') !== 'latest');
-                    @endphp
-                    @if($hasActiveFilter)
-                        <a href="{{ route('admin.reports.index') }}"
-                           class="btn p-0 border-0 bg-transparent text-muted"
-                           style="font-size: 0.75rem; flex-shrink: 0;"
-                           title="Reset semua filter">
-                            <i class="bi bi-x-circle" style="font-size: 1rem;"></i>
-                        </a>
-                    @endif
-
                 </div>
             </form>
         </div>
-    </div>
 
-    {{-- Table --}}
-    <x-admin.table class="border-0 shadow-sm rounded-3 overflow-hidden">
-        <x-slot:head>
-            <tr>
-                <th class="px-3 py-3 text-uppercase fw-bold text-muted ls-wide border-0" style="background-color: #F8FAFC; font-size: 0.75rem;">Order ID</th>
-                <th class="px-3 py-3 text-uppercase fw-bold text-muted ls-wide border-0" style="background-color: #F8FAFC; font-size: 0.75rem;">Tanggal</th>
-                <th class="px-3 py-3 text-uppercase fw-bold text-muted ls-wide border-0" style="background-color: #F8FAFC; font-size: 0.75rem;">Pelanggan</th>
-                <th class="px-3 py-3 text-uppercase fw-bold text-muted ls-wide border-0" style="background-color: #F8FAFC; font-size: 0.75rem;">Produk</th>
-                <th class="px-3 py-3 text-uppercase fw-bold text-muted ls-wide border-0" style="background-color: #F8FAFC; font-size: 0.75rem;">Jumlah</th>
-                <th class="px-3 py-3 text-uppercase fw-bold text-muted ls-wide border-0 text-center" style="background-color: #F8FAFC; font-size: 0.75rem;">Status</th>
-            </tr>
-        </x-slot:head>
+        {{-- Table --}}
+        <x-admin.table>
+            <x-slot:head>
+                <tr>
+                    <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Order ID</th>
+                    <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Tanggal</th>
+                    <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Pelanggan</th>
+                    <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider w-1/4">Produk</th>
+                    <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Jumlah</th>
+                    <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-center">Status</th>
+                </tr>
+            </x-slot:head>
 
-        @foreach($orders as $order)
-                        <tr class="border-bottom" style="background-color: #F8FAFC;">
-                            <td class="px-3 py-3" style="background-color: #F8FAFC;">
-                                <span class="fw-bold text-primary" style="font-size: 0.85rem;">
-                                    #ORD-{{ str_pad((string)$order->id, 8, '0', STR_PAD_LEFT) }}
-                                </span>
-                            </td>
-                            <td class="px-3 py-3 text-muted fw-medium" style="background-color: #F8FAFC;" style="font-size: 0.85rem;">
-                                {{ $order->tanggal_pesan->format('d M Y') }}
-                            </td>
-                            <td class="px-3 py-3" style="background-color: #F8FAFC;">
-                                <div class="d-flex align-items-center gap-2">
-                                    <div class="avatar-circle rounded-circle d-flex align-items-center justify-content-center fw-bold"
-                                         style="width: 32px; height: 32px; min-width: 32px; font-size: 0.65rem; background-color: #E8F0FE; color: #1a4fd9;">
-                                        {{ strtoupper(substr($order->user->nama, 0, 2)) }}
-                                    </div>
-                                    <div class="fw-medium text-dark text-truncate" style="font-size: 0.85rem; max-width: 150px;">
-                                        {{ $order->user->nama }}
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-3 py-3 text-muted" style="background-color: #F8FAFC;" style="font-size: 0.85rem; max-width: 180px;">
-                                @php $firstItem = $order->orderDetails->first(); @endphp
-                                <span class="text-truncate d-block">
-                                    {{ $firstItem ? $firstItem->book->judul : '-' }}
-                                    @if($order->orderDetails->count() > 1)
-                                        <span class="text-muted" style="font-size: 0.75rem;">(+{{ $order->orderDetails->count() - 1 }})</span>
-                                    @endif
-                                </span>
-                            </td>
-                            <td class="px-3 py-3 fw-bold text-dark" style="background-color: #F8FAFC;" style="font-size: 0.85rem; white-space: nowrap;">
-                                Rp {{ number_format($order->total_tagihan, 0, ',', '.') }}
-                            </td>
-                            <td class="px-3 py-3 text-center" style="background-color: #F8FAFC;">
-                                <x-badge :status="$order->status" />
-                            </td>
-                        </tr>
-        @endforeach
+            @foreach($orders as $order)
+                <tr class="hover:bg-slate-50/50 transition-colors group border-b border-slate-100 last:border-0">
+                    <td class="px-6 py-4">
+                        <span class="font-bold text-lumina-blue text-sm">
+                            #ORD-{{ str_pad((string)$order->id, 8, '0', STR_PAD_LEFT) }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 text-sm font-semibold text-slate-500">
+                        {{ $order->tanggal_pesan->format('d M Y') }}
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-lumina-blue/10 text-lumina-blue flex items-center justify-center font-bold text-xs shrink-0 border border-lumina-blue/20">
+                                {{ strtoupper(substr($order->user->nama, 0, 2)) }}
+                            </div>
+                            <div class="font-bold text-slate-800 text-sm group-hover:text-lumina-blue transition-colors truncate max-w-[150px]">{{ $order->user->nama }}</div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4">
+                        @php $firstItem = $order->orderDetails->first(); @endphp
+                        <div class="text-sm font-medium text-slate-700 truncate max-w-[200px]">
+                            {{ $firstItem ? $firstItem->book->judul : '-' }}
+                            @if($order->orderDetails->count() > 1)
+                                <span class="text-xs font-bold text-slate-400 ml-1">(+{{ $order->orderDetails->count() - 1 }})</span>
+                            @endif
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 font-bold text-slate-800 text-right">
+                        Rp {{ number_format($order->total_tagihan, 0, ',', '.') }}
+                    </td>
+                    <td class="px-6 py-4 text-center">
+                        <x-badge :status="$order->status" />
+                    </td>
+                </tr>
+            @endforeach
 
-        <x-slot:emptyState>
-            <div class="text-center py-4">
-                <i class="bi bi-inbox fs-1 text-secondary opacity-50"></i>
-                <div class="fw-bold mt-3 text-dark fs-5">Belum ada data transaksi</div>
-                <div class="text-muted mt-1">Transaksi yang selesai akan muncul di sini.</div>
-            </div>
-        </x-slot:emptyState>
-
-        <x-slot:pagination>
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="text-muted" style="font-size: 0.75rem;">
-                    Menampilkan {{ $orders->firstItem() ?? 0 }}-{{ $orders->lastItem() ?? 0 }} dari {{ $orders->total() }} transaksi
+            <x-slot:emptyState>
+                <div class="flex flex-col items-center justify-center py-8">
+                    <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
+                        <x-heroicon-o-inbox class="size-10 text-slate-300" />
+                    </div>
+                    <div class="font-bold text-slate-800 text-lg mb-1">Belum ada data transaksi</div>
+                    <div class="text-slate-500 text-sm">Transaksi yang selesai akan muncul di sini.</div>
                 </div>
-                <div class="d-flex gap-2">
-                    @if ($orders->onFirstPage())
-                        <span class="btn btn-light px-3 py-1 rounded-2 text-muted disabled border-0" style="font-size: 0.75rem;">Sebelumnya</span>
-                    @else
-                        <a href="{{ $orders->previousPageUrl() }}" class="btn btn-light px-3 py-1 rounded-2 text-muted border-0" style="font-size: 0.75rem;">Sebelumnya</a>
-                    @endif
+            </x-slot:emptyState>
 
-                    @if ($orders->hasMorePages())
-                        <a href="{{ $orders->nextPageUrl() }}" class="btn btn-primary px-3 py-1 rounded-2 shadow-sm border-0 fw-bold" style="font-size: 0.75rem;">Selanjutnya</a>
-                    @else
-                        <span class="btn btn-primary px-3 py-1 rounded-2 shadow-sm border-0 fw-bold disabled opacity-50" style="font-size: 0.75rem;">Selanjutnya</span>
-                    @endif
-                </div>
-            </div>
-        </x-slot:pagination>
-    </x-admin.table>
+            <x-slot:pagination>
+                @if($orders->hasPages())
+                    <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+                        <span class="text-slate-500 text-sm">Menampilkan <span class="font-semibold text-slate-700">{{ $orders->firstItem() }}-{{ $orders->lastItem() }}</span> dari <span class="font-semibold text-slate-700">{{ $orders->total() }}</span> transaksi</span>
+                        <div class="flex gap-2">
+                            @if ($orders->onFirstPage())
+                                <span class="px-4 py-2 border border-slate-200 text-slate-400 bg-slate-50 rounded-xl text-sm font-semibold cursor-not-allowed">Sebelumnya</span>
+                            @else
+                                <a href="{{ $orders->previousPageUrl() }}" class="px-4 py-2 border border-slate-200 text-slate-700 bg-white hover:bg-slate-50 rounded-xl text-sm font-semibold transition-colors shadow-sm">Sebelumnya</a>
+                            @endif
 
-    <div class="text-center mt-4 mb-2">
-        <p class="text-muted text-uppercase opacity-50" style="font-size: 0.65rem; letter-spacing: 0.08em;">
-            &copy; {{ date('Y') }} LUMINA MEDIA DASHBOARD. ALL RIGHTS RESERVED.
-        </p>
-    </div>
+                            @if ($orders->hasMorePages())
+                                <a href="{{ $orders->nextPageUrl() }}" class="px-4 py-2 border border-slate-200 text-slate-700 bg-white hover:bg-slate-50 rounded-xl text-sm font-semibold transition-colors shadow-sm">Selanjutnya</a>
+                            @else
+                                <span class="px-4 py-2 border border-slate-200 text-slate-400 bg-slate-50 rounded-xl text-sm font-semibold cursor-not-allowed">Selanjutnya</span>
+                            @endif
+                        </div>
+                    </div>
+                @endif
+            </x-slot:pagination>
+        </x-admin.table>
+
+        <div class="text-center mt-8 mb-4">
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                &copy; {{ date('Y') }} LUMINA MEDIA DASHBOARD. ALL RIGHTS RESERVED.
+            </p>
+        </div>
     </div>
 
     @push('styles')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <style>
-        .ls-wide { letter-spacing: 0.06em; }
-        .x-small { font-size: 0.75rem; }
-        .avatar-circle { border: 1.5px solid #fff; }
-        .dropdown-item.active { background-color: #1a4fd9 !important; color: #fff !important; }
-        .flatpickr-calendar.open {
-            border-radius: 14px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.12) !important;
-            border: 1px solid #eee;
+        .flatpickr-calendar {
+            font-family: 'Inter', sans-serif;
+            border: 1px solid #e2e8f0;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .flatpickr-day.selected {
+            background: #1a4fd9 !important;
+            border-color: #1a4fd9 !important;
         }
     </style>
     @endpush
@@ -231,13 +211,6 @@
                 e.stopPropagation();
                 fp.open();
             });
-
-            // Highlight calendar button if date filter is active
-            @if(request('start_date'))
-                triggerBtn.classList.remove('bg-white', 'text-muted');
-                triggerBtn.classList.add('bg-primary', 'border-primary', 'text-white');
-                triggerBtn.querySelector('i').className = 'bi bi-calendar-check text-white';
-            @endif
         });
     </script>
     @endpush

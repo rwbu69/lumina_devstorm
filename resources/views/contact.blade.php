@@ -1,7 +1,7 @@
 <x-app-layout :hideNavbar="true">
     <x-user-navbar />
     
-    <div class="min-h-screen bg-[#FDFDFC] font-sans">
+    <div class="min-h-screen bg-[#FDFBF7] font-sans">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
             
             <div class="mb-16">

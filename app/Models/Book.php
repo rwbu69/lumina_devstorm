@@ -20,6 +20,7 @@ class Book extends Model
         'file_buku',
         'cover_buku',
         'sinopsis',
+        'format',
     ];
 
     protected function casts(): array

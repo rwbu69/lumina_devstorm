@@ -1,32 +1,29 @@
-<x-admin.layout>
-    <div style=" border-radius: 20px; padding: 16px;">
-        <div class="d-flex justify-content-between align-items-center mb-4">
+<x-admin.layout :title="'Lumina Media - Kelola Pesanan'">
+    <div class="bg-[#FDFBF7] min-h-full">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
             <div>
-                <h1 class="fw-bold mb-0" style="color: #1a4fd9; font-size: 1.75rem; font-weight: 800; letter-spacing: -0.03em;">Pesanan</h1>
-                <p class="text-secondary fw-medium mb-0" style="font-size: 0.95rem; color: #1a4fd9 !important;">Kelola dan verifikasi transaksi pelanggan secara efisien.</p>
+                <h1 class="text-3xl font-serif font-bold text-lumina-blue mb-1.5">Pesanan</h1>
+                <p class="text-slate-500 font-medium">Kelola dan verifikasi transaksi pelanggan secara efisien.</p>
             </div>
-            <a href="{{ route('admin.orders.exportPdf', request()->query()) }}" class="btn btn-primary d-flex align-items-center gap-2 px-3 py-2 rounded-3 shadow-sm fw-bold btn-sm">
-                <i class="bi bi-file-earmark-pdf-fill"></i>
-                <span>Ekspor</span>
+            <a href="{{ route('admin.orders.exportPdf', request()->query()) }}" class="inline-flex items-center justify-center bg-lumina-blue hover:bg-blue-800 text-white px-5 py-2.5 rounded-xl font-bold shadow-sm transition-all whitespace-nowrap">
+                <x-heroicon-s-document-text class="mr-2 size-6" /> Ekspor PDF
             </a>
         </div>
 
         {{-- Filters & Search --}}
-        <div class="card border-0 shadow-sm rounded-4 mb-4 bg-white">
-        <div class="card-body px-3 py-3">
-            <form action="{{ route('admin.orders.index') }}" method="GET">
-                {{-- Search bar (full width) --}}
-                <div class="d-flex align-items-center gap-2 border-0 mb-3" style="">
-                    <i class="bi bi-search text-muted" style="font-size: 0.85rem; flex-shrink: 0;"></i>
+        <div class="bg-white border border-slate-200 shadow-sm rounded-3xl mb-8 p-4">
+            <form action="{{ route('admin.orders.index') }}" method="GET" class="flex flex-col gap-4">
+                {{-- Search bar --}}
+                <div class="flex items-center gap-3 px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus-within:border-lumina-blue focus-within:ring-2 focus-within:ring-lumina-blue/20 transition-all">
+                    <x-heroicon-o-magnifying-glass class="text-slate-400 size-6" />
                     <input type="text" name="search"
-                           class="form-control border-0 shadow-none p-0 bg-transparent"
+                           class="bg-transparent border-0 w-full focus:ring-0 p-0 text-sm font-medium text-slate-700 placeholder-slate-400"
                            placeholder="Cari berdasarkan nama pelanggan atau ID pesanan..."
-                           value="{{ request('search') }}"
-                           style="font-size: 0.85rem; height: auto; line-height: 1.4;">
+                           value="{{ request('search') }}">
                 </div>
 
                 {{-- Status filter tabs --}}
-                <div class="d-flex gap-2 overflow-x-auto pb-1">
+                <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
                     @php
                         $currentStatus = request('status', 'semua');
                         $statuses = [
@@ -38,270 +35,245 @@
                     @endphp
                     @foreach($statuses as $value => $label)
                         <a href="{{ route('admin.orders.index', array_merge(request()->query(), ['status' => $value])) }}"
-                           class="btn rounded-pill px-3 py-1 text-nowrap fw-semibold {{ $currentStatus == $value ? 'btn-primary' : 'btn-white bg-white text-muted border' }}"
-                           style="font-size: 0.78rem;">
+                           class="px-5 py-2 rounded-full font-bold text-sm whitespace-nowrap transition-colors {{ $currentStatus == $value ? 'bg-lumina-blue text-white shadow-sm' : 'bg-white border border-slate-200 text-slate-500 hover:bg-slate-50' }}">
                             {{ $label }}
                         </a>
                     @endforeach
                 </div>
             </form>
         </div>
-    </div>
 
-    {{-- Table --}}
-    <x-admin.table class="border-0 shadow-sm rounded-3 overflow-hidden">
-        <x-slot:head>
-            <tr>
-                <th class="px-3 py-3 text-uppercase x-small fw-bold text-muted ls-wide border-0" style="background-color: #F8FAFC; width: 25%; font-size: 0.75rem;">Nama Pembeli</th>
-                <th class="px-3 py-3 text-uppercase x-small fw-bold text-muted ls-wide border-0" style="background-color: #F8FAFC; font-size: 0.75rem;">Tanggal Pesan</th>
-                <th class="px-3 py-3 text-uppercase x-small fw-bold text-muted ls-wide border-0" style="background-color: #F8FAFC; font-size: 0.75rem;">Total Bayar</th>
-                <th class="px-3 py-3 text-uppercase x-small fw-bold text-muted ls-wide border-0 text-center" style="background-color: #F8FAFC; font-size: 0.75rem;">Status Pembayaran</th>
-                <th class="px-3 py-3 text-uppercase x-small fw-bold text-muted ls-wide border-0 text-center" style="background-color: #F8FAFC; font-size: 0.75rem;">Aksi</th>
-            </tr>
-        </x-slot:head>
+        {{-- Table --}}
+        <x-admin.table>
+            <x-slot:head>
+                <tr>
+                    <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider w-1/4">Nama Pembeli</th>
+                    <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Tanggal Pesan</th>
+                    <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Total Bayar</th>
+                    <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-center">Status Pembayaran</th>
+                    <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-center">Aksi</th>
+                </tr>
+            </x-slot:head>
 
-        @foreach($orders as $order)
-                        <tr class="border-bottom" style="background-color: #F8FAFC;">
-                            <td class="px-3 py-3" style="background-color: #F8FAFC;">
-                                <div class="d-flex align-items-center gap-2">
-                                    <div class="avatar-circle rounded-circle bg-primary-subtle text-primary d-grid place-items-center fw-bold" style="width: 36px; height: 36px; min-width: 36px; font-size: 0.7rem; background-color: #E8F0FE;">
-                                        {{ strtoupper(substr($order->user->nama, 0, 2)) }}
-                                    </div>
-                                    <div class="fw-bold text-dark" style="font-size: 0.85rem;">{{ $order->user->nama }}</div>
-                                </div>
-                            </td>
-                            <td class="px-3 py-3 text-muted fw-medium" style="background-color: #F8FAFC;" style="font-size: 0.85rem;">
-                                {{ $order->tanggal_pesan->format('d M Y') }}
-                            </td>
-                            <td class="px-3 py-3 fw-bold text-dark" style="background-color: #F8FAFC;" style="font-size: 0.85rem;">
-                                Rp {{ number_format($order->total_tagihan, 0, ',', '.') }}
-                            </td>
-                            <td class="px-3 py-3 text-center" style="background-color: #F8FAFC;">
-                                <x-badge :status="$order->status" />
-                            </td>
-                            <td class="px-3 py-3" style="background-color: #F8FAFC;">
-                                <div class="d-flex flex-column gap-1 align-items-center">
-                                    <button class="btn btn-white border btn-xs px-3 py-1 rounded-2 fw-bold text-muted w-100 shadow-sm bg-white" 
-                                            style="max-width: 110px; font-size: 0.7rem;"
-                                            data-bs-toggle="modal" 
-                                            data-bs-target="#modalDetail{{ $order->id }}">
-                                        Lihat Detail
-                                    </button>
-                                    @if($order->status == 'pending')
-                                        <button class="btn btn-primary btn-xs px-3 py-1 rounded-2 fw-bold w-100 shadow-sm" 
-                                                style="max-width: 110px; font-size: 0.7rem;"
-                                                data-bs-toggle="modal" 
-                                                data-bs-target="#modalVerifikasi{{ $order->id }}">
-                                            Verifikasi
-                                        </button>
-                                    @endif
-                                </div>
-                            </td>
-                        </tr>
-
-                    @endforeach
-
-        <x-slot:emptyState>
-            <div class="text-center py-4">
-                <i class="bi bi-inbox fs-1 text-secondary opacity-50"></i>
-                <div class="fw-bold mt-3 text-dark fs-5">Belum ada pesanan</div>
-                <div class="text-muted mt-1">Pesanan yang masuk akan muncul di sini.</div>
-            </div>
-        </x-slot:emptyState>
-
-        <x-slot:pagination>
-            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
-                <div class="text-muted x-small" style="font-size: 0.75rem;">
-                    Menampilkan {{ $orders->firstItem() ?? 0 }}-{{ $orders->lastItem() ?? 0 }} dari {{ $orders->total() }} pesanan
-                </div>
-                <div class="d-flex gap-2">
-                    @if ($orders->onFirstPage())
-                        <span class="btn btn-light btn-xs px-3 py-1 rounded-2 text-muted disabled border-0" style="font-size: 0.75rem;">Sebelumnya</span>
-                    @else
-                        <a href="{{ $orders->previousPageUrl() }}" class="btn btn-light btn-xs px-3 py-1 rounded-2 text-muted border-0" style="font-size: 0.75rem;">Sebelumnya</a>
-                    @endif
-
-                    @if ($orders->hasMorePages())
-                        <a href="{{ $orders->nextPageUrl() }}" class="btn btn-primary btn-xs px-3 py-1 rounded-2 shadow-sm border-0 fw-bold" style="font-size: 0.75rem;">Selanjutnya</a>
-                    @else
-                        <span class="btn btn-primary btn-xs px-3 py-1 rounded-2 shadow-sm border-0 fw-bold disabled opacity-50" style="font-size: 0.75rem;">Selanjutnya</span>
-                    @endif
-                </div>
-            </div>
-        </x-slot:pagination>
-    </x-admin.table>
-
-    </div>
-    @push('styles')
-    <style>
-        .transition-all { transition: all 0.3s ease; }
-        .ls-wide { letter-spacing: 0.05em; }
-        .bg-gray-100 { background-color: #f3f4f6; }
-        .x-small { font-size: 0.75rem; }
-        .btn-xs { padding: 0.25rem 0.5rem; font-size: 0.75rem; }
-        
-        .custom-scrollbar::-webkit-scrollbar { height: 3px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e0e0e0; border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #d0d0d0; }
-
-        .proof-container { position: relative; transition: transform 0.3s ease; }
-        .proof-container:hover { transform: scale(1.02); }
-        
-        .zoom-btn {
-            position: absolute; bottom: 10px; right: 10px;
-            background: white; color: #111827;
-            width: 32px; height: 32px; border-radius: 50%;
-            display: grid; place-items: center; text-decoration: none;
-            opacity: 0; transition: opacity 0.3s ease;
-        }
-        .proof-container:hover .zoom-btn { opacity: 1; }
-
-        .avatar-circle { font-size: 0.7rem; border: 1.5px solid #fff; }
-        .btn-outline-danger:hover { background-color: #fff5f5 !important; color: #dc3545 !important; }
-    </style>
-    @endpush
-    @foreach($orders as $order)
-        {{-- Modal Detail Pesanan --}}
-        <div class="modal fade" id="modalDetail{{ $order->id }}" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
-                <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
-                    <div class="modal-header border-bottom-0 bg-light px-4 py-3">
-                        <h5 class="modal-title fw-bold text-primary" style="font-size: 1.1rem;">Detail Pesanan #LM-{{ str_pad((string)$order->id, 8, '0', STR_PAD_LEFT) }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body px-4 py-4" style="background-color: #F8FAFC;">
-                        <div class="row g-4">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="x-small text-muted text-uppercase fw-bold mb-1" style="font-size: 0.65rem;">Nama Pelanggan</label>
-                                    <div class="fw-bold fs-6">{{ $order->user->nama }}</div>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="x-small text-muted text-uppercase fw-bold mb-1" style="font-size: 0.65rem;">Tanggal Pemesanan</label>
-                                    <div class="fw-bold fs-6">{{ $order->tanggal_pesan->format('d M Y, H:i') }}</div>
-                                </div>
+            @foreach($orders as $order)
+                <tr class="hover:bg-slate-50/50 transition-colors group border-b border-slate-100 last:border-0" x-data>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-lumina-blue/10 text-lumina-blue flex items-center justify-center font-bold text-sm shrink-0 border border-lumina-blue/20">
+                                {{ strtoupper(substr($order->user->nama, 0, 2)) }}
                             </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="x-small text-muted text-uppercase fw-bold mb-1" style="font-size: 0.65rem;">Status</label>
+                            <div class="font-bold text-slate-800 text-sm">{{ $order->user->nama }}</div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 text-sm font-semibold text-slate-500">
+                        {{ $order->tanggal_pesan->format('d M Y') }}
+                    </td>
+                    <td class="px-6 py-4 font-bold text-slate-800">
+                        Rp {{ number_format($order->total_tagihan, 0, ',', '.') }}
+                    </td>
+                    <td class="px-6 py-4 text-center">
+                        <x-badge :status="$order->status" />
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="flex flex-col gap-2 items-center">
+                            <button @click="$dispatch('open-modal', 'modalDetail-{{ $order->id }}')" class="w-28 px-3 py-1.5 bg-white border border-slate-200 text-slate-600 hover:text-lumina-blue hover:border-lumina-blue/30 hover:bg-blue-50 rounded-lg text-xs font-bold shadow-sm">
+                                Lihat Detail
+                            </button>
+                            @if($order->status == 'pending')
+                                <button @click="$dispatch('open-modal', 'modalVerifikasi-{{ $order->id }}')" class="w-28 px-3 py-1.5 bg-lumina-blue hover:bg-blue-800 text-white rounded-lg text-xs font-bold transition-all shadow-sm">
+                                    Verifikasi
+                                </button>
+                            @endif
+                        </div>
+                    </td>
+                </tr>
+            @endforeach
+
+            <x-slot:emptyState>
+                <div class="flex flex-col items-center justify-center">
+                    <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
+                        <x-heroicon-o-inbox class="size-10 text-slate-300" />
+                    </div>
+                    <div class="font-bold text-slate-800 text-lg mb-1">Belum ada pesanan</div>
+                    <div class="text-slate-500 text-sm">Pesanan yang masuk akan muncul di sini.</div>
+                </div>
+            </x-slot:emptyState>
+
+            <x-slot:pagination>
+                @if($orders->hasPages())
+                    <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+                        <span class="text-slate-500 text-sm">Menampilkan <span class="font-semibold text-slate-700">{{ $orders->firstItem() }}-{{ $orders->lastItem() }}</span> dari <span class="font-semibold text-slate-700">{{ $orders->total() }}</span> pesanan</span>
+                        <div class="flex gap-2">
+                            @if ($orders->onFirstPage())
+                                <span class="px-4 py-2 border border-slate-200 text-slate-400 bg-slate-50 rounded-xl text-sm font-semibold cursor-not-allowed">Sebelumnya</span>
+                            @else
+                                <a href="{{ $orders->previousPageUrl() }}" class="px-4 py-2 border border-slate-200 text-slate-700 bg-white hover:bg-slate-50 rounded-xl text-sm font-semibold transition-colors shadow-sm">Sebelumnya</a>
+                            @endif
+
+                            @if ($orders->hasMorePages())
+                                <a href="{{ $orders->nextPageUrl() }}" class="px-4 py-2 border border-slate-200 text-slate-700 bg-white hover:bg-slate-50 rounded-xl text-sm font-semibold transition-colors shadow-sm">Selanjutnya</a>
+                            @else
+                                <span class="px-4 py-2 border border-slate-200 text-slate-400 bg-slate-50 rounded-xl text-sm font-semibold cursor-not-allowed">Selanjutnya</span>
+                            @endif
+                        </div>
+                    </div>
+                @endif
+            </x-slot:pagination>
+        </x-admin.table>
+    </div>
+
+    {{-- Alpine Modals Container --}}
+    <div x-data="{ activeModal: null }" @open-modal.window="activeModal = $event.detail" @close-modal.window="activeModal = null" @keydown.escape.window="activeModal = null">
+        @foreach($orders as $order)
+            {{-- Modal Detail Pesanan --}}
+            <div x-show="activeModal === 'modalDetail-{{ $order->id }}'" style="display: none;" class="fixed inset-0 z-[1050] overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                <div x-show="activeModal === 'modalDetail-{{ $order->id }}'" x-transition.opacity class="fixed inset-0 bg-slate-900/50" @click="activeModal = null"></div>
+
+                <div class="flex min-h-full items-center justify-center p-4">
+                    <div x-show="activeModal === 'modalDetail-{{ $order->id }}'" 
+                         x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" 
+                         x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" 
+                         class="relative transform bg-white rounded-3xl text-left shadow-lg transition-all w-full max-w-2xl overflow-hidden">
+                        
+                        <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+                            <h5 class="text-xl font-bold text-lumina-blue">Detail Pesanan #INV-{{ str_pad((string)$order->id, 5, '0', STR_PAD_LEFT) }}</h5>
+                            <button type="button" @click="activeModal = null" class="text-slate-400 hover:text-rose-500 p-1 transition-colors">
+                                <x-heroicon-o-x-mark class="size-5" />
+                            </button>
+                        </div>
+
+                        <div class="p-6 md:p-8 max-h-[70vh] overflow-y-auto">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+                                <div>
+                                    <label class="block text-[0.65rem] font-bold text-slate-500 uppercase tracking-wider mb-1">Nama Pelanggan</label>
+                                    <div class="font-bold text-slate-800 text-lg">{{ $order->user->nama }}</div>
+                                </div>
+                                <div>
+                                    <label class="block text-[0.65rem] font-bold text-slate-500 uppercase tracking-wider mb-1">Status</label>
                                     <div><x-badge :status="$order->status" /></div>
                                 </div>
-                                <div class="mb-3">
-                                    <label class="x-small text-muted text-uppercase fw-bold mb-1" style="font-size: 0.65rem;">Total Tagihan</label>
-                                    <div class="fw-bold fs-5 text-primary">Rp {{ number_format($order->total_tagihan, 0, ',', '.') }}</div>
+                                <div>
+                                    <label class="block text-[0.65rem] font-bold text-slate-500 uppercase tracking-wider mb-1">Tanggal Pemesanan</label>
+                                    <div class="font-bold text-slate-800 text-lg">{{ $order->tanggal_pesan->format('d M Y, H:i') }}</div>
+                                </div>
+                                <div>
+                                    <label class="block text-[0.65rem] font-bold text-slate-500 uppercase tracking-wider mb-1">Total Tagihan</label>
+                                    <div class="font-bold text-lumina-blue text-2xl">Rp {{ number_format($order->total_tagihan, 0, ',', '.') }}</div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-4 border-b border-slate-100 pb-2">Buku yang Dipesan</label>
+                                <div class="border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+                                    <table class="w-full text-left border-collapse">
+                                        <thead class="bg-slate-50/80 border-b border-slate-200">
+                                            <tr>
+                                                <th class="px-4 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">Judul Buku</th>
+                                                <th class="px-4 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Harga</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="divide-y divide-slate-100 bg-white">
+                                            @foreach($order->orderDetails as $detail)
+                                                <tr class="hover:bg-slate-50/50 transition-colors">
+                                                    <td class="px-4 py-3 font-semibold text-slate-700 text-sm">{{ $detail->book->judul ?? 'Buku Dihapus' }}</td>
+                                                    <td class="px-4 py-3 text-right font-bold text-slate-800 text-sm">Rp {{ number_format($detail->harga_saat_beli, 0, ',', '.') }}</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
-                        
-                        <div class="mt-4">
-                            <label class="x-small text-muted text-uppercase fw-bold mb-2" style="font-size: 0.65rem;">Buku yang Dipesan</label>
-                            <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
-                                <table class="table table-hover align-middle mb-0">
-                                    <thead class="bg-light">
-                                        <tr>
-                                            <th class="px-3 py-2 text-uppercase text-muted fw-bold border-0" style="font-size: 0.65rem;">Judul Buku</th>
-                                            <th class="px-3 py-2 text-uppercase text-muted fw-bold border-0 text-end" style="font-size: 0.65rem;">Harga</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach($order->orderDetails as $detail)
-                                            <tr>
-                                                <td class="px-3 py-2 fw-medium" style="font-size: 0.85rem;">{{ $detail->book->judul ?? 'Buku Dihapus' }}</td>
-                                                <td class="px-3 py-2 text-end fw-bold" style="font-size: 0.85rem;">Rp {{ number_format($detail->harga_saat_beli, 0, ',', '.') }}</td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
+                        <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/50 flex justify-end">
+                            <button type="button" @click="activeModal = null" class="px-6 py-2.5 bg-white border border-slate-200 text-slate-700 font-bold rounded-xl shadow-sm hover:bg-slate-50 transition-colors">Tutup</button>
                         </div>
-                    </div>
-                    <div class="modal-footer border-top-0 px-4 py-3 bg-white">
-                        <button type="button" class="btn btn-light border px-4 py-2 rounded-3 fw-bold small" data-bs-dismiss="modal">Tutup</button>
                     </div>
                 </div>
             </div>
-        </div>
 
-        {{-- Modal Verifikasi --}}
-        @if($order->status == 'pending')
-            <div class="modal fade" id="modalVerifikasi{{ $order->id }}" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-lg modal-dialog-centered">
-                    <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
-                        <div class="row g-0">
+            {{-- Modal Verifikasi --}}
+            @if($order->status == 'pending')
+                <div x-show="activeModal === 'modalVerifikasi-{{ $order->id }}'" style="display: none;" class="fixed inset-0 z-[1050] overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                    <div x-show="activeModal === 'modalVerifikasi-{{ $order->id }}'" x-transition.opacity class="fixed inset-0 bg-slate-900/50" @click="activeModal = null"></div>
+
+                    <div class="flex min-h-full items-center justify-center p-4">
+                        <div x-show="activeModal === 'modalVerifikasi-{{ $order->id }}'" 
+                             x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" 
+                             x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" 
+                             class="relative transform bg-white rounded-3xl text-left shadow-lg transition-all w-full max-w-4xl overflow-hidden flex flex-col md:flex-row h-auto max-h-[85vh]">
+                            
                             {{-- Bukti Transfer --}}
-                            <div class="col-md-6 bg-light border-end d-flex flex-column">
-                                <div class="p-3 border-bottom bg-white text-center">
-                                    <span class="text-uppercase x-small fw-bold text-muted ls-wide" style="font-size: 0.7rem;">Bukti Transfer</span>
+                            <div class="md:w-1/2 bg-slate-50 border-b md:border-b-0 md:border-r border-slate-200 flex flex-col overflow-y-auto">
+                                <div class="p-4 border-b border-slate-200 bg-white text-center sticky top-0 z-10">
+                                    <span class="text-xs font-bold text-slate-500 uppercase tracking-widest">Bukti Transfer</span>
                                 </div>
-                                <div class="p-4 flex-grow-1 d-flex align-items-center justify-content-center bg-gray-100" style="min-height: 400px;">
+                                <div class="p-6 flex-grow flex items-center justify-center min-h-[300px]">
                                     @if($order->payment && $order->payment->file_bukti)
-                                        <div class="position-relative proof-container">
-                                            <img src="{{ asset('storage/' . $order->payment->file_bukti) }}" 
-                                                 class="img-fluid rounded-3 shadow-sm" 
-                                                 alt="Bukti Transfer"
-                                                 style="max-height: 350px; object-fit: contain;">
-                                            <a href="{{ asset('storage/' . $order->payment->file_bukti) }}" target="_blank" class="zoom-btn shadow-sm">
-                                                <i class="bi bi-search"></i>
+                                        <div class="relative group">
+                                            <img src="{{ asset('storage/' . $order->payment->file_bukti) }}" class="max-w-full rounded-2xl shadow-md max-h-[60vh] object-contain transition-transform duration-300 group-hover:scale-[1.02]" alt="Bukti Transfer">
+                                            <a href="{{ asset('storage/' . $order->payment->file_bukti) }}" target="_blank" class="absolute bottom-4 right-4 w-10 h-10 bg-white text-slate-800 rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-slate-50 hover:text-lumina-blue">
+                                                <x-heroicon-o-magnifying-glass-plus class="size-6" />
                                             </a>
                                         </div>
                                     @else
-                                        <div class="text-center py-5">
-                                            <i class="bi bi-image text-muted display-4"></i>
-                                            <p class="text-muted small mt-2">Bukti belum diunggah</p>
+                                        <div class="text-center">
+                                            <x-heroicon-o-photo class="size-16 text-slate-300 mb-3 block" />
+                                            <p class="text-slate-500 font-medium">Bukti belum diunggah</p>
                                         </div>
                                     @endif
                                 </div>
                             </div>
+
                             {{-- Details & Actions --}}
-                            <div class="col-md-6 d-flex flex-column" style="background-color: #FBF9F4;">
-                                <div class="p-4 p-lg-5 flex-grow-1">
-                                    <h4 class="fw-bold text-primary mb-4" style="font-family: 'Playfair Display', serif;">Verifikasi Pembayaran</h4>
-                                    
-                                    <div class="mb-3">
-                                        <label class="x-small text-muted text-uppercase fw-bold mb-1" style="font-size: 0.65rem;">ID Pesanan</label>
-                                        <div class="fw-bold fs-6">#LM-{{ str_pad((string)$order->id, 8, '0', STR_PAD_LEFT) }}</div>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label class="x-small text-muted text-uppercase fw-bold mb-1" style="font-size: 0.65rem;">Nama Pelanggan</label>
-                                        <div class="fw-bold fs-6">{{ $order->user->nama }}</div>
-                                    </div>
-
-                                    <div class="mb-4">
-                                        <div class="p-3 bg-white rounded-3 border">
-                                            <label class="x-small text-muted text-uppercase fw-bold mb-1 d-block" style="font-size: 0.65rem;">Total Pembayaran</label>
-                                            <div class="fw-bold fs-4 text-primary">Rp {{ number_format($order->total_tagihan, 0, ',', '.') }}</div>
-                                        </div>
-                                    </div>
-
-                                    <div class="d-grid gap-2">
-                                        <form action="{{ route('admin.orders.verify', $order) }}" method="POST">
-                                            @csrf
-                                            @method('PATCH')
-                                            <button type="submit" class="btn btn-primary w-100 py-2 rounded-3 fw-bold shadow-sm small">
-                                                Verifikasi & Akses
-                                            </button>
-                                        </form>
-                                        
-                                        <form action="{{ route('admin.orders.reject', $order) }}" method="POST">
-                                            @csrf
-                                            @method('PATCH')
-                                            <button type="submit" class="btn btn-outline-danger w-100 py-2 rounded-3 fw-bold border-0 bg-white small">
-                                                Tolak Pembayaran
-                                            </button>
-                                        </form>
-
-                                        <button type="button" class="btn btn-link text-muted text-decoration-none py-1 small" data-bs-dismiss="modal">
-                                            Tutup
+                            <div class="md:w-1/2 flex flex-col bg-white overflow-y-auto">
+                                <div class="p-8 flex-grow">
+                                    <div class="flex items-start justify-between mb-8">
+                                        <h4 class="text-2xl font-serif font-bold text-lumina-blue">Verifikasi Pembayaran</h4>
+                                        <button type="button" @click="activeModal = null" class="text-slate-400 hover:text-rose-500 p-1 transition-colors">
+                                            <x-heroicon-o-x-mark class="size-6" />
                                         </button>
                                     </div>
+                                    
+                                    <div class="space-y-6">
+                                        <div>
+                                            <label class="block text-[0.65rem] font-bold text-slate-500 uppercase tracking-wider mb-1">ID Pesanan</label>
+                                            <div class="font-bold text-slate-800 text-lg">#INV-{{ str_pad((string)$order->id, 5, '0', STR_PAD_LEFT) }}</div>
+                                        </div>
+
+                                        <div>
+                                            <label class="block text-[0.65rem] font-bold text-slate-500 uppercase tracking-wider mb-1">Nama Pelanggan</label>
+                                            <div class="font-bold text-slate-800 text-lg">{{ $order->user->nama }}</div>
+                                        </div>
+
+                                        <div class="p-5 bg-blue-50 border border-blue-100 rounded-2xl">
+                                            <label class="block text-[0.65rem] font-bold text-blue-500 uppercase tracking-wider mb-1">Total Pembayaran</label>
+                                            <div class="font-bold text-lumina-blue text-3xl">Rp {{ number_format($order->total_tagihan, 0, ',', '.') }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="p-6 border-t border-slate-100 bg-slate-50/50 space-y-3 sticky bottom-0">
+                                    <form action="{{ route('admin.orders.verify', $order) }}" method="POST">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button type="submit" class="w-full flex items-center justify-center bg-lumina-blue hover:bg-blue-800 text-white py-3.5 rounded-xl font-bold shadow-sm transition-colors text-sm">
+                                            <x-heroicon-s-check-circle class="mr-2 size-6" /> Verifikasi & Berikan Akses
+                                        </button>
+                                    </form>
+                                    
+                                    <form action="{{ route('admin.orders.reject', $order) }}" method="POST">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button type="submit" class="w-full flex items-center justify-center bg-white border border-rose-200 text-rose-500 hover:bg-rose-50 hover:border-rose-300 py-3.5 rounded-xl font-bold shadow-sm transition-colors text-sm">
+                                            <x-heroicon-s-x-circle class="mr-2 size-6" /> Tolak Pembayaran
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        @endif
-    @endforeach
-</x-admin-layout>
+            @endif
+        @endforeach
+    </div>
+</x-admin.layout>

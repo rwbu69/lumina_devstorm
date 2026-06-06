@@ -64,4 +64,14 @@ class User extends Authenticatable
     {
         return $this->role === 'user';
     }
+
+    public function ownedBookIds(): array
+    {
+        return \Illuminate\Support\Facades\DB::table('order_details')
+            ->join('orders', 'order_details.order_id', '=', 'orders.id')
+            ->where('orders.user_id', $this->id)
+            ->where('orders.status', 'verified')
+            ->pluck('order_details.book_id')
+            ->toArray();
+    }
 }

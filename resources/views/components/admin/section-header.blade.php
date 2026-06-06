@@ -3,15 +3,15 @@
     'subtitle' => null,
 ])
 
-<div class="d-flex align-items-start justify-content-between gap-3 flex-wrap">
+<div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
     <div>
-        <h1 class="h2 fw-bold mb-1 text-primary text-bold">{{ $title }}</h1>
+        <h1 class="text-3xl font-serif font-bold text-lumina-blue mb-1.5">{{ $title }}</h1>
         @if ($subtitle)
-            <div class="lm-muted">{{ $subtitle }}</div>
+            <div class="text-slate-500 font-medium">{{ $subtitle }}</div>
         @endif
     </div>
 
-    <div class="d-flex align-items-center gap-2 ms-auto">
+    <div class="flex items-center gap-3">
         {{ $slot }}
     </div>
 </div>

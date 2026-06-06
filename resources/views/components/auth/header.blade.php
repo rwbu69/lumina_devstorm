@@ -3,11 +3,11 @@
     'subtitle' => 'Selamat datang kembali',
 ])
 
-<div class="text-center mb-4">
-    <div class="d-inline-flex align-items-center justify-content-center mb-3">
-        <img src="{{ asset('assets/img/lumina.jpeg') }}" alt="Lumina Logo" style="width: 80px; height: 80px; object-fit: contain;">
+<div class="text-center mb-8">
+    <div class="inline-flex items-center justify-center mb-6">
+        <img src="{{ asset('assets/img/lumina.jpeg') }}" alt="Lumina Logo" class="w-20 h-20 object-cover rounded-full">
     </div>
 
-    <h1 class="h2 fw-bold text-primary mb-1" style="color: #2b4ea1 !important;">{{ $title }}</h1>
-    <div class="text-secondary opacity-75">{{ $subtitle }}</div>
+    <h1 class="text-3xl font-serif font-bold text-[#1e3a8a] mb-2 tracking-tight">{{ $title }}</h1>
+    <div class="text-slate-500 text-[15px]">{{ $subtitle }}</div>
 </div>

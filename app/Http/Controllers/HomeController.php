@@ -10,13 +10,9 @@ use Illuminate\View\View;
 
 class HomeController extends Controller
 {
-    /**
-     * Menampilkan halaman utama Lumina Media dengan 4 buku terbaru
-     * dan ayat Alkitab harian secara dinamis.
-     */
     public function index(DailyVerseService $dailyVerseService): View
     {
-        $latestBooks = Book::query()    
+        $latestBooks = Book::query()
             ->latest()
             ->take(4)
             ->get();
@@ -25,7 +21,23 @@ class HomeController extends Controller
 
         return view('home', [
             'latestBooks' => $latestBooks,
-            'dailyVerse'  => $dailyVerse,
+            'dailyVerse' => $dailyVerse,
         ]);
     }
+
+    public function userHome(DailyVerseService $dailyVerseService): View
+    {
+        $latestBooks = Book::query()
+            ->latest()
+            ->take(4)
+            ->get();
+
+        $dailyVerse = $dailyVerseService->getDailyVerse();
+
+        return view('home', [
+            'latestBooks' => $latestBooks,
+            'dailyVerse' => $dailyVerse,
+        ]);
+    }
+
 }

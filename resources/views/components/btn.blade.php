@@ -11,19 +11,19 @@
     $size = $size ? strtolower((string) $size) : null;
 
     $variantClass = match ($variant) {
-        'danger' => 'btn-danger',
-        'outline' => 'btn-outline-primary',
-        'ghost' => 'btn-link text-decoration-none',
-        default => 'btn-primary',
+        'danger' => 'bg-rose-600 hover:bg-rose-700 text-white',
+        'outline' => 'bg-transparent border-2 border-lumina-blue text-lumina-blue hover:bg-lumina-blue hover:text-white',
+        'ghost' => 'bg-transparent text-lumina-blue hover:bg-slate-50',
+        default => 'bg-lumina-blue hover:opacity-90 text-white shadow-sm hover:shadow-md',
     };
 
     $sizeClass = match ($size) {
-        'sm' => 'btn-sm',
-        'lg' => 'btn-lg',
-        default => '',
+        'sm' => 'px-3 py-1.5 text-xs',
+        'lg' => 'px-6 py-3 text-lg',
+        default => 'px-4 py-2 text-sm',
     };
 
-    $baseClass = trim("btn {$variantClass} {$sizeClass}");
+    $baseClass = trim("inline-flex items-center justify-center font-bold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed {$variantClass} {$sizeClass}");
 @endphp
 
 @if ($href)
