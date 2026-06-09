@@ -48,6 +48,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store')->middleware('throttle:checkout');
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
     Route::post('/orders/{order}/payment', [OrderController::class, 'uploadPayment'])->name('orders.uploadPayment');
+    Route::get('/orders/{order}/success', [OrderController::class, 'success'])->name('orders.success');
 
     Route::get('/collection', [CollectionController::class, 'index'])->name('collection.index');
     Route::get('/collection/{book}/download', [CollectionController::class, 'download'])->name('collection.download');

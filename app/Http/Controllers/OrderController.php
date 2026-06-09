@@ -91,6 +91,17 @@ class OrderController extends Controller
             ]
         );
 
-        return redirect()->route('orders.show', $order->id)->with('success', 'Bukti pembayaran berhasil diunggah! Admin akan segera memverifikasi pesanan Anda.');
+        return redirect()->route('orders.success', $order->id);
+    }
+
+    public function success(Order $order): View
+    {
+        if (Auth::id() !== $order->user_id) {
+            abort(403);
+        }
+
+        return view('orders.success', [
+            'order' => $order,
+        ]);
     }
 }
