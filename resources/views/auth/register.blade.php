@@ -40,7 +40,7 @@
                     <input id="username" type="text" name="username" x-model="username"
                         @input="if(errors.username) delete errors.username"
                         :class="errors.username ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-200'"
-                        class="block w-full pl-11 pr-4 py-3 bg-white border rounded-xl text-[15px] placeholder-slate-400 focus:outline-none focus:border-[#1a4fd9] focus:ring-1 focus:ring-[#1a4fd9] transition-all"
+                        class="block w-full pl-11 pr-4 py-3 bg-white border rounded-xl text-[15px] placeholder-slate-400 focus:outline-none focus:border-lumina-blue focus:ring-1 focus:ring-lumina-blue transition-all"
                         placeholder="Masukkan nama akun Anda" autofocus />
                 </div>
                 <div class="text-slate-500 text-[13px] mt-1.5 ml-1">Maksimal 16 karakter.</div>
@@ -67,7 +67,7 @@
                     <input id="email" type="email" name="email" x-model="email"
                         @input="if(errors.email) delete errors.email"
                         :class="errors.email ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-200'"
-                        class="block w-full pl-11 pr-4 py-3 bg-white border rounded-xl text-[15px] placeholder-slate-400 focus:outline-none focus:border-[#1a4fd9] focus:ring-1 focus:ring-[#1a4fd9] transition-all"
+                        class="block w-full pl-11 pr-4 py-3 bg-white border rounded-xl text-[15px] placeholder-slate-400 focus:outline-none focus:border-lumina-blue focus:ring-1 focus:ring-lumina-blue transition-all"
                         placeholder="contoh@email.com" />
                 </div>
                 <div class="text-slate-500 text-[13px] mt-1.5 ml-1">Format email yang valid.</div>
@@ -94,7 +94,7 @@
                     <input id="password" type="password" name="password" x-model="password"
                         @input="if(errors.password) delete errors.password"
                         :class="errors.password ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-200'"
-                        class="block w-full pl-11 pr-4 py-3 bg-white border rounded-xl text-[15px] placeholder-slate-400 focus:outline-none focus:border-[#1a4fd9] focus:ring-1 focus:ring-[#1a4fd9] transition-all"
+                        class="block w-full pl-11 pr-4 py-3 bg-white border rounded-xl text-[15px] placeholder-slate-400 focus:outline-none focus:border-lumina-blue focus:ring-1 focus:ring-lumina-blue transition-all"
                         placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" />
                 </div>
                 <div class="text-slate-500 text-[13px] mt-1.5 ml-1">Minimal 8 karakter.</div>
@@ -122,7 +122,7 @@
                         x-model="password_confirmation"
                         @input="if(errors.password_confirmation) delete errors.password_confirmation"
                         :class="errors.password_confirmation ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-200'"
-                        class="block w-full pl-11 pr-4 py-3 bg-white border rounded-xl text-[15px] placeholder-slate-400 focus:outline-none focus:border-[#1a4fd9] focus:ring-1 focus:ring-[#1a4fd9] transition-all"
+                        class="block w-full pl-11 pr-4 py-3 bg-white border rounded-xl text-[15px] placeholder-slate-400 focus:outline-none focus:border-lumina-blue focus:ring-1 focus:ring-lumina-blue transition-all"
                         placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" />
                 </div>
                 <div class="text-slate-500 text-[13px] mt-1.5 ml-1">Ketik ulang kata sandi Anda.</div>
@@ -136,7 +136,7 @@
 
             <!-- Submit Button -->
             <button type="submit"
-                class="w-full py-3.5 px-4 rounded-xl text-[15px] font-semibold text-white bg-[#1a4fd9] hover:bg-[#1e3a8a] focus:outline-none focus:ring-4 focus:ring-blue-500/30 transition-all mb-8">
+                class="w-full py-3.5 px-4 rounded-xl text-[15px] font-semibold text-white bg-lumina-blue hover:bg-[#1e3a8a] focus:outline-none focus:ring-4 focus:ring-blue-500/30 transition-all mb-8">
                 Daftar Sekarang
             </button>
 
@@ -144,7 +144,7 @@
             <div class="text-center">
                 <span class="text-slate-500 text-[15px]">Sudah punya akun?</span>
                 <a href="{{ route('login') }}"
-                    class="font-semibold text-[#1a4fd9] hover:text-[#1e3a8a] hover:underline transition-colors text-[15px] ml-1">Masuk
+                    class="font-semibold text-lumina-blue hover:text-[#1e3a8a] hover:underline transition-colors text-[15px] ml-1">Masuk
                     di sini</a>
             </div>
         </form>

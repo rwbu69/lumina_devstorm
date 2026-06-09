@@ -165,7 +165,7 @@
     <div x-data="{ activeModal: {!! $errors->any() && !old('_method') ? "'modalTambahBuku'" : (old('_method') === 'PUT' ? "'modalEditBuku-".old('id')."'" : 'null') !!} }" @open-modal.window="activeModal = $event.detail" @close-modal.window="activeModal = null" @keydown.escape.window="activeModal = null">
 
         {{-- Modal Tambah Buku --}}
-        <div x-show="activeModal === 'modalTambahBuku'" style="display: none;" class="fixed inset-0 z-[1050] overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div x-show="activeModal === 'modalTambahBuku'" style="display: none;" class="fixed inset-0 z-1050 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
             <div x-show="activeModal === 'modalTambahBuku'" x-transition.opacity class="fixed inset-0 bg-slate-900/50" @click="activeModal = null"></div>
 
             <div class="flex min-h-full items-center justify-center p-4">
@@ -298,7 +298,7 @@
         {{-- Modals for existing books (Edit / Delete) --}}
         @foreach($books as $book)
             {{-- Modal Delete --}}
-            <div x-show="activeModal === 'deleteModal-{{ $book->id }}'" style="display: none;" class="fixed inset-0 z-[1050] overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+            <div x-show="activeModal === 'deleteModal-{{ $book->id }}'" style="display: none;" class="fixed inset-0 z-1050 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
                 <div x-show="activeModal === 'deleteModal-{{ $book->id }}'" x-transition.opacity class="fixed inset-0 bg-slate-900/50" @click="activeModal = null"></div>
 
                 <div class="flex min-h-full items-center justify-center p-4">
@@ -328,7 +328,7 @@
             </div>
 
             {{-- Modal Edit Buku --}}
-            <div x-show="activeModal === 'modalEditBuku-{{ $book->id }}'" style="display: none;" class="fixed inset-0 z-[1050] overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+            <div x-show="activeModal === 'modalEditBuku-{{ $book->id }}'" style="display: none;" class="fixed inset-0 z-1050 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
                 <div x-show="activeModal === 'modalEditBuku-{{ $book->id }}'" x-transition.opacity class="fixed inset-0 bg-slate-900/50" @click="activeModal = null"></div>
 
                 <div class="flex min-h-full items-center justify-center p-4">

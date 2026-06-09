@@ -39,7 +39,7 @@
                         x-model="username"
                         @input="if(errors.username) delete errors.username"
                         :class="errors.username ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-200'"
-                        class="block w-full pl-11 pr-4 py-3 bg-white border rounded-xl text-[15px] placeholder-slate-400 focus:outline-none focus:border-[#1a4fd9] focus:ring-1 focus:ring-[#1a4fd9] transition-all"
+                        class="block w-full pl-11 pr-4 py-3 bg-white border rounded-xl text-[15px] placeholder-slate-400 focus:outline-none focus:border-lumina-blue focus:ring-1 focus:ring-lumina-blue transition-all"
                         placeholder="Masukkan nama akun Anda"
                         autofocus
                     />
@@ -67,7 +67,7 @@
                         x-model="password"
                         @input="if(errors.password) delete errors.password"
                         :class="errors.password ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-200'"
-                        class="block w-full pl-11 pr-4 py-3 bg-white border rounded-xl text-[15px] placeholder-slate-400 focus:outline-none focus:border-[#1a4fd9] focus:ring-1 focus:ring-[#1a4fd9] transition-all"
+                        class="block w-full pl-11 pr-4 py-3 bg-white border rounded-xl text-[15px] placeholder-slate-400 focus:outline-none focus:border-lumina-blue focus:ring-1 focus:ring-lumina-blue transition-all"
                         placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
                     />
                 </div>
@@ -81,24 +81,24 @@
             </div>
 
             <!-- Submit Button -->
-            <button type="submit" class="w-full py-3.5 px-4 rounded-xl text-[15px] font-semibold text-white bg-[#1a4fd9] hover:bg-[#1e3a8a] focus:outline-none focus:ring-4 focus:ring-blue-500/30 transition-all mb-8">
+            <button type="submit" class="w-full py-3.5 px-4 rounded-xl text-[15px] font-semibold text-white bg-lumina-blue hover:bg-[#1e3a8a] focus:outline-none focus:ring-4 focus:ring-blue-500/30 transition-all mb-8">
                 Masuk
             </button>
 
             <!-- Footer Link -->
             <div class="text-center">
                 <span class="text-slate-500 text-[15px]">Belum punya akun?</span>
-                <a href="{{ route('register') }}" class="font-semibold text-[#1a4fd9] hover:text-[#1e3a8a] hover:underline transition-colors text-[15px] ml-1">Daftar di sini</a>
+                <a href="{{ route('register') }}" class="font-semibold text-lumina-blue hover:text-[#1e3a8a] hover:underline transition-colors text-[15px] ml-1">Daftar di sini</a>
             </div>
         </form>
     </div>
 
     @if (session('success'))
-        <div id="success-toast" class="fixed bottom-6 right-6 z-50 bg-gradient-to-br from-emerald-500 to-emerald-600 text-white px-5 py-4 rounded-xl shadow-lg flex items-center gap-4 min-w-[320px] font-sans opacity-0 translate-y-5 transition-all duration-300 ease-out">
+        <div id="success-toast" class="fixed bottom-6 right-6 z-50 bg-linear-to-br from-emerald-500 to-emerald-600 text-white px-5 py-4 rounded-xl shadow-lg flex items-center gap-4 min-w-[320px] font-sans opacity-0 translate-y-5 transition-all duration-300 ease-out">
             <div class="bg-white text-emerald-600 rounded-full w-8 h-8 flex items-center justify-center shrink-0 shadow-sm">
                 <x-heroicon-o-check class="font-bold size-6" />
             </div>
-            <div class="flex-grow">
+            <div class="grow">
                 <div class="font-bold text-sm mb-0.5">Registrasi Sukses</div>
                 <div class="text-xs opacity-95">{{ session('success') }}</div>
             </div>

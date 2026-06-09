@@ -19,7 +19,7 @@
                                 {{ $metric['label'] }}</div>
                             <div class="text-2xl font-bold text-slate-800 mb-2">{{ $metric['value'] }}</div>
                             <div
-                                class="text-xs font-semibold @if ($metric['trend']['tone'] == 'success') text-emerald-600 @elseif($metric['trend']['tone'] == 'danger') text-rose-600 @else text-slate-500 @endif">
+                                class="text-xs font-semibold px-2 py-1 bg-white border border-slate-200 rounded-lg shadow-sm {{ $metric['trend']['tone'] == 'success' ? 'text-emerald-600' : 'text-rose-600' }}">
                                 {{ $metric['trend']['label'] }} <span
                                     class="text-slate-400 font-medium">{{ $metric['trend']['note'] }}</span>
                             </div>
@@ -47,7 +47,7 @@
                 </div>
             </div>
 
-            <div class="w-full h-[350px] relative">
+            <div class="w-full h-80 relative">
                 <canvas id="revenueChart"></canvas>
             </div>
         </x-admin.card>
