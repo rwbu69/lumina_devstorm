@@ -1,18 +1,10 @@
 @props([
-    // Bootstrap mode
-    'id' => null,
-    'title' => null,
-    'size' => null,
-
-    // Breeze legacy mode (Alpine + Tailwind)
-    'name' => null,
+    'name',
     'show' => false,
-    'maxWidth' => '2xl',
+    'maxWidth' => '2xl'
 ])
 
 @php
-$size = $size ? strtolower((string) $size) : null;
-
 $maxWidth = [
     'sm' => 'sm:max-w-sm',
     'md' => 'sm:max-w-md',
@@ -21,45 +13,6 @@ $maxWidth = [
     '2xl' => 'sm:max-w-2xl',
 ][$maxWidth];
 @endphp
-
-@if ($id)
-    @php
-        $dialogSize = match ($size) {
-            'sm' => 'modal-sm',
-            'lg' => 'modal-lg',
-            'xl' => 'modal-xl',
-            default => '',
-        };
-        $labelId = $id.'Label';
-    @endphp
-
-    <div
-        {{ $attributes->merge(['class' => 'modal fade']) }}
-        id="{{ $id }}"
-        tabindex="-1"
-        aria-labelledby="{{ $labelId }}"
-        aria-hidden="true"
-        data-bs-backdrop="static"
-    >
-        <div class="modal-dialog modal-dialog-centered {{ $dialogSize }}">
-            <div class="modal-content border-0 rounded-4">
-                <div class="modal-header">
-                    <h5 class="modal-title fw-semibold" id="{{ $labelId }}">{{ $title }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-                </div>
-                <div class="modal-body">
-                    {{ $slot }}
-                </div>
-
-                @isset($footer)
-                    <div class="modal-footer">
-                        {{ $footer }}
-                    </div>
-                @endisset
-            </div>
-        </div>
-    </div>
-@else
 
 <div
     x-data="{
@@ -123,5 +76,4 @@ $maxWidth = [
         {{ $slot }}
     </div>
 </div>
-@endif
 

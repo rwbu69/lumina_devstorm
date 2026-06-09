@@ -28,6 +28,7 @@ class BookFactory extends Factory
             'judul' => $judul,
             'penulis' => fake()->name(),
             'harga' => fake()->numberBetween(50_000, 250_000),
+            'stok' => fake()->numberBetween(0, 150),
             'file_buku' => 'books/'.Str::uuid().'.pdf',
         ];
     }

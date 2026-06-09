@@ -16,13 +16,18 @@ class Book extends Model
         'judul',
         'penulis',
         'harga',
+        'stok',
         'file_buku',
+        'cover_buku',
+        'sinopsis',
+        'format',
     ];
 
     protected function casts(): array
     {
         return [
             'harga' => 'decimal:2',
+            'stok' => 'integer',
         ];
     }
 

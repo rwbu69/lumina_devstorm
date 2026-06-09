@@ -18,4 +18,9 @@ class Category extends Model
     {
         return $this->hasMany(Book::class);
     }
+
+    public function getNamaAttribute()
+    {
+        return $this->nama_kategori;
+    }
 }

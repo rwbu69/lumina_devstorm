@@ -56,12 +56,26 @@ class User extends Authenticatable
 
     public function isAdmin(): bool
     {
-        return $this->role === 'admin';
+        return in_array($this->role, ['admin', 'superadmin']);
     }
 
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === 'superadmin';
+    }
 
     public function isUser(): bool
     {
         return $this->role === 'user';
+    }
+
+    public function ownedBookIds(): array
+    {
+        return \Illuminate\Support\Facades\DB::table('order_details')
+            ->join('orders', 'order_details.order_id', '=', 'orders.id')
+            ->where('orders.user_id', $this->id)
+            ->where('orders.status', 'verified')
+            ->pluck('order_details.book_id')
+            ->toArray();
     }
 }

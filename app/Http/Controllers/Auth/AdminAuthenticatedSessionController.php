@@ -36,7 +36,7 @@ class AdminAuthenticatedSessionController extends Controller
 
             $user = $request->user();
 
-            if (! $user || $user->role !== 'admin') {
+            if (! $user || !$user->isAdmin()) {
                 Auth::logout();
                 $request->session()->invalidate();
                 $request->session()->regenerateToken();

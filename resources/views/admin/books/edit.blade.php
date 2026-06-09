@@ -3,20 +3,177 @@
         title="Edit Buku"
         subtitle="Perbarui informasi buku sebelum disimpan."
     >
-        <a href="{{ route('admin.books.show', $book) }}" class="btn btn-light border rounded-3">
-            <i class="bi bi-eye me-2"></i>
-            Lihat
-        </a>
-        <a href="{{ route('admin.books.index') }}" class="btn btn-light border rounded-3">
-            Kembali
-        </a>
+        <div class="flex gap-2">
+            <a href="{{ route('admin.books.show', $book) }}" class="inline-flex items-center justify-center px-4 py-2 border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 bg-white hover:bg-slate-50 hover:text-lumina-blue transition-colors shadow-sm">
+                <x-heroicon-o-eye class="mr-2 size-5" />
+                Lihat
+            </a>
+            <a href="{{ route('admin.books.index') }}" class="inline-flex items-center justify-center px-4 py-2 border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 bg-white hover:bg-slate-50 hover:text-lumina-blue transition-colors shadow-sm">
+                Kembali
+            </a>
+        </div>
     </x-admin.section-header>
 
-    <div class="mt-4"></div>
+    <div class="mt-8">
+        <x-admin.card>
+            <form action="{{ route('admin.books.update', $book->id) }}" method="POST" enctype="multipart/form-data" novalidate
+                  x-data="{
+                      judul: '{{ old('judul', addslashes($book->judul)) }}',
+                      penulis: '{{ old('penulis', addslashes($book->penulis)) }}',
+                      category_id: '{{ old('category_id', $book->category_id) }}',
+                      new_category_name: '{{ old('new_category_name') }}',
+                      format: '{{ old('format', $book->format) }}',
+                      harga: '{{ old('harga', intval($book->harga)) }}',
+                      stok: '{{ old('stok', $book->stok) }}',
+                      errors: {},
+                      validate() {
+                          this.errors = {};
+                          if (!this.judul) this.errors.judul = 'Judul buku harus diisi.';
+                          if (!this.penulis) this.errors.penulis = 'Nama penulis harus diisi.';
+                          
+                          if (!this.category_id) this.errors.category_id = 'Kategori harus dipilih.';
+                          else if (this.category_id === 'new' && !this.new_category_name) this.errors.new_category_name = 'Nama kategori baru harus diisi.';
+                          
+                          if (!this.format) this.errors.format = 'Format buku harus dipilih.';
+                          if (this.harga === '' || this.harga < 0) this.errors.harga = 'Harga tidak valid.';
+                          if (this.stok === '' || this.stok < 0) this.errors.stok = 'Stok tidak valid.';
+                          
+                          // Optional cover for edit, so no validation here unless you want size limits.
+                          return Object.keys(this.errors).length === 0;
+                      }
+                  }" @submit="if(!validate()) $event.preventDefault()">
+                @csrf
+                @method('PUT')
 
-    <x-admin.card>
-        <div class="alert alert-warning mb-0">
-            Form edit buku untuk <span class="fw-semibold">{{ $book->judul }}</span> akan ditempatkan di sini (placeholder UI).
-        </div>
-    </x-admin.card>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div>
+                        <label for="judul" class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Judul Buku <span class="text-rose-500">*</span></label>
+                        <input type="text" name="judul" id="judul" x-model="judul" @input="if(errors.judul) delete errors.judul" :class="errors.judul ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-200'" class="w-full px-4 py-3 bg-slate-50 border rounded-xl text-sm focus:outline-none focus:border-lumina-blue focus:ring-2 focus:ring-lumina-blue/20 transition-all text-slate-800" placeholder="Masukkan judul buku" required maxlength="255">
+                        <template x-if="errors.judul"><p class="text-rose-500 text-xs mt-1.5 font-bold flex items-center"><x-heroicon-o-exclamation-circle class="mr-1 size-4" /><span x-text="errors.judul"></span></p></template>
+                        @error('judul')<p x-show="!errors.judul" class="text-rose-500 text-xs mt-1.5 font-bold flex items-center"><x-heroicon-o-exclamation-circle class="mr-1 size-4" />{{ $message }}</p>@enderror
+                    </div>
+                    
+                    <div>
+                        <label for="penulis" class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Penulis <span class="text-rose-500">*</span></label>
+                        <input type="text" name="penulis" id="penulis" x-model="penulis" @input="if(errors.penulis) delete errors.penulis" :class="errors.penulis ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-200'" class="w-full px-4 py-3 bg-slate-50 border rounded-xl text-sm focus:outline-none focus:border-lumina-blue focus:ring-2 focus:ring-lumina-blue/20 transition-all text-slate-800" placeholder="Nama penulis atau pengarang" required maxlength="255">
+                        <template x-if="errors.penulis"><p class="text-rose-500 text-xs mt-1.5 font-bold flex items-center"><x-heroicon-o-exclamation-circle class="mr-1 size-4" /><span x-text="errors.penulis"></span></p></template>
+                        @error('penulis')<p x-show="!errors.penulis" class="text-rose-500 text-xs mt-1.5 font-bold flex items-center"><x-heroicon-o-exclamation-circle class="mr-1 size-4" />{{ $message }}</p>@enderror
+                    </div>
+
+                    <div>
+                        <label for="category_id" class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Kategori <span class="text-rose-500">*</span></label>
+                        <select id="category_id" name="category_id" x-model="category_id" @change="if(errors.category_id) delete errors.category_id" :class="errors.category_id ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-200'" class="w-full px-4 py-3 bg-slate-50 border rounded-xl text-sm focus:outline-none focus:border-lumina-blue focus:ring-2 focus:ring-lumina-blue/20 transition-all text-slate-800 appearance-none cursor-pointer" required>
+                            <option value="" disabled>-- Pilih Kategori --</option>
+                            <option value="new" class="font-bold text-lumina-blue">+ Tambah Kategori Baru</option>
+                            @php
+                                $categories = \App\Models\Category::all();
+                            @endphp
+                            @foreach($categories as $category)
+                                <option value="{{ $category->id }}">{{ $category->nama_kategori ?? $category->nama }}</option>
+                            @endforeach
+                        </select>
+                        
+                        <!-- Input for New Category -->
+                        <div x-show="category_id === 'new'" x-transition class="mt-3">
+                            <input type="text" name="new_category_name" id="new_category_name" x-model="new_category_name" @input="if(errors.new_category_name) delete errors.new_category_name" :class="errors.new_category_name ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-200'" class="w-full px-4 py-3 bg-white border rounded-xl text-sm focus:outline-none focus:border-lumina-blue focus:ring-2 focus:ring-lumina-blue/20 transition-all text-slate-800 shadow-sm" placeholder="Ketik nama kategori baru...">
+                            <template x-if="errors.new_category_name"><p class="text-rose-500 text-xs mt-1.5 font-bold flex items-center"><x-heroicon-o-exclamation-circle class="mr-1 size-4" /><span x-text="errors.new_category_name"></span></p></template>
+                            @error('new_category_name')<p x-show="!errors.new_category_name" class="text-rose-500 text-xs mt-1.5 font-bold flex items-center"><x-heroicon-o-exclamation-circle class="mr-1 size-4" />{{ $message }}</p>@enderror
+                        </div>
+
+                        <template x-if="errors.category_id && category_id !== 'new'"><p class="text-rose-500 text-xs mt-1.5 font-bold flex items-center"><x-heroicon-o-exclamation-circle class="mr-1 size-4" /><span x-text="errors.category_id"></span></p></template>
+                        @error('category_id')<p x-show="!errors.category_id && category_id !== 'new'" class="text-rose-500 text-xs mt-1.5 font-bold flex items-center"><x-heroicon-o-exclamation-circle class="mr-1 size-4" />{{ $message }}</p>@enderror
+                    </div>
+
+                    <div>
+                        <label for="format" class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Format Buku <span class="text-rose-500">*</span></label>
+                        <select id="format" name="format" x-model="format" @change="if(errors.format) delete errors.format" :class="errors.format ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-200'" class="w-full px-4 py-3 bg-slate-50 border rounded-xl text-sm focus:outline-none focus:border-lumina-blue focus:ring-2 focus:ring-lumina-blue/20 transition-all text-slate-800 appearance-none cursor-pointer" required>
+                            <option value="digital">Digital (E-Book)</option>
+                            <option value="fisik" disabled>Fisik (Cetak) - Belum Tersedia</option>
+                        </select>
+                        <p class="text-slate-400 text-xs mt-1.5 font-medium">Sementara hanya melayani format digital.</p>
+                        <template x-if="errors.format"><p class="text-rose-500 text-xs mt-1.5 font-bold flex items-center"><x-heroicon-o-exclamation-circle class="mr-1 size-4" /><span x-text="errors.format"></span></p></template>
+                        @error('format')<p x-show="!errors.format" class="text-rose-500 text-xs mt-1.5 font-bold flex items-center"><x-heroicon-o-exclamation-circle class="mr-1 size-4" />{{ $message }}</p>@enderror
+                    </div>
+
+                    <div>
+                        <label for="harga" class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Harga (IDR) <span class="text-rose-500">*</span></label>
+                        <div class="relative flex items-center">
+                            <span class="absolute left-4 font-semibold text-slate-400 text-sm">Rp</span>
+                            <input type="number" name="harga" id="harga" x-model="harga" @input="if(errors.harga) delete errors.harga" :class="errors.harga ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-200'" class="w-full pl-10 pr-4 py-3 bg-slate-50 border rounded-xl text-sm focus:outline-none focus:border-lumina-blue focus:ring-2 focus:ring-lumina-blue/20 transition-all text-slate-800" placeholder="150000" required min="0" step="1">
+                        </div>
+                        <template x-if="errors.harga"><p class="text-rose-500 text-xs mt-1.5 font-bold flex items-center"><x-heroicon-o-exclamation-circle class="mr-1 size-4" /><span x-text="errors.harga"></span></p></template>
+                        @error('harga')<p x-show="!errors.harga" class="text-rose-500 text-xs mt-1.5 font-bold flex items-center"><x-heroicon-o-exclamation-circle class="mr-1 size-4" />{{ $message }}</p>@enderror
+                    </div>
+                    
+                    <div>
+                        <label for="stok" class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Stok <span class="text-rose-500">*</span></label>
+                        <input type="number" name="stok" id="stok" x-model="stok" @input="if(errors.stok) delete errors.stok" :class="errors.stok ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-200'" class="w-full px-4 py-3 bg-slate-50 border rounded-xl text-sm focus:outline-none focus:border-lumina-blue focus:ring-2 focus:ring-lumina-blue/20 transition-all text-slate-800" placeholder="Masukkan jumlah stok" required min="0" step="1">
+                        <template x-if="errors.stok"><p class="text-rose-500 text-xs mt-1.5 font-bold flex items-center"><x-heroicon-o-exclamation-circle class="mr-1 size-4" /><span x-text="errors.stok"></span></p></template>
+                        @error('stok')<p x-show="!errors.stok" class="text-rose-500 text-xs mt-1.5 font-bold flex items-center"><x-heroicon-o-exclamation-circle class="mr-1 size-4" />{{ $message }}</p>@enderror
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label for="sinopsis" class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Sinopsis</label>
+                        <textarea id="sinopsis" name="sinopsis" rows="4" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-lumina-blue focus:ring-2 focus:ring-lumina-blue/20 transition-all text-slate-800 resize-y" placeholder="Tuliskan sinopsis buku (opsional)">{{ old('sinopsis', $book->sinopsis) }}</textarea>
+                        @error('sinopsis')<p class="text-rose-500 text-xs mt-1.5 font-bold flex items-center"><x-heroicon-o-exclamation-circle class="mr-1 size-4" />{{ $message }}</p>@enderror
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <!-- Upload Cover -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Ganti Cover Buku</label>
+                        <div class="flex flex-col sm:flex-row items-start gap-4">
+                            <div class="w-24 h-32 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-center shrink-0 overflow-hidden shadow-sm">
+                                @if($book->cover_buku)
+                                    <img src="{{ asset('storage/' . $book->cover_buku) }}" alt="Preview" class="w-full h-full object-cover">
+                                @elseif($book->gambar)
+                                    <img src="{{ asset('storage/' . $book->gambar) }}" alt="Preview" class="w-full h-full object-cover">
+                                @else
+                                    <span class="text-slate-400 text-[10px] font-bold tracking-widest">NO COVER</span>
+                                @endif
+                            </div>
+                            <div class="relative w-full">
+                                <input class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" type="file" id="cover_buku" name="cover_buku" accept=".jpeg,.jpg,.png,.webp">
+                                <div class="border-2 border-dashed border-lumina-blue/30 bg-blue-50/50 hover:bg-blue-50 transition-colors rounded-2xl p-6 text-center flex flex-col items-center justify-center h-32">
+                                    <i class="bi bi-cloud-upload text-2xl text-lumina-blue mb-2"></i>
+                                    <span class="font-bold text-slate-700 text-xs mb-1">Upload untuk ganti</span>
+                                    <span class="text-slate-500 text-[10px] font-medium">Opsional. JPG, PNG, WEBP (Maks. 5MB)</span>
+                                </div>
+                            </div>
+                        </div>
+                        @error('cover_buku')<p class="text-rose-500 text-xs mt-1.5 font-bold flex items-center"><x-heroicon-o-exclamation-circle class="mr-1 size-4" />{{ $message }}</p>@enderror
+                    </div>
+
+                    <!-- Upload PDF (E-Book) -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Ganti File E-Book (Digital)</label>
+                        <div class="relative">
+                            <input class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" type="file" id="file_buku" name="file_buku" accept=".pdf">
+                            <div class="border-2 border-dashed border-slate-300 bg-slate-50/50 hover:bg-slate-100 transition-colors rounded-2xl p-6 text-center flex flex-col items-center justify-center h-32">
+                                <i class="bi bi-file-earmark-pdf text-2xl text-slate-400 mb-2"></i>
+                                <span class="font-bold text-slate-700 text-xs mb-1">
+                                    @if($book->file_buku) 
+                                        File terlampir: Ganti?
+                                    @else 
+                                        Belum ada file, upload? 
+                                    @endif
+                                </span>
+                                <span class="text-slate-500 text-[10px] font-medium">Opsional. Format PDF (Maks. 10MB)</span>
+                            </div>
+                        </div>
+                        @error('file_buku')<p class="text-rose-500 text-xs mt-1.5 font-bold flex items-center"><x-heroicon-o-exclamation-circle class="mr-1 size-4" />{{ $message }}</p>@enderror
+                    </div>
+                </div>
+
+                <div class="flex justify-end items-center border-t border-slate-100 pt-6 gap-3">
+                    <a href="{{ route('admin.books.index') }}" class="px-5 py-2.5 text-sm font-bold text-slate-500 hover:text-slate-700 hover:bg-slate-50 rounded-xl transition-colors">Batal</a>
+                    <button type="submit" class="flex items-center justify-center px-6 py-2.5 bg-lumina-blue hover:bg-blue-800 text-white text-sm font-bold rounded-xl shadow-sm hover:shadow transition-all">
+                        <x-heroicon-o-document-check class="mr-2 size-5" />
+                        Simpan Perubahan
+                    </button>
+                </div>
+            </form>
+        </x-admin.card>
+    </div>
 </x-admin.layout>
