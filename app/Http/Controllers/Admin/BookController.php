@@ -35,6 +35,8 @@ class BookController extends Controller
         return view('admin.books.index', compact('books', 'totalJudul', 'stokRendah', 'terjualBulanIni', 'valuasiStok', 'categories'));
     }
 
+    return view('admin.books.index', compact('books'));
+}
     public function create(): View
     {
         $categories = Category::all();
