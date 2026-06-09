@@ -1,8 +1,8 @@
-@php
+ @php
     $user = auth()->user();
     $name = $user->nama ?? $user->name ?? 'User';
     $username = $user->username ?? 'user';
-    
+
     // Generate Initials
     $words = explode(' ', trim($name));
     $initials = '';
@@ -17,16 +17,16 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-<nav class="bg-white border-b border-slate-200 sticky top-0 z-[1050] font-sans shadow-sm" x-data="{ open: false }">
+<nav class="bg-white border-b border-slate-200 sticky top-0 z-1050 font-sans shadow-sm" x-data="{ open: false }">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16 items-center">
-            
+
             <!-- Left Side: Logo & Brand -->
-            <div class="flex items-center space-x-6 flex-grow max-w-xl">
+            <div class="flex items-center space-x-6 grow max-w-xl">
                 <!-- Brand Logo & Teks -->
-                <a class="flex items-center space-x-2 text-indigo-900 hover:text-indigo-700 transition-colors flex-shrink-0" href="{{ auth()->check() ? route('home') : route('welcome') }}">
+                <a class="flex items-center space-x-2 text-indigo-900 hover:text-indigo-700 transition-colors shrink-0" href="{{ auth()->check() ? route('home') : route('welcome') }}">
                     <img src="{{ asset('images/logolumina.svg') }}" alt="Logo Lumina" class="w-8 h-8">
-                    <span class="font-bold text-lg tracking-tight font-serif">Lumina Media</span>
+                    <span class="font-bold text-lg tracking-tight font-serif">{{ \App\Models\Setting::getValue('site_name', 'Lumina Media') }}</span>
                 </a>
             </div>
 
@@ -49,13 +49,13 @@
 
                 @auth
                 <!-- Shopping Cart Icon -->
-                <div class="relative" x-data="{ 
-                    count: {{ session('cart') ? count(session('cart')) : 0 }}, 
+                <div class="relative" x-data="{
+                    count: {{ session('cart') ? count(session('cart')) : 0 }},
                     animate: false,
                     showHover: false
                 }"
                 @cart-updated.window="count = $event.detail.count; animate = true; setTimeout(() => animate = false, 300); showHover = true; setTimeout(() => showHover = false, 3000)">
-                    <a href="{{ route('cart.index') }}" 
+                    <a href="{{ route('cart.index') }}"
                        @mouseenter="showHover = true" @mouseleave="showHover = false"
                        class="text-slate-500 hover:text-indigo-600 transition-all duration-300 relative p-1.5 rounded-xl hover:bg-slate-50 flex items-center justify-center"
                        :class="animate ? 'scale-105 text-indigo-600 bg-indigo-50' : ''">
@@ -65,9 +65,9 @@
                                   :class="animate ? 'scale-110 bg-rose-600' : 'scale-100 bg-rose-500'"></span>
                         </template>
                     </a>
-                    
+
                     <!-- Hover Menu / Notification -->
-                    <div x-show="showHover && count > 0" 
+                    <div x-show="showHover && count > 0"
                          x-transition:enter="transition ease-out duration-200"
                          x-transition:enter-start="opacity-0 translate-y-2"
                          x-transition:enter-end="opacity-100 translate-y-0"
@@ -86,29 +86,29 @@
                     @auth
                         <!-- Profile Button -->
                         <button @click="open = !open" @click.outside="open = false" class="flex items-center focus:outline-none group">
-                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-indigo-700 text-white flex items-center justify-center font-bold text-sm tracking-wider shadow-md hover:shadow-indigo-200 ring-2 ring-indigo-100 hover:ring-indigo-400 group-hover:scale-105 transition-all duration-200">
+                            <div class="w-10 h-10 rounded-full bg-linear-to-br from-indigo-500 to-indigo-700 text-white flex items-center justify-center font-bold text-sm tracking-wider shadow-md hover:shadow-indigo-200 ring-2 ring-indigo-100 hover:ring-indigo-400 group-hover:scale-105 transition-all duration-200">
                                 {{ $initials }}
                             </div>
                         </button>
 
                         <!-- Dropdown Menu -->
-                        <div x-show="open" 
+                        <div x-show="open"
                              x-transition:enter="transition ease-out duration-100"
                              x-transition:enter-start="transform opacity-0 scale-95"
                              x-transition:enter-end="transform opacity-100 scale-100"
                              x-transition:leave="transition ease-in duration-75"
                              x-transition:leave-start="transform opacity-100 scale-100"
                              x-transition:leave-end="transform opacity-0 scale-95"
-                             class="absolute right-0 top-full mt-3 w-56 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden z-[1050]"
+                             class="absolute right-0 top-full mt-3 w-56 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden z-1050"
                              style="display: none;">
-                            
+
                             <!-- Account Info -->
                             <div class="p-4 border-b border-slate-50 bg-slate-50/50">
                                 <p class="text-[10px] font-bold text-slate-400 tracking-wider uppercase mb-0.5">Akun Saya</p>
                                 <p class="font-bold text-slate-800 text-sm truncate">{{ $name }}</p>
                                 <p class="text-xs text-indigo-600 font-medium truncate">&#64;{{ $username }}</p>
                             </div>
-                            
+
                             <!-- Menu Items -->
                             <div class="py-1">
                                 <a href="{{ route('profile.edit') }}" class="flex items-center px-4 py-2.5 text-slate-700 hover:bg-slate-50 text-sm font-medium transition-colors">

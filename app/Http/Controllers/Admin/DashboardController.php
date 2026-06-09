@@ -111,7 +111,7 @@ class DashboardController extends Controller
 
         $maxRev = empty($monthlyRevenue) ? 1 : max($monthlyRevenue);
         if ($maxRev == 0) $maxRev = 1;
-        
+
         $monthlyRevenueData = [];
         foreach ($monthlyRevenue as $i => $rev) {
             $monthlyRevenueData[] = [

@@ -2,9 +2,9 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
-                <div class="font-semibold text-slate-800 mb-3">Lumina Media</div>
+                <div class="font-semibold text-slate-800 mb-3">{{ \App\Models\Setting::getValue('site_name', 'Lumina Media') }}</div>
                 <div class="text-slate-500 text-sm leading-relaxed">
-                    Platform e-commerce buku digital untuk belajar, berkembang, dan berkarya.
+                    {{ \App\Models\Setting::getValue('footer_description', 'Platform e-commerce buku digital untuk belajar, berkembang, dan berkarya.') }}
                 </div>
             </div>
 
@@ -20,13 +20,14 @@
 
             <div>
                 <div class="font-semibold text-slate-800 mb-3">Kontak</div>
-                <div class="text-slate-500 text-sm mb-2">Email: support@luminamedia.test</div>
+                <div class="text-slate-500 text-sm mb-2">Email: {{ \App\Models\Setting::getValue('contact_email', 'support@luminamedia.test') }}</div>
+                <div class="text-slate-500 text-sm mb-2">Telepon/WA: {{ \App\Models\Setting::getValue('contact_phone', '+62 812 3456 7890') }}</div>
                 <div class="text-slate-500 text-sm">Jam: Senin–Jumat (09.00–17.00)</div>
             </div>
         </div>
 
         <div class="border-t border-slate-100 mt-8 pt-6 text-slate-400 text-xs text-center">
-            &copy; {{ date('Y') }} Lumina Media. All rights reserved.
+            &copy; {{ date('Y') }} {{ \App\Models\Setting::getValue('site_name', 'Lumina Media') }}. All rights reserved.
         </div>
     </div>
 </footer>

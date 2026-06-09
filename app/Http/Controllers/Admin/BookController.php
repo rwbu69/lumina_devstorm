@@ -43,6 +43,17 @@ class BookController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        if ($request->category_id === 'new') {
+            $request->validate([
+                'new_category_name' => 'required|string|max:255|unique:categories,nama_kategori'
+            ], [
+                'new_category_name.required' => 'Nama kategori baru harus diisi.',
+                'new_category_name.unique' => 'Kategori ini sudah ada.'
+            ]);
+            $category = Category::create(['nama_kategori' => $request->new_category_name]);
+            $request->merge(['category_id' => $category->id]);
+        }
+
         $request->validate([
             'judul' => 'required|string|max:255',
             'penulis' => 'required|string|max:255',
@@ -83,6 +94,17 @@ class BookController extends Controller
 
     public function update(Request $request, Book $book): RedirectResponse
     {
+        if ($request->category_id === 'new') {
+            $request->validate([
+                'new_category_name' => 'required|string|max:255|unique:categories,nama_kategori'
+            ], [
+                'new_category_name.required' => 'Nama kategori baru harus diisi.',
+                'new_category_name.unique' => 'Kategori ini sudah ada.'
+            ]);
+            $category = Category::create(['nama_kategori' => $request->new_category_name]);
+            $request->merge(['category_id' => $category->id]);
+        }
+
         $request->validate([
             'judul' => 'required|string|max:255',
             'penulis' => 'required|string|max:255',

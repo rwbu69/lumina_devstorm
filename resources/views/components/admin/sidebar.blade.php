@@ -31,6 +31,15 @@
             'active' => request()->routeIs('admin.users.*'),
         ],
     ];
+
+    if (auth()->check() && auth()->user()->isSuperAdmin()) {
+        $menu[] = [
+            'label' => 'Pengaturan Website',
+            'icon' => 'bi-gear',
+            'route' => 'admin.settings.index',
+            'active' => request()->routeIs('admin.settings.*'),
+        ];
+    }
 @endphp
 
 {{-- Alpine Component for Sidebar --}}

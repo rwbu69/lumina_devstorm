@@ -1,10 +1,8 @@
 <x-admin.layout :title="'Lumina Media - Dashboard Admin'">
     <div class="bg-[#FDFBF7] min-h-full">
-        <x-admin.section-header
-            :title="$pageTitle"
-            subtitle="Selamat datang kembali, Administrator."
-        >
-            <button type="button" class="inline-flex items-center justify-center bg-white border border-slate-200 text-slate-700 px-4 py-2.5 rounded-full font-semibold shadow-sm hover:bg-slate-50 hover:border-slate-300 transition-all text-sm">
+        <x-admin.section-header :title="$pageTitle" subtitle="Selamat datang kembali, Administrator.">
+            <button type="button"
+                class="inline-flex items-center justify-center bg-white border border-slate-200 text-slate-700 px-4 py-2.5 rounded-full font-semibold shadow-sm hover:bg-slate-50 hover:border-slate-300 transition-all text-sm">
                 <x-heroicon-o-calendar class="mr-2 text-lumina-blue size-5" />
                 {{ $periodLabel }}
             </button>
@@ -17,16 +15,17 @@
                 <x-admin.card class="h-full">
                     <div class="flex items-start justify-between gap-4">
                         <div>
-                            <div class="text-[0.7rem] font-bold text-slate-500 uppercase tracking-wider mb-2">{{ $metric['label'] }}</div>
+                            <div class="text-[0.7rem] font-bold text-slate-500 uppercase tracking-wider mb-2">
+                                {{ $metric['label'] }}</div>
                             <div class="text-2xl font-bold text-slate-800 mb-2">{{ $metric['value'] }}</div>
-                            <div class="text-xs font-semibold @if($metric['trend']['tone'] == 'success') text-emerald-600 @elseif($metric['trend']['tone'] == 'danger') text-rose-600 @else text-slate-500 @endif">
-                                {{ $metric['trend']['label'] }} <span class="text-slate-400 font-medium">{{ $metric['trend']['note'] }}</span>
+                            <div
+                                class="text-xs font-semibold px-2 py-1 bg-white border border-slate-200 rounded-lg shadow-sm {{ $metric['trend']['tone'] == 'success' ? 'text-emerald-600' : 'text-rose-600' }}">
+                                {{ $metric['trend']['label'] }} <span
+                                    class="text-slate-400 font-medium">{{ $metric['trend']['note'] }}</span>
                             </div>
                         </div>
 
-                        <div class="w-12 h-12 rounded-xl bg-lumina-blue/10 text-lumina-blue flex items-center justify-center shrink-0">
-                            <i class="bi {{ $metric['icon'] }} text-2xl"></i>
-                        </div>
+
                     </div>
                 </x-admin.card>
             @endforeach
@@ -42,12 +41,13 @@
                 </div>
 
                 <div class="sm:text-right">
-                    <div class="text-[0.7rem] font-bold text-slate-500 uppercase tracking-wider mb-1">Total Inventaris</div>
+                    <div class="text-[0.7rem] font-bold text-slate-500 uppercase tracking-wider mb-1">Total Inventaris
+                    </div>
                     <div class="text-2xl font-bold text-lumina-blue">{{ $inventoryValue }}</div>
                 </div>
             </div>
 
-            <div class="w-full h-[350px] relative">
+            <div class="w-full h-80 relative">
                 <canvas id="revenueChart"></canvas>
             </div>
         </x-admin.card>
@@ -62,7 +62,9 @@
                         <div class="text-sm text-slate-500 mt-1">Transaksi terbaru yang masuk ke sistem</div>
                     </div>
 
-                    <a href="{{ route('admin.orders.index') }}" class="inline-flex items-center justify-center bg-lumina-blue hover:bg-blue-800 text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-sm transition-all">Lihat Semua</a>
+                    <a href="{{ route('admin.orders.index') }}"
+                        class="inline-flex items-center justify-center bg-lumina-blue hover:bg-blue-800 text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-sm transition-all">Lihat
+                        Semua</a>
                 </div>
                 <div class="flex items-center gap-2 mt-3 text-xs text-slate-400 sm:hidden">
                     <x-heroicon-o-arrows-right-left class="size-5" />
@@ -73,13 +75,16 @@
             @forelse ($recentActivities as $activity)
                 <tr class="hover:bg-slate-50/50 transition-colors group">
                     <td class="px-6 py-4">
-                        <div class="font-semibold text-slate-800 group-hover:text-lumina-blue transition-colors">{{ $activity['customer'] }}</div>
+                        <div class="font-semibold text-slate-800 group-hover:text-lumina-blue transition-colors">
+                            {{ $activity['customer'] }}</div>
                         <div class="text-xs text-slate-500 mt-1">{{ $activity['dateLabel'] }}</div>
                     </td>
                     <td class="px-6 py-4">
                         <div class="font-semibold text-slate-700 truncate max-w-xs">{{ $activity['bookSummary'] }}</div>
                         <div class="text-xs text-slate-500 mt-1">
-                            {{ $activity['bookCount'] }} buku @if (! empty($activity['paymentLabel'])) • {{ $activity['paymentLabel'] }} @endif
+                            {{ $activity['bookCount'] }} buku @if (!empty($activity['paymentLabel']))
+                                • {{ $activity['paymentLabel'] }}
+                            @endif
                         </div>
                     </td>
                     <td class="px-6 py-4">
@@ -97,7 +102,8 @@
                                 <x-heroicon-o-receipt-percent class="size-10 text-slate-300" />
                             </div>
                             <div class="font-bold text-slate-800 text-lg mb-1">Data belum tersedia</div>
-                            <div class="text-slate-500 text-sm">Belum ada aktivitas transaksi yang dapat ditampilkan.</div>
+                            <div class="text-slate-500 text-sm">Belum ada aktivitas transaksi yang dapat ditampilkan.
+                            </div>
                         </div>
                     </td>
                 </tr>
@@ -106,88 +112,109 @@
     </div>
 
     @push('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        const ctx = document.getElementById('revenueChart').getContext('2d');
-        const gradient = ctx.createLinearGradient(0, 0, 0, 350);
-        gradient.addColorStop(0, 'rgba(26, 79, 217, 0.2)');
-        gradient.addColorStop(1, 'rgba(26, 79, 217, 0)');
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            const ctx = document.getElementById('revenueChart').getContext('2d');
+            const gradient = ctx.createLinearGradient(0, 0, 0, 350);
+            gradient.addColorStop(0, 'rgba(26, 79, 217, 0.2)');
+            gradient.addColorStop(1, 'rgba(26, 79, 217, 0)');
 
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: {!! json_encode($chartLabels) !!},
-                datasets: [{
-                    label: 'Pendapatan (Rp)',
-                    data: {!! json_encode($chartData) !!},
-                    borderColor: '#1a4fd9',
-                    backgroundColor: gradient,
-                    borderWidth: 3,
-                    pointBackgroundColor: '#ffffff',
-                    pointBorderColor: '#1a4fd9',
-                    pointBorderWidth: 2,
-                    pointRadius: 4,
-                    pointHoverRadius: 6,
-                    fill: true,
-                    tension: 0.4
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        backgroundColor: '#1e293b',
-                        padding: 12,
-                        titleFont: { size: 13, family: "'Inter', sans-serif" },
-                        bodyFont: { size: 14, family: "'Inter', sans-serif", weight: 'bold' },
-                        cornerRadius: 8,
-                        displayColors: false,
-                        callbacks: {
-                            label: function(context) {
-                                let label = context.dataset.label || '';
-                                if (label) {
-                                    label += ': ';
-                                }
-                                if (context.parsed.y !== null) {
-                                    label += new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(context.parsed.y);
-                                }
-                                return label;
-                            }
-                        }
-                    }
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: {!! json_encode($chartLabels) !!},
+                    datasets: [{
+                        label: 'Pendapatan (Rp)',
+                        data: {!! json_encode($chartData) !!},
+                        borderColor: '#1a4fd9',
+                        backgroundColor: gradient,
+                        borderWidth: 3,
+                        pointBackgroundColor: '#ffffff',
+                        pointBorderColor: '#1a4fd9',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        fill: true,
+                        tension: 0.4
+                    }]
                 },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: {
-                            color: 'rgba(0,0,0,0.04)',
-                            drawBorder: false,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
                         },
-                        ticks: {
-                            font: { family: "'Inter', sans-serif", size: 11 },
-                            color: '#64748b',
-                            callback: function(value) {
-                                return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(value);
+                        tooltip: {
+                            backgroundColor: '#1e293b',
+                            padding: 12,
+                            titleFont: {
+                                size: 13,
+                                family: "'Inter', sans-serif"
+                            },
+                            bodyFont: {
+                                size: 14,
+                                family: "'Inter', sans-serif",
+                                weight: 'bold'
+                            },
+                            cornerRadius: 8,
+                            displayColors: false,
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += new Intl.NumberFormat('id-ID', {
+                                            style: 'currency',
+                                            currency: 'IDR',
+                                            minimumFractionDigits: 0
+                                        }).format(context.parsed.y);
+                                    }
+                                    return label;
+                                }
                             }
                         }
                     },
-                    x: {
-                        grid: {
-                            display: false,
-                            drawBorder: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0,0,0,0.04)',
+                                drawBorder: false,
+                            },
+                            ticks: {
+                                font: {
+                                    family: "'Inter', sans-serif",
+                                    size: 11
+                                },
+                                color: '#64748b',
+                                callback: function(value) {
+                                    return new Intl.NumberFormat('id-ID', {
+                                        style: 'currency',
+                                        currency: 'IDR',
+                                        minimumFractionDigits: 0
+                                    }).format(value);
+                                }
+                            }
                         },
-                        ticks: {
-                            font: { family: "'Inter', sans-serif", size: 12 },
-                            color: '#64748b'
+                        x: {
+                            grid: {
+                                display: false,
+                                drawBorder: false,
+                            },
+                            ticks: {
+                                font: {
+                                    family: "'Inter', sans-serif",
+                                    size: 12
+                                },
+                                color: '#64748b'
+                            }
                         }
                     }
                 }
-            }
-        });
-    </script>
+            });
+        </script>
     @endpush
 </x-admin.layout>

@@ -184,7 +184,14 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/50 flex justify-end">
+                        <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/50 flex justify-between items-center">
+                            <div>
+                                @if($order->status == 'verified' && $order->payment && $order->payment->file_bukti)
+                                    <button type="button" @click="$dispatch('open-modal', 'modalBukti-{{ $order->id }}')" class="inline-flex items-center px-4 py-2 bg-lumina-blue/10 text-lumina-blue hover:bg-lumina-blue/20 font-bold rounded-xl transition-colors text-sm">
+                                        <x-heroicon-o-photo class="w-5 h-5 mr-2" /> Lihat Bukti Pembayaran
+                                    </button>
+                                @endif
+                            </div>
                             <button type="button" @click="activeModal = null" class="px-6 py-2.5 bg-white border border-slate-200 text-slate-700 font-bold rounded-xl shadow-sm hover:bg-slate-50 transition-colors">Tutup</button>
                         </div>
                     </div>
@@ -269,6 +276,39 @@
                                         </button>
                                     </form>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
+
+            {{-- Modal Bukti Pembayaran (Baru) --}}
+            @if($order->status == 'verified' && $order->payment && $order->payment->file_bukti)
+                <div x-show="activeModal === 'modalBukti-{{ $order->id }}'" style="display: none;" class="fixed inset-0 z-[1060] overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                    <div x-show="activeModal === 'modalBukti-{{ $order->id }}'" x-transition.opacity class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm" @click="activeModal = null"></div>
+
+                    <div class="flex min-h-full items-center justify-center p-4">
+                        <div x-show="activeModal === 'modalBukti-{{ $order->id }}'" 
+                             x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" 
+                             x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95" 
+                             class="relative transform bg-white rounded-3xl text-left shadow-2xl transition-all w-full max-w-2xl overflow-hidden flex flex-col">
+                            
+                            <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+                                <h5 class="text-lg font-bold text-slate-800">Bukti Pembayaran #INV-{{ str_pad((string)$order->id, 5, '0', STR_PAD_LEFT) }}</h5>
+                                <button type="button" @click="activeModal = null" class="text-slate-400 hover:text-rose-500 p-1 transition-colors">
+                                    <x-heroicon-o-x-mark class="size-6" />
+                                </button>
+                            </div>
+
+                            <div class="p-6 flex-grow flex items-center justify-center bg-slate-100/50">
+                                <img src="{{ asset('storage/' . $order->payment->file_bukti) }}" class="max-w-full max-h-[70vh] rounded-xl shadow-sm object-contain" alt="Bukti Pembayaran">
+                            </div>
+
+                            <div class="px-6 py-4 border-t border-slate-100 bg-white flex justify-end">
+                                <a href="{{ asset('storage/' . $order->payment->file_bukti) }}" download class="inline-flex items-center px-5 py-2.5 bg-lumina-blue text-white hover:bg-blue-800 font-bold rounded-xl shadow-sm transition-colors text-sm mr-3">
+                                    <x-heroicon-o-arrow-down-tray class="w-5 h-5 mr-2" /> Unduh Gambar
+                                </a>
+                                <button type="button" @click="activeModal = null" class="px-5 py-2.5 bg-white border border-slate-200 text-slate-700 font-bold rounded-xl shadow-sm hover:bg-slate-50 transition-colors">Tutup</button>
                             </div>
                         </div>
                     </div>

@@ -31,7 +31,7 @@ class OrderController extends Controller
             });
         }
 
-        $orders = $query->latest()->paginate(10)->withQueryString();
+        $orders = $query->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
 
         return view('admin.orders.index', compact('orders'));
     }
@@ -77,7 +77,7 @@ class OrderController extends Controller
             });
         }
 
-        $orders = $query->latest()->get();
+        $orders = $query->orderBy('created_at', 'desc')->get();
 
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.orders.pdf', compact('orders'));
 

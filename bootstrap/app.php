@@ -12,9 +12,15 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->web(append: [
+            \App\Http\Middleware\SecurityHeadersMiddleware::class,
+            \App\Http\Middleware\MaintenanceMiddleware::class,
+        ]);
+
         $middleware->alias([
             'is_admin' => \App\Http\Middleware\IsAdmin::class,
             'role' => \App\Http\Middleware\CheckRole::class,
+            'is_superadmin' => \App\Http\Middleware\SuperAdminMiddleware::class,
         ]);
 
         $middleware->redirectGuestsTo(function (Request $request): string {
@@ -26,7 +32,7 @@ return Application::configure(basePath: dirname(__DIR__))
         });
 
         $middleware->redirectUsersTo(function (Request $request): string {
-            if ($request->user()?->role === 'admin') {
+            if ($request->user()?->isAdmin()) {
                 return route('admin.dashboard');
             }
 

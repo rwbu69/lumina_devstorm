@@ -45,7 +45,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
     Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
 
-    Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
+    Route::post('/orders', [OrderController::class, 'store'])->name('orders.store')->middleware('throttle:checkout');
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
     Route::post('/orders/{order}/payment', [OrderController::class, 'uploadPayment'])->name('orders.uploadPayment');
 
@@ -67,7 +67,7 @@ Route::middleware('auth')->group(function () {
 
 Route::prefix('admin')
     ->as('admin.')
-    ->middleware(['auth', 'role:admin'])
+    ->middleware(['auth', 'role:admin,superadmin'])
     ->group(function () {
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
@@ -87,6 +87,12 @@ Route::prefix('admin')
         Route::post('/users/{user}/access', [AdminManageUserController::class, 'addAccess'])->name('users.addAccess');
         Route::patch('/users/{user}/credentials', [AdminManageUserController::class, 'updateCredentials'])->name('users.updateCredentials');
         Route::delete('/users/{user}', [AdminManageUserController::class, 'destroy'])->name('users.destroy');
+
+        // Superadmin Routes
+        Route::middleware(['is_superadmin'])->group(function () {
+            Route::get('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'index'])->name('settings.index');
+            Route::post('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'store'])->name('settings.store');
+        });
     });
 
 
