@@ -20,14 +20,22 @@ class DatabaseSeeder extends Seeder
 {
     use WithoutModelEvents;
 
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
         $faker = FakerFactory::create('id_ID');
 
         $this->call(CategorySeeder::class);
+
+        User::query()->firstOrCreate(
+            ['email' => 'superadmin@lumina.id'],
+            [
+                'nama' => 'Superadmin Lumina',
+                'username' => 'superadmin',
+                'password' => Hash::make('password'),
+                'role' => 'superadmin',
+                'email_verified_at' => now(),
+            ]
+        );
 
         User::query()->firstOrCreate(
             ['email' => 'admin@lumina.id'],
@@ -40,7 +48,6 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-
         User::query()->firstOrCreate(
             ['email' => 'user@lumina.id'],
             [
@@ -50,7 +57,7 @@ class DatabaseSeeder extends Seeder
                 'role' => 'user',
                 'email_verified_at' => now(),
             ]
-            );
+        );
 
         $users = User::factory()->count(10)->create([
             'role' => 'user',
@@ -80,16 +87,18 @@ class DatabaseSeeder extends Seeder
             );
         });
 
+        // DIUBAH: tambah username di sampleCustomers
         $sampleCustomers = collect([
-            ['nama' => 'Andi Ardiansyah', 'email' => 'andi.ardiansyah@example.com'],
-            ['nama' => 'Budi Santoso', 'email' => 'budi.santoso@example.com'],
-            ['nama' => 'Citra Putri', 'email' => 'citra.putri@example.com'],
-            ['nama' => 'Dedi Mahendra', 'email' => 'dedi.mahendra@example.com'],
+            ['nama' => 'Andi Ardiansyah', 'email' => 'andi.ardiansyah@example.com', 'username' => 'andi_ardiansyah'],
+            ['nama' => 'Budi Santoso', 'email' => 'budi.santoso@example.com', 'username' => 'budi_santoso'],
+            ['nama' => 'Citra Putri', 'email' => 'citra.putri@example.com', 'username' => 'citra_putri'],
+            ['nama' => 'Dedi Mahendra', 'email' => 'dedi.mahendra@example.com', 'username' => 'dedi_mahendra'],
         ])->map(function (array $customerData) {
             return User::query()->firstOrCreate(
                 ['email' => $customerData['email']],
                 [
                     'nama' => $customerData['nama'],
+                    'username' => $customerData['username'], // DIUBAH: tambah username
                     'password' => Hash::make('password'),
                     'role' => 'user',
                     'email_verified_at' => now(),

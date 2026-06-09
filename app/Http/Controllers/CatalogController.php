@@ -31,11 +31,31 @@ class CatalogController extends Controller
         $books = $query->latest()->paginate(12)->withQueryString();
         $categories = Category::all();
 
+        $ownedBookIds = \Illuminate\Support\Facades\Auth::check() ? \Illuminate\Support\Facades\Auth::user()->ownedBookIds() : [];
+
         return view('catalog.index', [
             'books' => $books,
             'categories' => $categories,
             'cartService' => $cartService,
+            'ownedBookIds' => $ownedBookIds,
         ]);
+    }
+
+    public function searchPreview(Request $request)
+    {
+        $q = $request->input('q');
+        if (!$q) {
+            return response()->json([]);
+        }
+
+        $books = Book::query()
+            ->with('category')
+            ->where('judul', 'like', "%{$q}%")
+            ->orWhere('penulis', 'like', "%{$q}%")
+            ->take(5)
+            ->get();
+
+        return response()->json($books);
     }
 
     public function show(Book $book, CartService $cartService): View
@@ -48,10 +68,13 @@ class CatalogController extends Controller
             ->take(4)
             ->get();
 
+        $ownedBookIds = \Illuminate\Support\Facades\Auth::check() ? \Illuminate\Support\Facades\Auth::user()->ownedBookIds() : [];
+
         return view('catalog.show', [
             'book' => $book,
             'relatedBooks' => $relatedBooks,
             'cartService' => $cartService,
+            'ownedBookIds' => $ownedBookIds,
         ]);
     }
 }

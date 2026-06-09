@@ -1,518 +1,217 @@
 <x-admin.layout :title="'Lumina Media - Laporan Penjualan'">
-    @push('styles')
-        <style>
-            .report-shell {
-                background: linear-gradient(180deg, #f7f2e7 0%, #f3eddc 100%);
-                border-radius: 28px;
-                padding: 18px;
-            }
-
-            .report-header {
-                display: flex;
-                align-items: flex-start;
-                justify-content: space-between;
-                gap: 1rem;
-                margin-bottom: 14px;
-            }
-
-            .report-title {
-                margin: 0;
-                color: #1559c7;
-                font-size: clamp(1.75rem, 3vw, 2.35rem);
-                font-weight: 800;
-                line-height: 1.1;
-                letter-spacing: -0.03em;
-            }
-
-            .report-subtitle {
-                margin-top: .45rem;
-                color: rgba(17, 24, 39, .68);
-                max-width: 58rem;
-            }
-
-            .report-export-btn {
-                height: 44px;
-                border-radius: 999px;
-                padding: 0 1.1rem;
-                box-shadow: 0 10px 20px rgba(21, 89, 199, .16);
-                margin-top: .35rem;
-            }
-
-            .report-toolbar,
-            .report-card {
-                border: 1px solid rgba(15, 23, 42, .08);
-                border-radius: 18px;
-                background: rgba(255, 255, 255, .92);
-                box-shadow: 0 14px 28px rgba(15, 23, 42, .05);
-            }
-
-            .report-toolbar {
-                padding: 14px;
-            }
-
-            .report-input,
-            .report-select,
-            .report-date {
-                min-height: 44px;
-                border-radius: 14px;
-                background: #f7f9fc;
-                border-color: rgba(15, 23, 42, .08);
-                box-shadow: none !important;
-            }
-
-            .report-input {
-                padding-left: 1rem;
-            }
-
-            .report-icon-btn {
-                width: 44px;
-                height: 44px;
-                border-radius: 14px;
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                border: 1px solid rgba(15, 23, 42, .08);
-                background: #fff;
-                color: #697386;
-            }
-
-            .report-card {
-                overflow: hidden;
-            }
-
-            .report-card .card-header {
-                padding: 14px 16px 10px;
-                background: transparent;
-                border-bottom: 1px solid rgba(15, 23, 42, .06);
-            }
-
-            .report-card .table-responsive {
-                overflow-x: auto;
-                overflow-y: hidden;
-                -webkit-overflow-scrolling: touch;
-            }
-
-            .report-card table {
-                margin-bottom: 0;
-                table-layout: fixed;
-                min-width: 980px;
-            }
-
-            .report-scroll-hint {
-                display: none;
-                align-items: center;
-                gap: .5rem;
-                color: rgba(17, 24, 39, .58);
-                font-size: .82rem;
-                margin-top: .5rem;
-            }
-
-            .report-card thead th {
-                background: #f8fafc;
-                color: #7a8594;
-                font-size: .75rem;
-                letter-spacing: .08em;
-                padding: 14px 16px;
-                border-bottom: 1px solid rgba(15, 23, 42, .08) !important;
-            }
-
-            .report-card tbody td {
-                padding: 16px;
-                vertical-align: middle;
-                border-color: rgba(15, 23, 42, .05);
-            }
-
-            .report-card tbody tr:hover {
-                background: rgba(13, 110, 253, .02);
-            }
-
-            .report-id {
-                color: #1559c7;
-                font-weight: 800;
-                line-height: 1.05;
-                letter-spacing: -.03em;
-            }
-
-            .report-avatar {
-                width: 32px;
-                height: 32px;
-                border-radius: 999px;
-                display: grid;
-                place-items: center;
-                background: #d7e6ff;
-                color: #4678d2;
-                font-size: .72rem;
-                font-weight: 800;
-                flex: 0 0 auto;
-            }
-
-            .report-meta {
-                color: rgba(17, 24, 39, .55);
-                font-size: .82rem;
-            }
-
-            .report-amount {
-                font-weight: 800;
-                color: #111827;
-            }
-
-            .report-badge {
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                min-width: 84px;
-                padding: .35rem .75rem;
-                border-radius: 999px;
-                font-size: .8rem;
-                font-weight: 700;
-                white-space: nowrap;
-            }
-
-            .report-badge--success { background: #e8f8ee; color: #27ae60; }
-            .report-badge--warning { background: #fff3d8; color: #c58a19; }
-            .report-badge--danger  { background: #fde8eb; color: #d65a73; }
-            .report-badge--secondary { background: #eef2f6; color: #6b7280; }
-
-            .report-footer {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                gap: 1rem;
-                padding: 10px 16px 14px;
-                border-top: 1px solid rgba(15, 23, 42, .06);
-                color: rgba(17, 24, 39, .55);
-                font-size: .86rem;
-                flex-wrap: wrap;
-            }
-
-            .report-pager {
-                display: inline-flex;
-                align-items: center;
-                gap: .5rem;
-            }
-
-            .report-pager .btn {
-                min-height: 34px;
-                padding-inline: .9rem;
-                border-radius: 999px;
-                font-size: .85rem;
-            }
-
-            .report-summary {
-                white-space: nowrap;
-            }
-
-            .filter-modal .modal-content {
-                border: 0;
-                border-radius: 20px;
-                box-shadow: 0 24px 48px rgba(15, 23, 42, .2);
-            }
-
-            .filter-modal .modal-header {
-                border-bottom: 1px solid rgba(15, 23, 42, .06);
-            }
-
-            @media (max-width: 991.98px) {
-                .report-shell {
-                    border-radius: 20px;
-                    padding: 14px;
-                }
-
-                .report-header {
-                    flex-direction: column;
-                }
-
-                .report-export-btn {
-                    align-self: flex-start;
-                }
-
-                .report-scroll-hint {
-                    display: inline-flex;
-                }
-
-                .report-footer {
-                    align-items: flex-start;
-                }
-            }
-
-            @media (max-width: 767.98px) {
-                .report-toolbar {
-                    padding: 12px;
-                }
-
-                .report-card .card-header,
-                .report-card .table thead th,
-                .report-card .table tbody td {
-                    padding-inline: 14px;
-                }
-
-                .report-pager {
-                    width: 100%;
-                    justify-content: space-between;
-                }
-
-                .report-pager .btn {
-                    flex: 1 1 0;
-                }
-            }
-        </style>
-    @endpush
-
-    <div class="report-shell">
-        <div class="report-header">
+    <div class="bg-[#FDFBF7] min-h-full">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
             <div>
-                <h1 class="report-title">Laporan Penjualan</h1>
-                <div class="report-subtitle">Kelola dan pantau seluruh data transaksi penjualan Lumina Media dalam periode berjalan.</div>
+                <h1 class="text-3xl font-serif font-bold text-lumina-blue mb-1.5">Laporan Penjualan</h1>
+                <p class="text-slate-500 font-medium">Kelola dan pantau seluruh data transaksi penjualan dalam periode berjalan.</p>
             </div>
-
-            <button type="button" class="btn btn-primary report-export-btn" id="export-pdf-button">
-                <i class="bi bi-file-earmark-pdf me-2"></i>
-                Ekspor PDF
-            </button>
+            <a href="{{ route('admin.reports.exportPdf', request()->query()) }}" class="inline-flex items-center justify-center bg-lumina-blue hover:bg-blue-800 text-white px-5 py-2.5 rounded-xl font-bold shadow-sm transition-all whitespace-nowrap">
+                <x-heroicon-s-document-text class="mr-2 size-6" /> Ekspor PDF
+            </a>
         </div>
 
-        <div id="report-alert"></div>
-
-        <div class="report-toolbar mt-3">
-            <form id="report-filter-form" method="GET" action="{{ route('admin.reports.index') }}">
-                <input type="hidden" name="tanggal_awal" value="{{ $filters['tanggal_awal'] }}">
-                <input type="hidden" name="tanggal_akhir" value="{{ $filters['tanggal_akhir'] }}">
-                <input type="hidden" name="metode_pembayaran" value="{{ $filters['metode_pembayaran'] }}">
-
-                <div class="row g-3 align-items-center">
-                    <div class="col-12 col-xl-6">
-                        <label for="search" class="visually-hidden">Cari</label>
-                        <div class="input-group">
-                            <span class="input-group-text border-0 bg-transparent pe-0 ps-3 rounded-start-4">
-                                <i class="bi bi-search text-secondary"></i>
-                            </span>
-                            <input
-                                type="search"
-                                class="form-control report-input"
-                                id="search"
-                                name="search"
-                                value="{{ $filters['search'] }}"
-                                placeholder="Cari Order ID atau pelanggan..."
-                            >
-                        </div>
+        {{-- Filters & Search --}}
+        <div class="bg-white border border-slate-200 shadow-sm rounded-3xl mb-8 p-4">
+            <form action="{{ route('admin.reports.index') }}" method="GET" id="filterForm">
+                <div class="flex flex-col md:flex-row items-center gap-4">
+                    
+                    {{-- Search --}}
+                    <div class="flex items-center gap-3 px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus-within:border-lumina-blue focus-within:ring-2 focus-within:ring-lumina-blue/20 transition-all flex-grow w-full md:w-auto">
+                        <x-heroicon-o-magnifying-glass class="text-slate-400 size-6 shrink-0" />
+                        <input type="text" name="search"
+                               class="bg-transparent border-0 w-full focus:ring-0 p-0 text-sm font-medium text-slate-700 placeholder-slate-400"
+                               placeholder="Cari Order ID atau pelanggan..."
+                               value="{{ request('search') }}">
                     </div>
 
-                    <div class="col-12 col-md-6 col-xl-2">
-                        <label for="status" class="visually-hidden">Status</label>
-                        <select class="form-select report-select" id="status" name="status">
-                            <option value="">Semua Status</option>
-                            <option value="pending" @selected($filters['status'] === 'pending')>Proses</option>
-                            <option value="verified" @selected($filters['status'] === 'verified')>Berhasil</option>
-                            <option value="cancelled" @selected($filters['status'] === 'cancelled')>Dibatalkan</option>
+                    <div class="flex items-center gap-3 w-full md:w-auto">
+                        {{-- Status Select --}}
+                        <select name="status" class="px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:border-lumina-blue focus:ring-2 focus:ring-lumina-blue/20 transition-all text-sm font-medium text-slate-700 outline-none cursor-pointer" onchange="this.form.submit()">
+                            <option value="semua" {{ request('status', 'semua') == 'semua' ? 'selected' : '' }}>Semua Status</option>
+                            <option value="verified" {{ request('status') == 'verified' ? 'selected' : '' }}>Berhasil</option>
+                            <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>Dibatalkan</option>
                         </select>
-                    </div>
 
-                    <div class="col-12 col-md-6 col-xl-1">
-                        <button type="button" class="report-icon-btn w-100" data-bs-toggle="modal" data-bs-target="#advancedFilterModal" aria-label="Tanggal dan metode pembayaran">
-                            <i class="bi bi-calendar3"></i>
-                        </button>
-                    </div>
+                        {{-- Date Picker --}}
+                        <div class="relative">
+                            <button type="button" id="datePickerTrigger" class="w-12 h-12 flex items-center justify-center rounded-xl border transition-colors {{ request('start_date') ? 'bg-lumina-blue border-lumina-blue text-white' : 'bg-slate-50 border-slate-200 text-slate-500 hover:text-lumina-blue hover:bg-white' }}" title="{{ request('start_date') ? request('start_date') . ' – ' . request('end_date') : 'Pilih Rentang Tanggal' }}">
+                                <x-heroicon-o-calendar-days class="size-6" />
+                            </button>
+                            <input type="text" id="dateRangePicker" class="absolute w-0 h-0 opacity-0 pointer-events-none">
+                            <input type="hidden" name="start_date" id="start_date" value="{{ request('start_date') }}">
+                            <input type="hidden" name="end_date" id="end_date" value="{{ request('end_date') }}">
+                        </div>
 
-                    <div class="col-12 col-md-6 col-xl-1">
-                        <button type="button" class="report-icon-btn w-100" data-bs-toggle="modal" data-bs-target="#advancedFilterModal" aria-label="Filter lanjutan">
-                            <i class="bi bi-filter"></i>
-                        </button>
-                    </div>
+                        {{-- Sort Dropdown (Alpine) --}}
+                        <div class="relative" x-data="{ open: false }">
+                            <button type="button" @click="open = !open" @click.away="open = false" class="w-12 h-12 flex items-center justify-center rounded-xl border transition-colors {{ (request('sort') && request('sort') !== 'latest') ? 'bg-lumina-blue border-lumina-blue text-white' : 'bg-slate-50 border-slate-200 text-slate-500 hover:text-lumina-blue hover:bg-white' }}">
+                                <x-heroicon-o-funnel class="size-6" />
+                            </button>
+                            
+                            <div x-show="open" style="display: none;" x-transition.opacity class="absolute right-0 mt-2 w-48 bg-white border border-slate-200 shadow-lg rounded-2xl overflow-hidden z-50">
+                                <a href="#" @click.prevent="setSort('latest'); open = false" class="block px-4 py-2.5 text-sm font-medium transition-colors {{ !request('sort') || request('sort') == 'latest' ? 'bg-lumina-blue text-white' : 'text-slate-700 hover:bg-slate-50' }}">Terbaru</a>
+                                <a href="#" @click.prevent="setSort('oldest'); open = false" class="block px-4 py-2.5 text-sm font-medium transition-colors {{ request('sort') == 'oldest' ? 'bg-lumina-blue text-white' : 'text-slate-700 hover:bg-slate-50' }}">Terlama</a>
+                                <div class="border-t border-slate-100 my-1"></div>
+                                <a href="#" @click.prevent="setSort('highest'); open = false" class="block px-4 py-2.5 text-sm font-medium transition-colors {{ request('sort') == 'highest' ? 'bg-lumina-blue text-white' : 'text-slate-700 hover:bg-slate-50' }}">Harga Tertinggi</a>
+                                <a href="#" @click.prevent="setSort('lowest'); open = false" class="block px-4 py-2.5 text-sm font-medium transition-colors {{ request('sort') == 'lowest' ? 'bg-lumina-blue text-white' : 'text-slate-700 hover:bg-slate-50' }}">Harga Terendah</a>
+                            </div>
+                            <input type="hidden" name="sort" id="sortInput" value="{{ request('sort', 'latest') }}">
+                        </div>
 
-                    <div class="col-12 col-xl-2 ms-xl-auto d-flex justify-content-xl-end gap-2">
-                        <a href="{{ route('admin.reports.index') }}" class="btn btn-light border rounded-pill px-3">Reset</a>
-                        <button type="submit" class="btn btn-outline-primary rounded-pill px-3">Terapkan</button>
+                        {{-- Reset Button --}}
+                        @php
+                            $hasActiveFilter = request()->filled('search')
+                                || request()->filled('start_date')
+                                || (request()->filled('status') && request('status') !== 'semua')
+                                || (request()->filled('sort') && request('sort') !== 'latest');
+                        @endphp
+                        @if($hasActiveFilter)
+                            <a href="{{ route('admin.reports.index') }}" class="w-12 h-12 flex items-center justify-center rounded-xl bg-rose-50 border border-rose-200 text-rose-500 hover:bg-rose-500 hover:text-white transition-colors" title="Reset semua filter">
+                                <x-heroicon-o-x-mark class="size-5" />
+                            </a>
+                        @endif
                     </div>
                 </div>
             </form>
         </div>
 
-        <div class="report-card mt-3">
-            <x-admin.table :headers="['Order ID', 'Tanggal', 'Pelanggan', 'Produk', 'Jumlah', 'Status']" class="report-card">
-                <x-slot:header>
-                    <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap">
-                        <div>
-                            <div class="fw-bold">Data Penjualan</div>
-                            <div class="report-meta">Menampilkan {{ $reports->total() }} transaksi yang sesuai filter.</div>
-                        </div>
-                        <div class="report-badge report-badge--secondary">
-                            {{ $reports->count() }} data di halaman ini
-                        </div>
-                    </div>
-                    <div class="report-scroll-hint">
-                        <i class="bi bi-arrow-left-right"></i>
-                        Geser kiri kanan untuk melihat kolom lain.
-                    </div>
-                </x-slot:header>
+        {{-- Table --}}
+        <x-admin.table>
+            <x-slot:head>
+                <tr>
+                    <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Order ID</th>
+                    <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Tanggal</th>
+                    <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Pelanggan</th>
+                    <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider w-1/4">Produk</th>
+                    <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Jumlah</th>
+                    <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-center">Status</th>
+                </tr>
+            </x-slot:head>
 
-                @forelse ($reports as $report)
-                    <tr>
-                        <td>
-                            <div class="report-id">#ORD-{{ optional($report['tanggal_transaksi'])->format('Y') }}-{{ str_pad((string) $report['id_penjualan'], 3, '0', STR_PAD_LEFT) }}</div>
-                        </td>
-                        <td>
-                            <div class="fw-semibold">{{ $report['tanggal_label'] ?: '-' }}</div>
-                            <div class="report-meta">{{ $report['jam_label'] ?: '-' }}</div>
-                        </td>
-                        <td>
-                            <div class="d-flex align-items-center gap-2">
-                                <div class="report-avatar">
-                                    {{ collect(explode(' ', (string) $report['nama_pelanggan']))->filter()->map(fn ($part) => mb_substr($part, 0, 1))->take(2)->implode('') ?: 'LM' }}
-                                </div>
-                                <div>
-                                    <div class="fw-semibold">{{ $report['nama_pelanggan'] }}</div>
-                                    <div class="report-meta">Pelanggan</div>
-                                </div>
+            @foreach($orders as $order)
+                <tr class="hover:bg-slate-50/50 transition-colors group border-b border-slate-100 last:border-0">
+                    <td class="px-6 py-4">
+                        <span class="font-bold text-lumina-blue text-sm">
+                            #ORD-{{ str_pad((string)$order->id, 8, '0', STR_PAD_LEFT) }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 text-sm font-semibold text-slate-500">
+                        {{ $order->tanggal_pesan->format('d M Y') }}
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-lumina-blue/10 text-lumina-blue flex items-center justify-center font-bold text-xs shrink-0 border border-lumina-blue/20">
+                                {{ strtoupper(substr($order->user->nama, 0, 2)) }}
                             </div>
-                        </td>
-                        <td class="text-secondary">{{ $report['produk'] ?: '-' }}</td>
-                        <td>
-                            <div class="report-meta fw-semibold">{{ $report['jumlah_barang'] }} item</div>
-                        </td>
-                        <td>
-                            <x-badge :status="$report['status']" class="report-badge" />
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="6" class="py-5">
-                            <div class="text-center">
-                                <div class="fw-semibold">Data belum tersedia</div>
-                                <div class="text-secondary small">Ubah filter untuk mencari transaksi yang sesuai.</div>
-                            </div>
-                        </td>
-                    </tr>
-                @endforelse
-
-                <x-slot:pagination>
-                    <div class="report-footer">
-                        <div class="report-summary">
-                            @if ($reports->count() > 0)
-                                Menampilkan {{ $reports->firstItem() }}-{{ $reports->lastItem() }} dari {{ $reports->total() }} transaksi
-                            @else
-                                Menampilkan 0 transaksi
+                            <div class="font-bold text-slate-800 text-sm group-hover:text-lumina-blue transition-colors truncate max-w-[150px]">{{ $order->user->nama }}</div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4">
+                        @php $firstItem = $order->orderDetails->first(); @endphp
+                        <div class="text-sm font-medium text-slate-700 truncate max-w-[200px]">
+                            {{ $firstItem ? $firstItem->book->judul : '-' }}
+                            @if($order->orderDetails->count() > 1)
+                                <span class="text-xs font-bold text-slate-400 ml-1">(+{{ $order->orderDetails->count() - 1 }})</span>
                             @endif
                         </div>
+                    </td>
+                    <td class="px-6 py-4 font-bold text-slate-800 text-right">
+                        Rp {{ number_format($order->total_tagihan, 0, ',', '.') }}
+                    </td>
+                    <td class="px-6 py-4 text-center">
+                        <x-badge :status="$order->status" />
+                    </td>
+                </tr>
+            @endforeach
 
-                        @if ($reports->hasPages())
-                            <div class="report-pager">
-                                <a href="{{ $reports->previousPageUrl() ?: '#' }}" class="btn btn-light border {{ $reports->onFirstPage() ? 'disabled' : '' }}" @if($reports->onFirstPage()) tabindex="-1" aria-disabled="true" @endif>Sebelumnya</a>
-                                <a href="{{ $reports->nextPageUrl() ?: '#' }}" class="btn btn-primary {{ $reports->hasMorePages() ? '' : 'disabled' }}" @if(! $reports->hasMorePages()) tabindex="-1" aria-disabled="true" @endif>Selanjutnya</a>
-                            </div>
-                        @endif
+            <x-slot:emptyState>
+                <div class="flex flex-col items-center justify-center py-8">
+                    <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
+                        <x-heroicon-o-inbox class="size-10 text-slate-300" />
                     </div>
-                </x-slot:pagination>
-            </x-admin.table>
+                    <div class="font-bold text-slate-800 text-lg mb-1">Belum ada data transaksi</div>
+                    <div class="text-slate-500 text-sm">Transaksi yang selesai akan muncul di sini.</div>
+                </div>
+            </x-slot:emptyState>
+
+            <x-slot:pagination>
+                @if($orders->hasPages())
+                    <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+                        <span class="text-slate-500 text-sm">Menampilkan <span class="font-semibold text-slate-700">{{ $orders->firstItem() }}-{{ $orders->lastItem() }}</span> dari <span class="font-semibold text-slate-700">{{ $orders->total() }}</span> transaksi</span>
+                        <div class="flex gap-2">
+                            @if ($orders->onFirstPage())
+                                <span class="px-4 py-2 border border-slate-200 text-slate-400 bg-slate-50 rounded-xl text-sm font-semibold cursor-not-allowed">Sebelumnya</span>
+                            @else
+                                <a href="{{ $orders->previousPageUrl() }}" class="px-4 py-2 border border-slate-200 text-slate-700 bg-white hover:bg-slate-50 rounded-xl text-sm font-semibold transition-colors shadow-sm">Sebelumnya</a>
+                            @endif
+
+                            @if ($orders->hasMorePages())
+                                <a href="{{ $orders->nextPageUrl() }}" class="px-4 py-2 border border-slate-200 text-slate-700 bg-white hover:bg-slate-50 rounded-xl text-sm font-semibold transition-colors shadow-sm">Selanjutnya</a>
+                            @else
+                                <span class="px-4 py-2 border border-slate-200 text-slate-400 bg-slate-50 rounded-xl text-sm font-semibold cursor-not-allowed">Selanjutnya</span>
+                            @endif
+                        </div>
+                    </div>
+                @endif
+            </x-slot:pagination>
+        </x-admin.table>
+
+        <div class="text-center mt-8 mb-4">
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                &copy; {{ date('Y') }} LUMINA MEDIA DASHBOARD. ALL RIGHTS RESERVED.
+            </p>
         </div>
     </div>
 
-    <div class="modal fade filter-modal" id="advancedFilterModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div>
-                        <h5 class="modal-title fw-bold mb-0">Filter Lanjutan</h5>
-                        <div class="report-meta">Tanggal transaksi dan metode pembayaran</div>
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row g-3">
-                        <div class="col-12 col-md-6">
-                            <label for="modal_tanggal_awal" class="form-label fw-semibold">Tanggal Awal</label>
-                            <input type="date" class="form-control report-date" id="modal_tanggal_awal" value="{{ $filters['tanggal_awal'] }}">
-                        </div>
-                        <div class="col-12 col-md-6">
-                            <label for="modal_tanggal_akhir" class="form-label fw-semibold">Tanggal Akhir</label>
-                            <input type="date" class="form-control report-date" id="modal_tanggal_akhir" value="{{ $filters['tanggal_akhir'] }}">
-                        </div>
-                        <div class="col-12">
-                            <label for="modal_metode_pembayaran" class="form-label fw-semibold">Metode Pembayaran</label>
-                            <select class="form-select report-select" id="modal_metode_pembayaran">
-                                <option value="">Semua Metode</option>
-                                @foreach ($paymentMethods as $value => $label)
-                                    <option value="{{ $value }}" @selected($filters['metode_pembayaran'] === $value)>{{ $label }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light border" id="modal-reset-filter">Reset</button>
-                    <button type="button" class="btn btn-primary" id="modal-apply-filter">Terapkan</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    @push('styles')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        .flatpickr-calendar {
+            font-family: 'Inter', sans-serif;
+            border: 1px solid #e2e8f0;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .flatpickr-day.selected {
+            background: #1a4fd9 !important;
+            border-color: #1a4fd9 !important;
+        }
+    </style>
+    @endpush
 
     @push('scripts')
-        <script>
-            (() => {
-                const exportButton = document.getElementById('export-pdf-button');
-                const filterForm = document.getElementById('report-filter-form');
-                const alertContainer = document.getElementById('report-alert');
-                const exportUrl = @json(route('admin.reports.exportPdf'));
-                const modalTanggalAwal = document.getElementById('modal_tanggal_awal');
-                const modalTanggalAkhir = document.getElementById('modal_tanggal_akhir');
-                const modalMetodePembayaran = document.getElementById('modal_metode_pembayaran');
-                const modalApplyFilter = document.getElementById('modal-apply-filter');
-                const modalResetFilter = document.getElementById('modal-reset-filter');
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        function setSort(val) {
+            document.getElementById('sortInput').value = val;
+            document.getElementById('filterForm').submit();
+        }
 
-                const renderAlert = (type, message) => {
-                    alertContainer.innerHTML = `
-                        <div class="alert alert-${type} alert-dismissible fade show mb-3" role="alert">
-                            ${message}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
-                        </div>
-                    `;
-                };
-
-                const syncAdvancedFilters = () => {
-                    const tanggalAwalField = filterForm.querySelector('[name="tanggal_awal"]');
-                    const tanggalAkhirField = filterForm.querySelector('[name="tanggal_akhir"]');
-                    const metodePembayaranField = filterForm.querySelector('[name="metode_pembayaran"]');
-
-                    if (tanggalAwalField) {
-                        tanggalAwalField.value = modalTanggalAwal.value;
+        document.addEventListener('DOMContentLoaded', function () {
+            const triggerBtn = document.getElementById('datePickerTrigger');
+            const fp = flatpickr('#dateRangePicker', {
+                mode: 'range',
+                dateFormat: 'Y-m-d',
+                defaultDate: [
+                    '{{ request('start_date') }}',
+                    '{{ request('end_date') }}'
+                ],
+                onChange: function (selectedDates, dateStr, instance) {
+                    if (selectedDates.length === 2) {
+                        document.getElementById('start_date').value = instance.formatDate(selectedDates[0], 'Y-m-d');
+                        document.getElementById('end_date').value   = instance.formatDate(selectedDates[1], 'Y-m-d');
+                        document.getElementById('filterForm').submit();
                     }
+                },
+                positionElement: triggerBtn,
+                position: 'below'
+            });
 
-                    if (tanggalAkhirField) {
-                        tanggalAkhirField.value = modalTanggalAkhir.value;
-                    }
-
-                    if (metodePembayaranField) {
-                        metodePembayaranField.value = modalMetodePembayaran.value;
-                    }
-                };
-
-                modalApplyFilter.addEventListener('click', () => {
-                    syncAdvancedFilters();
-                    const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('advancedFilterModal'));
-                    modal.hide();
-                    filterForm.submit();
-                });
-
-                modalResetFilter.addEventListener('click', () => {
-                    modalTanggalAwal.value = '';
-                    modalTanggalAkhir.value = '';
-                    modalMetodePembayaran.value = '';
-                });
-
-                exportButton.addEventListener('click', () => {
-                    syncAdvancedFilters();
-                    const params = new URLSearchParams(new FormData(filterForm));
-                    const url = `${exportUrl}?${params.toString()}`;
-
-                        const link = document.createElement('a');
-                        link.href = url;
-                        link.target = '_blank';
-                        link.rel = 'noopener noreferrer';
-                        document.body.appendChild(link);
-                        link.click();
-                        link.remove();
-                        renderAlert('success', 'PDF laporan sedang dibuka di tab baru.');
-                });
-            })();
-        </script>
+            triggerBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                fp.open();
+            });
+        });
+    </script>
     @endpush
 </x-admin.layout>

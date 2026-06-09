@@ -13,86 +13,47 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS (Vite) -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 
     <x-lumina.colors />
 
-    <style>
-        :root {
-            --lm-sidebar-width: 280px;
-            --bs-heading-color: var(--lm-primary);
-        }
-
-        body {
-            background: var(--lm-bg);
-            color: var(--lm-text);
-            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, 'Noto Sans', 'Liberation Sans', sans-serif;
-        }
-
-        h1, h2, h3, h4, h5, h6 {
-            color: var(--lm-primary);
-        }
-
-        h1, h2, h3, h4, h5, h6,
-        .display-1, .display-2, .display-3, .display-4, .display-5, .display-6,
-        .navbar-brand {
-            font-family: 'Inter', sans-serif;
-            font-weight: bolder;
-        }
-        .lm-sidebar {
-            position: fixed;
-            inset: 0 auto 0 0;
-            width: var(--lm-sidebar-width);
-            background: #ffffff;
-            border-right: 1px solid rgba(0, 0, 0, .06);
-        }
-        .lm-main { margin-left: 0; }
-        .lm-nav-link { color: var(--lm-text); }
-        .lm-nav-link:hover { background: rgba(var(--bs-primary-rgb), .06); }
-        .lm-nav-link.active {
-            background: rgba(var(--bs-primary-rgb), .12);
-            border: 1px solid rgba(var(--bs-primary-rgb), .18);
-            color: var(--bs-primary);
-        }
-        .lm-card { border: 1px solid rgba(0, 0, 0, .06); }
-        .lm-muted { color: rgba(17, 24, 39, .70); }
-        .lm-kpi-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            display: grid;
-            place-items: center;
-            background: rgba(var(--bs-primary-rgb), .10);
-            color: var(--bs-primary);
-        }
-        .lm-chart {
-            height: 340px;
-            background: #fff;
-            border: 1px solid rgba(0, 0, 0, .06);
-            border-radius: 16px;
-        }
-        @media (min-width: 992px) {
-            .lm-main { margin-left: var(--lm-sidebar-width); }
-        }
-        @media (max-width: 991.98px) {
-            :root { --lm-sidebar-width: 240px; }
-        }
-    </style>
-
     @stack('styles')
 </head>
-<body>
+<body class="bg-slate-50 text-slate-900 font-sans antialiased min-h-screen flex flex-col">
+
+<!-- Sidebar component already has its own Alpine logic for mobile offcanvas and desktop fixed -->
 <x-admin.sidebar />
 
-<main class="lm-main">
-    <div class="container-fluid px-4 px-lg-5 py-4">
+<!-- Main content wrapper. 
+     On lg screens (where sidebar is fixed block), we add pl-72 (padding-left 288px) to push content to the right. -->
+<main class="flex-grow flex flex-col lg:pl-72 transition-all duration-300">
+    <div class="w-full px-4 lg:px-8 py-6 flex-grow">
         {{ $slot }}
     </div>
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<!-- Toast Notifications -->
+<div class="fixed bottom-4 right-4 z-50 flex flex-col gap-2">
+    @if(session('success'))
+        <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 5000)" x-show="show" x-transition.opacity.duration.500ms class="bg-emerald-50 text-emerald-700 border border-emerald-200 px-4 py-3 rounded-xl shadow-lg flex items-center gap-3 w-80">
+            <x-heroicon-s-check-circle class="size-6" />
+            <span class="font-bold text-sm">{{ session('success') }}</span>
+            <button @click="show = false" class="ml-auto text-emerald-500 hover:text-emerald-700"><x-heroicon-o-x-mark class="size-5" /></button>
+        </div>
+    @endif
+
+    @if(session('error') || $errors->any())
+        <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 5000)" x-show="show" x-transition.opacity.duration.500ms class="bg-rose-50 text-rose-700 border border-rose-200 px-4 py-3 rounded-xl shadow-lg flex items-center gap-3 w-80">
+            <x-heroicon-s-exclamation-circle class="size-6" />
+            <span class="font-bold text-sm">{{ session('error') ?? 'Terdapat kesalahan input form.' }}</span>
+            <button @click="show = false" class="ml-auto text-rose-500 hover:text-rose-700"><x-heroicon-o-x-mark class="size-5" /></button>
+        </div>
+    @endif
+</div>
+
 @stack('scripts')
 </body>
 </html>

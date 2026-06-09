@@ -18,54 +18,17 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Tailwind CSS (Vite) -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <style>
-        :root {
-            --lm-primary: #1d4ed8;
-            --lm-accent: #f2c94c;
-            --lm-bg: #FAF8F5;
-            --lm-text: #1e293b;
-
-            --bs-primary: var(--lm-primary);
-            --bs-primary-rgb: 29, 78, 216;
-            --bs-warning: var(--lm-accent);
-            --bs-warning-rgb: 242, 201, 76;
-            --bs-body-bg: var(--lm-bg);
-            --bs-body-color: var(--lm-text);
-            --bs-link-color: var(--lm-primary);
-            --bs-link-hover-color: var(--lm-primary);
-        }
-
-    <style>
-        body {
-            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, 'Noto Sans', 'Liberation Sans', sans-serif;
-            background-color: var(--lm-bg);
-            color: var(--lm-text);
-            -webkit-font-smoothing: antialiased;
-        }
-
-        h1, h2, h3, h4, h5, h6,
-        .display-1, .display-2, .display-3, .display-4, .display-5, .display-6,
-        .navbar-brand {
-            font-family: 'Playfair Display', serif;
-            color: #1e3a8a;
-        }
-    </style>
+    <x-lumina.colors />
 </head>
 
-<body>
-<main class="min-vh-100 d-flex align-items-center justify-content-center py-5">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-12 col-sm-10 col-md-7 col-lg-5 col-xl-4">
-                {{ $slot }}
-            </div>
+<body class="bg-[#FDFBF7] text-slate-900 font-sans antialiased">
+    <main class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="w-full max-w-[420px]">
+            {{ $slot }}
         </div>
-    </div>
-</main>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    </main>
 </body>
 </html>
