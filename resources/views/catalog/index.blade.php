@@ -49,7 +49,7 @@
                                    class="flex justify-between items-center px-3 py-2.5 rounded-xl text-sm font-bold transition-all {{ !request('category') ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-700 hover:bg-slate-100 hover:text-indigo-600' }}">
                                     <span>Semua Buku</span>
                                     <span class="px-2 py-0.5 rounded-md text-[10px] font-bold tracking-wider {{ !request('category') ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-600' }}">
-                                        {{ \App\Models\Book::count() }}
+                                        {{ $totalBooks }}
                                     </span>
                                 </a>
                                 
@@ -58,7 +58,7 @@
                                        class="flex justify-between items-center px-3 py-2.5 rounded-xl text-sm font-bold transition-all {{ request('category') == $cat->id ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-700 hover:bg-slate-100 hover:text-indigo-600' }}">
                                         <span>{{ $cat->nama }}</span>
                                         <span class="px-2 py-0.5 rounded-md text-[10px] font-bold tracking-wider {{ request('category') == $cat->id ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-600' }}">
-                                            {{ $cat->books()->count() }}
+                                            {{ $cat->books_count }}
                                         </span>
                                     </a>
                                 @endforeach
@@ -246,10 +246,9 @@
     <script>
         document.addEventListener('alpine:init', () => {
             Alpine.data('searchPreview', () => ({
-                query: '{{ request('q') }}',
+                query: @js(request('q', '')),
                 results: [],
                 isOpen: false,
-                isLoading: false,
 
                 async fetchResults() {
                     if (this.query.length < 2) {
@@ -257,8 +256,7 @@
                         this.isOpen = false;
                         return;
                     }
-                    
-                    this.isLoading = true;
+
                     try {
                         const response = await fetch(`/catalog/search-preview?q=${encodeURIComponent(this.query)}`);
                         if (response.ok) {
@@ -268,8 +266,6 @@
                         }
                     } catch (error) {
                         console.error('Error fetching search preview:', error);
-                    } finally {
-                        this.isLoading = false;
                     }
                 }
             }))

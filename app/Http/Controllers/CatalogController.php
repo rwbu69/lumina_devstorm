@@ -29,13 +29,15 @@ class CatalogController extends Controller
         }
 
         $books = $query->latest()->paginate(12)->withQueryString();
-        $categories = Category::all();
+        $categories = Category::query()->withCount('books')->get();
+        $totalBooks = Book::count();
 
         $ownedBookIds = \Illuminate\Support\Facades\Auth::check() ? \Illuminate\Support\Facades\Auth::user()->ownedBookIds() : [];
 
         return view('catalog.index', [
             'books' => $books,
             'categories' => $categories,
+            'totalBooks' => $totalBooks,
             'cartService' => $cartService,
             'ownedBookIds' => $ownedBookIds,
         ]);

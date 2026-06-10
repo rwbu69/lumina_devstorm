@@ -84,12 +84,12 @@
                     <div class="bg-white border border-slate-200 shadow-sm rounded-3xl p-6 md:p-8 sticky top-24">
                         <h5 class="font-bold text-xl text-slate-800 mb-6">Ringkasan Pesanan</h5>
 
-                        <div class="flex justify-content-between mb-4 text-sm md:text-base">
+                        <div class="flex justify-between mb-4 text-sm md:text-base">
                             <span class="text-slate-500 grow">Jumlah E-Book</span>
                             <span class="font-semibold text-slate-800">{{ $items->count() }} item</span>
                         </div>
 
-                        <div class="flex justify-content-between mb-6 text-sm md:text-base">
+                        <div class="flex justify-between mb-6 text-sm md:text-base">
                             <span class="text-slate-500 grow">Format Pengiriman</span>
                             <span
                                 class="font-bold text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-full text-xs">Unduhan
