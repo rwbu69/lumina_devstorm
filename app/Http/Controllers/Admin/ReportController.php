@@ -7,16 +7,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
-use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
-use Illuminate\View\View;
-
 
 class ReportController extends Controller
 {
@@ -29,9 +20,9 @@ class ReportController extends Controller
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('id', 'like', "%{$search}%")
-                  ->orWhereHas('user', function ($qu) use ($search) {
-                      $qu->where('nama', 'like', "%{$search}%");
-                  });
+                    ->orWhereHas('user', function ($qu) use ($search) {
+                        $qu->where('nama', 'like', "%{$search}%");
+                    });
             });
         }
 
@@ -70,9 +61,9 @@ class ReportController extends Controller
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('id', 'like', "%{$search}%")
-                  ->orWhereHas('user', function ($qu) use ($search) {
-                      $qu->where('nama', 'like', "%{$search}%");
-                  });
+                    ->orWhereHas('user', function ($qu) use ($search) {
+                        $qu->where('nama', 'like', "%{$search}%");
+                    });
             });
         }
 
@@ -102,9 +93,9 @@ class ReportController extends Controller
         $pdf = Pdf::loadView('admin.reports.pdf', [
             'orders' => $orders,
             'title' => 'Laporan Penjualan Lumina Media',
-            'date' => now()->format('d F Y')
+            'date' => now()->format('d F Y'),
         ]);
 
-        return $pdf->download('laporan-penjualan-' . now()->format('Y-m-d') . '.pdf');
+        return $pdf->download('laporan-penjualan-'.now()->format('Y-m-d').'.pdf');
     }
 }

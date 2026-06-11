@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Services\AdminActivityLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -39,6 +40,7 @@ class OrderController extends Controller
     public function verify(Order $order): RedirectResponse
     {
         $order->update(['status' => 'verified']);
+        AdminActivityLogger::log('Verifikasi Pesanan', "Memverifikasi pesanan #ORD-{$order->id} (User ID: {$order->user_id})");
 
         if ($order->payment) {
             $order->payment->update(['status_verifikasi' => 'approved']);
@@ -50,6 +52,7 @@ class OrderController extends Controller
     public function reject(Order $order): RedirectResponse
     {
         $order->update(['status' => 'cancelled']);
+        AdminActivityLogger::log('Tolak Pesanan', "Menolak pesanan #ORD-{$order->id} (User ID: {$order->user_id})");
 
         if ($order->payment) {
             $order->payment->update(['status_verifikasi' => 'rejected']);
@@ -81,7 +84,8 @@ class OrderController extends Controller
 
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.orders.pdf', compact('orders'));
 
-        $filename = 'laporan-pesanan-' . now()->format('Y-m-d') . '.pdf';
+        $filename = 'laporan-pesanan-'.now()->format('Y-m-d').'.pdf';
+
         return $pdf->download($filename);
     }
 }

@@ -30,7 +30,7 @@ class CartService
     {
         $ids = $this->getBookIds();
         if (empty($ids)) {
-            return new \Illuminate\Database\Eloquent\Collection();
+            return new \Illuminate\Database\Eloquent\Collection;
         }
 
         return Book::with('category')->whereIn('id', $ids)->get();
@@ -42,7 +42,7 @@ class CartService
     public function add(int $bookId): void
     {
         $ids = $this->getBookIds();
-        if (!in_array($bookId, $ids, true)) {
+        if (! in_array($bookId, $ids, true)) {
             $ids[] = $bookId;
             Session::put(self::SESSION_KEY, $ids);
         }

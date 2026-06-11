@@ -11,16 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('books', function (Blueprint $table) {
+        Schema::create('admin_logs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('category_id')
-                ->constrained('categories')
-                ->restrictOnDelete();
-
-            $table->string('judul');
-            $table->string('penulis');
-            $table->decimal('harga', 12, 2);
-            $table->string('file_buku');
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->string('action');
+            $table->text('description')->nullable();
+            $table->string('ip_address')->nullable();
             $table->timestamps();
         });
     }
@@ -30,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('books');
+        Schema::dropIfExists('admin_logs');
     }
 };

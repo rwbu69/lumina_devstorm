@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
-use Illuminate\Http\RedirectResponse;
 
 class LoginController extends Controller
 {
@@ -29,7 +29,7 @@ class LoginController extends Controller
             $usernameField => ['required', 'string'],
             'password' => ['required', 'string'],
         ], [
-            $usernameField . '.required' => 'Nama Akun wajib diisi.',
+            $usernameField.'.required' => 'Nama Akun wajib diisi.',
             'password.required' => 'Password wajib diisi.',
         ]);
 
@@ -41,8 +41,8 @@ class LoginController extends Controller
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
 
-            $redirectTo = $request->user()?->isAdmin() 
-                ? route('admin.dashboard', absolute: false) 
+            $redirectTo = $request->user()?->isAdmin()
+                ? route('admin.dashboard', absolute: false)
                 : route('catalog.index', absolute: false);
 
             return redirect()->intended($redirectTo);

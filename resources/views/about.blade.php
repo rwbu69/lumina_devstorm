@@ -1,4 +1,4 @@
-<x-app-layout :hideNavbar="true">
+<x-app-layout :hideNavbar="true" title="Tentang Kami" meta_description="Kenali visi dan misi Lumina Media dalam menyediakan literatur Kristen dan theologi terbaik untuk pertumbuhan rohani Anda.">
     <x-user-navbar />
     
     <div class="min-h-screen bg-[#FDFBF7] font-sans">

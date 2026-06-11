@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Http;
 class DailyVerseService
 {
     private const CACHE_KEY = 'daily_verse.v2';
+
     private const CACHE_TTL_SECONDS = 86400;
 
     /**

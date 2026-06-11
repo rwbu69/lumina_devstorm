@@ -81,7 +81,6 @@
                         <label for="format" class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Format Buku <span class="text-rose-500">*</span></label>
                         <select id="format" name="format" x-model="format" @change="if(errors.format) delete errors.format" :class="errors.format ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-200'" class="w-full px-4 py-3 bg-slate-50 border rounded-xl text-sm focus:outline-none focus:border-lumina-blue focus:ring-2 focus:ring-lumina-blue/20 transition-all text-slate-800 appearance-none cursor-pointer" required>
                             <option value="digital">Digital (E-Book)</option>
-                            <option value="fisik" disabled>Fisik (Cetak) - Belum Tersedia</option>
                         </select>
                         <p class="text-slate-400 text-xs mt-1.5 font-medium">Sementara hanya melayani format digital.</p>
                         <template x-if="errors.format"><p class="text-rose-500 text-xs mt-1.5 font-bold flex items-center"><x-heroicon-o-exclamation-circle class="mr-1 size-4" /><span x-text="errors.format"></span></p></template>

@@ -11,7 +11,6 @@ use App\Services\CartService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class OrderController extends Controller
@@ -19,7 +18,7 @@ class OrderController extends Controller
     public function store(CartService $cartService): RedirectResponse
     {
         $items = $cartService->getItems();
-        
+
         if ($items->isEmpty()) {
             return redirect()->route('cart.index')->with('error', 'Keranjang belanja Anda kosong.');
         }
@@ -50,7 +49,7 @@ class OrderController extends Controller
     public function show(Order $order): View
     {
         // Safety check
-        if (Auth::id() !== $order->user_id && !Auth::user()->isAdmin()) {
+        if (Auth::id() !== $order->user_id && ! Auth::user()->isAdmin()) {
             abort(403, 'Anda tidak memiliki akses ke pesanan ini.');
         }
 

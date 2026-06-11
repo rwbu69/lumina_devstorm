@@ -10,16 +10,6 @@
             </button>
         </div>
 
-        @if(session('success'))
-            <div class="bg-emerald-50 border border-emerald-200 text-emerald-700 px-6 py-4 rounded-2xl shadow-sm mb-8 flex items-center relative" x-data="{ show: true }" x-show="show" x-transition>
-                <x-heroicon-s-check-circle class="mr-3 size-6" />
-                <span class="font-medium mr-auto">{{ session('success') }}</span>
-                <button @click="show = false" class="text-emerald-500 hover:text-emerald-700 transition-colors">
-                    <x-heroicon-o-x-mark class="size-5" />
-                </button>
-            </div>
-        @endif
-
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <!-- Total Judul -->
             <x-admin.card>
@@ -32,7 +22,7 @@
                 <h2 class="font-bold text-slate-800 text-2xl">{{ number_format($totalJudul, 0, ',', '.') }}</h2>
             </x-admin.card>
             
-            <!-- Stok Rendah -->
+            <!-- Stok Rendah (Hidden for digital focus)
             <x-admin.card>
                 <div class="flex items-start justify-between mb-4">
                     <span class="text-slate-500 font-bold text-sm tracking-wide">Stok Rendah</span>
@@ -40,8 +30,9 @@
                         <x-heroicon-o-exclamation-triangle class="size-6" />
                     </div>
                 </div>
-                <h2 class="font-bold text-slate-800 text-2xl">{{ number_format($stokRendah, 0, ',', '.') }}</h2>
+                <h2 class="font-bold text-slate-800 text-2xl">{{ number_format($stokRendah ?? 0, 0, ',', '.') }}</h2>
             </x-admin.card>
+            -->
 
             <!-- Terjual Bulan ini -->
             <x-admin.card>
@@ -54,7 +45,7 @@
                 <h2 class="font-bold text-slate-800 text-2xl">{{ number_format($terjualBulanIni, 0, ',', '.') }}</h2>
             </x-admin.card>
 
-            <!-- Valuasi Stok -->
+            <!-- Valuasi Stok (Hidden for digital focus)
             <x-admin.card>
                 <div class="flex items-start justify-between mb-4">
                     <span class="text-slate-500 font-bold text-sm tracking-wide">Valuasi Stok</span>
@@ -62,8 +53,9 @@
                         <x-heroicon-o-banknotes class="size-6" />
                     </div>
                 </div>
-                <h2 class="font-bold text-slate-800 text-2xl">Rp {{ number_format($valuasiStok, 0, ',', '.') }}</h2>
+                <h2 class="font-bold text-slate-800 text-2xl">Rp {{ number_format($valuasiStok ?? 0, 0, ',', '.') }}</h2>
             </x-admin.card>
+            -->
         </div>
 
         <x-admin.table>
@@ -81,7 +73,7 @@
                 <tr>
                     <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider w-2/5">Judul Buku</th>
                     <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Penulis</th>
-                    <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Stok</th>
+                    {{-- <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Stok</th> --}}
                     <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Harga</th>
                     <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Aksi</th>
                 </tr>
@@ -104,14 +96,14 @@
                         </div>
                     </td>
                     <td class="px-6 py-4 text-sm font-semibold text-slate-500">{{ strtoupper($book->penulis) }}</td>
-                    <td class="px-6 py-4">
+                    {{-- <td class="px-6 py-4">
                         @php
                             $stockClass = 'bg-emerald-100 text-emerald-700 border-emerald-200';
                             if ($book->stok < 20) $stockClass = 'bg-rose-100 text-rose-700 border-rose-200';
                             elseif ($book->stok < 50) $stockClass = 'bg-amber-100 text-amber-700 border-amber-200';
                         @endphp
                         <span class="px-3 py-1 text-xs font-bold rounded-full border {{ $stockClass }}">{{ $book->stok ?? 0 }}</span>
-                    </td>
+                    </td> --}}
                     <td class="px-6 py-4 font-bold text-lumina-blue">
                         Rp {{ number_format($book->harga, 0, ',', '.') }}
                     </td>
@@ -255,7 +247,7 @@
                                     <template x-if="errors.harga"><p class="text-rose-500 text-xs mt-1" x-text="errors.harga"></p></template>
                                     @error('harga') <p x-show="!errors.harga" class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
                                 </div>
-                                <div>
+                                <div style="display: none;">
                                     <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Stok</label>
                                     <input type="number" name="stok" x-model.number="stok" @input="delete errors.stok" :class="errors.stok ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-200'" class="w-full px-4 py-3 bg-slate-50 border rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors" min="0">
                                     <template x-if="errors.stok"><p class="text-rose-500 text-xs mt-1" x-text="errors.stok"></p></template>
@@ -417,7 +409,7 @@
                                             <template x-if="errors.harga"><p class="text-rose-500 text-xs mt-1" x-text="errors.harga"></p></template>
                                             @error('harga') <p x-show="!errors.harga" class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
                                         </div>
-                                        <div>
+                                        <div style="display: none;">
                                             <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Stok</label>
                                             <input type="number" name="stok" x-model.number="stok" @input="delete errors.stok" :class="errors.stok ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-200'" class="w-full px-4 py-3 bg-slate-50 border rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors" min="0">
                                             <template x-if="errors.stok"><p class="text-rose-500 text-xs mt-1" x-text="errors.stok"></p></template>

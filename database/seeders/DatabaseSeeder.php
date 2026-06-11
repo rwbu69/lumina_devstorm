@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-
 use App\Models\Book;
 use App\Models\Category;
 use App\Models\Order;
@@ -11,10 +10,10 @@ use App\Models\Payment;
 use App\Models\User;
 use Faker\Factory as FakerFactory;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Database\Eloquent\Factories\Sequence;
 
 class DatabaseSeeder extends Seeder
 {

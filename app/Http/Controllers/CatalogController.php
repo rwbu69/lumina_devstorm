@@ -46,7 +46,7 @@ class CatalogController extends Controller
     public function searchPreview(Request $request)
     {
         $q = $request->input('q');
-        if (!$q) {
+        if (! $q) {
             return response()->json([]);
         }
 
@@ -63,7 +63,7 @@ class CatalogController extends Controller
     public function show(Book $book, CartService $cartService): View
     {
         $book->load('category');
-        
+
         $relatedBooks = Book::query()
             ->where('category_id', $book->category_id)
             ->where('id', '!=', $book->id)

@@ -1,6 +1,8 @@
 @props([
     'showSearch' => false,
     'hideNavbar' => false,
+    'title' => config('app.name', 'Lumina Media'),
+    'meta_description' => 'Platform toko e-book rohani terpercaya. Temukan berbagai buku digital Kristen, theologi, dan renungan harian.',
 ])
 
 <!doctype html>
@@ -10,7 +12,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Lumina Media') }}</title>
+    <title>{{ $title === config('app.name', 'Lumina Media') ? $title : $title . ' - ' . config('app.name', 'Lumina Media') }}</title>
+    <meta name="description" content="{{ $meta_description }}">
+    <meta property="og:title" content="{{ $title }}">
+    <meta property="og:description" content="{{ $meta_description }}">
+    <meta property="og:type" content="website">
+    <meta name="theme-color" content="#1a4fd9">
 
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
     <link rel="alternate icon" href="{{ asset('favicon.ico') }}">
