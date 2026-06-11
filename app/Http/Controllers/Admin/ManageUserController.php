@@ -29,6 +29,24 @@ class ManageUserController extends Controller
         return view('admin.users.index', compact('users'));
     }
 
+    public function store(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'nama' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users,username',
+            'email' => 'required|string|email|max:255|unique:users,email',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $validated['password'] = bcrypt($validated['password']);
+        $validated['role'] = 'user';
+
+        $user = User::create($validated);
+        AdminActivityLogger::log('Tambah User', "Menambahkan user baru {$user->email} (ID: {$user->id})");
+
+        return back()->with('success', 'Pengguna berhasil ditambahkan.');
+    }
+
     public function show(User $user)
     {
         $this->authorizeAdminAction($user);

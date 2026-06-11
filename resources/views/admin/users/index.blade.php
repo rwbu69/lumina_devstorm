@@ -5,7 +5,7 @@
                 <h1 class="text-3xl font-serif font-bold text-lumina-blue mb-1.5">Kelola User</h1>
                 <p class="text-slate-500 font-medium">Manajemen akun pengguna dan bantuan akses.</p>
             </div>
-            <button class="inline-flex items-center justify-center bg-lumina-blue hover:bg-blue-800 text-white px-5 py-2.5 rounded-xl font-bold shadow-sm transition-all whitespace-nowrap">
+            <button x-data @click="$dispatch('open-modal', 'modalTambahUser')" class="inline-flex items-center justify-center bg-lumina-blue hover:bg-blue-800 text-white px-5 py-2.5 rounded-xl font-bold shadow-sm transition-all whitespace-nowrap">
                 <x-heroicon-s-user-plus class="mr-2 size-6" /> Tambah User
             </button>
         </div>
@@ -91,5 +91,98 @@
                 @endif
             </x-slot:pagination>
         </x-admin.table>
+    </div>
+
+    {{-- Alpine Modals Container --}}
+    <div x-data="{ activeModal: {!! $errors->any() ? "'modalTambahUser'" : 'null' !!} }" @open-modal.window="activeModal = $event.detail"
+        @close-modal.window="activeModal = null" @keydown.escape.window="activeModal = null">
+
+        {{-- Modal Tambah User --}}
+        <div x-show="activeModal === 'modalTambahUser'" style="display: none;"
+            class="fixed inset-0 z-[1050] overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+            <div x-show="activeModal === 'modalTambahUser'" x-transition.opacity class="fixed inset-0 bg-slate-900/50"></div>
+
+            <div class="flex min-h-full items-center justify-center p-4">
+                <div x-show="activeModal === 'modalTambahUser'" x-transition:enter="ease-out duration-300"
+                    x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                    x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                    x-transition:leave="ease-in duration-200"
+                    x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                    x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                    class="relative transform bg-white rounded-3xl text-left shadow-lg transition-all w-full max-w-2xl overflow-hidden">
+
+                    <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+                        <h5 class="text-xl font-bold text-lumina-blue">Tambah Pengguna Baru</h5>
+                        <button type="button" @click="activeModal = null"
+                            class="text-slate-400 hover:text-rose-500 p-1 transition-colors">
+                            <x-heroicon-o-x-mark class="size-5" />
+                        </button>
+                    </div>
+
+                    <form action="{{ route('admin.users.store') }}" method="POST"
+                        class="max-h-[75vh] overflow-y-auto">
+                        @csrf
+                        <div class="p-6 md:p-8">
+                            <div class="grid grid-cols-1 gap-6">
+                                <div>
+                                    <label
+                                        class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Nama
+                                        Lengkap</label>
+                                    <input type="text" name="nama" value="{{ old('nama') }}" required
+                                        class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors">
+                                    @error('nama')
+                                        <p class="text-rose-500 text-xs mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div>
+                                    <label
+                                        class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Username</label>
+                                    <input type="text" name="username" value="{{ old('username') }}" required
+                                        class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors">
+                                    @error('username')
+                                        <p class="text-rose-500 text-xs mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div>
+                                    <label
+                                        class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Alamat
+                                        Email</label>
+                                    <input type="email" name="email" value="{{ old('email') }}" required
+                                        class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors">
+                                    @error('email')
+                                        <p class="text-rose-500 text-xs mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div>
+                                    <label
+                                        class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Kata
+                                        Sandi</label>
+                                    <input type="password" name="password" required
+                                        class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors">
+                                    @error('password')
+                                        <p class="text-rose-500 text-xs mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div>
+                                    <label
+                                        class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Konfirmasi
+                                        Kata Sandi</label>
+                                    <input type="password" name="password_confirmation" required
+                                        class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors">
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            class="px-6 py-4 border-t border-slate-100 bg-slate-50/50 flex justify-end gap-3 sticky bottom-0">
+                            <button type="button" @click="activeModal = null"
+                                class="px-6 py-2.5 bg-white border border-slate-200 text-slate-700 font-bold rounded-xl shadow-sm hover:bg-slate-50 transition-colors">Batal</button>
+                            <button type="submit"
+                                class="px-6 py-2.5 bg-lumina-blue hover:bg-blue-800 text-white font-bold rounded-xl shadow-sm transition-colors">Simpan
+                                Pengguna</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </x-admin.layout>

@@ -83,6 +83,7 @@ Route::prefix('admin')
         Route::get('/reports/export-pdf', [AdminReportController::class, 'exportPdf'])->name('reports.exportPdf');
 
         Route::get('/users', [AdminManageUserController::class, 'index'])->name('users.index');
+        Route::post('/users', [AdminManageUserController::class, 'store'])->name('users.store');
         Route::get('/users/{user}', [AdminManageUserController::class, 'show'])->name('users.show');
         Route::patch('/users/{user}', [AdminManageUserController::class, 'update'])->name('users.update');
         Route::post('/users/{user}/access', [AdminManageUserController::class, 'addAccess'])->name('users.addAccess');
