@@ -39,5 +39,4 @@ class HomeController extends Controller
             'dailyVerse' => $dailyVerse,
         ]);
     }
-
 }

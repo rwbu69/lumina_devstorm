@@ -28,7 +28,7 @@ class MaintenanceMiddleware
             if ($request->route() && in_array($request->route()->getName(), $allowedRoutes)) {
                 return $next($request);
             }
-            
+
             // Allow paths explicitly
             if ($request->is('login') || $request->is('admin/login')) {
                 return $next($request);

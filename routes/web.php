@@ -91,10 +91,14 @@ Route::prefix('admin')
 
         // Superadmin Routes
         Route::middleware(['is_superadmin'])->group(function () {
+            Route::get('/admins', [\App\Http\Controllers\Admin\ManageAdminController::class, 'index'])->name('admins.index');
+            Route::post('/admins', [\App\Http\Controllers\Admin\ManageAdminController::class, 'store'])->name('admins.store');
+            Route::delete('/admins/{admin}', [\App\Http\Controllers\Admin\ManageAdminController::class, 'destroy'])->name('admins.destroy');
+            Route::get('/admins/logs', [\App\Http\Controllers\Admin\ManageAdminController::class, 'logs'])->name('admins.logs');
+            
             Route::get('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'index'])->name('settings.index');
             Route::post('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'store'])->name('settings.store');
         });
     });
-
 
 require __DIR__.'/auth.php';

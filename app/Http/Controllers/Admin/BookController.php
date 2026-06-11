@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Book;
 use App\Models\Category;
+use App\Services\AdminActivityLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -25,8 +26,8 @@ class BookController extends Controller
 
         $terjualBulanIni = \App\Models\OrderDetail::whereHas('order', function ($query) {
             $query->where('status', 'verified')
-                  ->whereMonth('tanggal_pesan', now()->month)
-                  ->whereYear('tanggal_pesan', now()->year);
+                ->whereMonth('tanggal_pesan', now()->month)
+                ->whereYear('tanggal_pesan', now()->year);
         })->count();
 
         $valuasiStok = Book::sum(\Illuminate\Support\Facades\DB::raw('harga * stok'));
@@ -34,9 +35,11 @@ class BookController extends Controller
 
         return view('admin.books.index', compact('books', 'totalJudul', 'stokRendah', 'terjualBulanIni', 'valuasiStok', 'categories'));
     }
+
     public function create(): View
     {
         $categories = Category::all();
+
         return view('admin.books.create', compact('categories'));
     }
 
@@ -44,10 +47,10 @@ class BookController extends Controller
     {
         if ($request->category_id === 'new') {
             $request->validate([
-                'new_category_name' => 'required|string|max:255|unique:categories,nama_kategori'
+                'new_category_name' => 'required|string|max:255|unique:categories,nama_kategori',
             ], [
                 'new_category_name.required' => 'Nama kategori baru harus diisi.',
-                'new_category_name.unique' => 'Kategori ini sudah ada.'
+                'new_category_name.unique' => 'Kategori ini sudah ada.',
             ]);
             $category = Category::create(['nama_kategori' => $request->new_category_name]);
             $request->merge(['category_id' => $category->id]);
@@ -75,7 +78,8 @@ class BookController extends Controller
             $data['cover_buku'] = $request->file('cover_buku')->store('covers', 'public');
         }
 
-        Book::create($data);
+        $book = Book::create($data);
+        AdminActivityLogger::log('Tambah Buku', "Menambahkan buku baru: '{$book->judul}' (ID: {$book->id})");
 
         return redirect()->route('admin.books.index')->with('success', 'Buku berhasil ditambahkan!');
     }
@@ -88,6 +92,7 @@ class BookController extends Controller
     public function edit(Book $book): View
     {
         $categories = Category::all();
+
         return view('admin.books.edit', compact('book', 'categories'));
     }
 
@@ -95,10 +100,10 @@ class BookController extends Controller
     {
         if ($request->category_id === 'new') {
             $request->validate([
-                'new_category_name' => 'required|string|max:255|unique:categories,nama_kategori'
+                'new_category_name' => 'required|string|max:255|unique:categories,nama_kategori',
             ], [
                 'new_category_name.required' => 'Nama kategori baru harus diisi.',
-                'new_category_name.unique' => 'Kategori ini sudah ada.'
+                'new_category_name.unique' => 'Kategori ini sudah ada.',
             ]);
             $category = Category::create(['nama_kategori' => $request->new_category_name]);
             $request->merge(['category_id' => $category->id]);
@@ -133,6 +138,7 @@ class BookController extends Controller
         }
 
         $book->update($data);
+        AdminActivityLogger::log('Update Buku', "Memperbarui data buku: '{$book->judul}' (ID: {$book->id})");
 
         return redirect()->route('admin.books.index')->with('success', 'Buku berhasil diperbarui!');
     }
@@ -144,7 +150,10 @@ class BookController extends Controller
         }
 
         $book->orderDetails()->delete();
+        $judul = $book->judul;
+        $id = $book->id;
         $book->delete();
+        AdminActivityLogger::log('Hapus Buku', "Menghapus buku: '{$judul}' (ID: {$id})");
 
         return redirect()->route('admin.books.index')
             ->with('success', "Buku \"{$book->judul}\" berhasil dihapus.");

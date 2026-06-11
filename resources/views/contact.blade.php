@@ -1,4 +1,4 @@
-<x-app-layout :hideNavbar="true">
+<x-app-layout :hideNavbar="true" title="Hubungi Kami" meta_description="Hubungi tim Lumina Media untuk pertanyaan, kerjasama, atau bantuan seputar pemesanan buku digital rohani.">
     <x-user-navbar />
     
     <div class="min-h-screen bg-[#FDFBF7] font-sans">

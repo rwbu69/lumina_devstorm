@@ -24,16 +24,6 @@
             </div>
         </div>
 
-        @if(session('success'))
-            <div class="bg-emerald-50 border border-emerald-200 text-emerald-700 px-6 py-4 rounded-2xl shadow-sm mb-8 flex items-center relative" x-data="{ show: true }" x-show="show" x-transition>
-                <x-heroicon-s-check-circle class="mr-3 size-6" />
-                <span class="font-medium mr-auto">{{ session('success') }}</span>
-                <button @click="show = false" class="text-emerald-500 hover:text-emerald-700 transition-colors">
-                    <x-heroicon-o-x-mark class="size-5" />
-                </button>
-            </div>
-        @endif
-
         {{-- Profile Card --}}
         <x-admin.card class="mb-8">
             <div class="flex flex-col md:flex-row gap-6 items-center md:items-start">
