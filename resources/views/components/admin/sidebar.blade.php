@@ -39,12 +39,6 @@
             'route' => 'admin.admins.index',
             'active' => request()->routeIs('admin.admins.*'),
         ];
-        $menu[] = [
-            'label' => 'Pengaturan Website',
-            'icon' => 'bi-gear',
-            'route' => 'admin.settings.index',
-            'active' => request()->routeIs('admin.settings.*'),
-        ];
     }
 @endphp
 

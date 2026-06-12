@@ -8,7 +8,7 @@ Lumina Media adalah platform e-commerce yang berdedikasi untuk menjual buku-buku
 - Evaluasi dan Pembangunan Diri
 
 Website ini dirancang untuk memudahkan pembaca dalam menemukan, membeli, dan membaca literatur yang dapat membangun iman, memperluas wawasan keagamaan, serta memotivasi pertumbuhan pribadi secara praktis dan spiritual.
-
+Amen
 ---
 
 ## Fitur Utama
