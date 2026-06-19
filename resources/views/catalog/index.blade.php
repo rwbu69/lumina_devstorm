@@ -1,4 +1,4 @@
-<x-app-layout :hideNavbar="true">
+<x-app-layout :hideNavbar="true" title="Katalog Buku Digital">
     <x-user-navbar />
 
     <div class="min-h-screen bg-transparent font-sans pb-16">

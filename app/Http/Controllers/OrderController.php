@@ -23,21 +23,47 @@ class OrderController extends Controller
             return redirect()->route('cart.index')->with('error', 'Keranjang belanja Anda kosong.');
         }
 
-        // Create Order
-        $order = Order::create([
-            'user_id' => Auth::id(),
-            'tanggal_pesan' => now(),
-            'total_tagihan' => $cartService->getTotal(),
-            'status' => 'pending',
-        ]);
+        $ownedBookIds = Auth::user()->ownedBookIds();
+        $hasDuplicate = false;
 
-        // Create Order Details
         foreach ($items as $book) {
-            OrderDetail::create([
-                'order_id' => $order->id,
-                'book_id' => $book->id,
-                'harga_saat_beli' => $book->harga,
-            ]);
+            if (in_array($book->id, $ownedBookIds, true)) {
+                $cartService->remove($book->id);
+                $hasDuplicate = true;
+            }
+        }
+
+        if ($hasDuplicate) {
+            return redirect()->route('cart.index')->with('error', 'Beberapa buku sudah Anda miliki dan dihapus dari keranjang.');
+        }
+
+        if ($items->isEmpty()) {
+            return redirect()->route('cart.index')->with('error', 'Keranjang belanja Anda kosong.');
+        }
+
+        try {
+            $order = \Illuminate\Support\Facades\DB::transaction(function () use ($items, $cartService) {
+                // Create Order
+                $order = Order::create([
+                    'user_id' => Auth::id(),
+                    'tanggal_pesan' => now(),
+                    'total_tagihan' => $cartService->getTotal(),
+                    'status' => 'pending',
+                ]);
+
+                // Create Order Details
+                foreach ($items as $book) {
+                    OrderDetail::create([
+                        'order_id' => $order->id,
+                        'book_id' => $book->id,
+                        'harga_saat_beli' => $book->harga,
+                    ]);
+                }
+
+                return $order;
+            });
+        } catch (\Exception $e) {
+            return redirect()->route('cart.index')->with('error', 'Terjadi kesalahan saat membuat pesanan. Silakan coba lagi.');
         }
 
         // Clear Cart
@@ -64,6 +90,10 @@ class OrderController extends Controller
     {
         if (Auth::id() !== $order->user_id) {
             abort(403);
+        }
+
+        if ($order->status !== 'pending') {
+            abort(403, 'Pesanan sudah diproses atau dibatalkan.');
         }
 
         $request->validate([

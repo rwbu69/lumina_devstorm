@@ -7,9 +7,9 @@
     };
 @endphp
 
-<x-app-layout :hideNavbar="true">
+<x-app-layout :hideNavbar="true" title="Beranda">
     <x-user-navbar />
-    
+
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16">
         {{-- A. Section Hero --}}
         <section class="py-8 md:py-12">
@@ -21,7 +21,7 @@
                     </p>
 
                     <div class="flex flex-wrap gap-4">
-                        <x-btn variant="primary" size="lg" :href="route('catalog.index')" class="shadow-sm">Belanja Sekarang</x-btn>
+                        <x-btn variant="primary" size="lg" :href="route('register')" class="shadow-sm">Daftar Sekarang</x-btn>
                         <x-btn variant="outline" size="lg" :href="route('catalog.index')" class="">Lihat Katalog</x-btn>
                     </div>
                 </div>
@@ -49,25 +49,28 @@
                 @forelse ($latestBooks as $book)
                     @php
                         $synopsis = "Buku digital rohani karya {$book->penulis} untuk menemani pembacaan dan perenungan.";
+                        $targetUrl = auth()->check() ? route('catalog.show', $book->id) : route('login');
                     @endphp
 
-                    <x-card layout="vertical" shadow="sm" class="h-full">
-                        <x-slot:header>
-                            <div class="w-full h-full bg-slate-100 flex items-center justify-center">
-                                @if($book->cover_buku)
-                                    <img src="{{ asset('storage/' . $book->cover_buku) }}" alt="{{ $book->judul }}" class="w-full h-full object-cover">
-                                @else
-                                    <div class="text-slate-400 font-bold tracking-widest text-sm">COVER</div>
-                                @endif
-                            </div>
-                        </x-slot:header>
+                    <a href="{{ $targetUrl }}" class="block h-full group">
+                        <x-card layout="vertical" shadow="sm" class="h-full transition-transform duration-300 group-hover:-translate-y-1 group-hover:shadow-md ring-1 ring-transparent group-hover:ring-lumina-blue/20">
+                            <x-slot:header>
+                                <div class="w-full h-full bg-slate-100 flex items-center justify-center">
+                                    @if($book->cover_buku)
+                                        <img src="{{ asset('storage/' . $book->cover_buku) }}" alt="{{ $book->judul }}" class="w-full h-full object-cover">
+                                    @else
+                                        <div class="text-slate-400 font-bold tracking-widest text-sm">COVER</div>
+                                    @endif
+                                </div>
+                            </x-slot:header>
 
-                        <div class="font-bold text-slate-800 text-lg mb-1.5 line-clamp-1" title="{{ $book->judul }}">{{ $book->judul }}</div>
-                        <div class="text-sm text-lumina-blue font-medium mb-3">{{ $book->penulis }}</div>
-                        <div class="text-sm text-slate-500 mb-4 line-clamp-2 leading-relaxed">{{ Str::limit($synopsis, 90) }}</div>
+                            <div class="font-bold text-slate-800 text-lg mb-1.5 line-clamp-1 group-hover:text-lumina-blue transition-colors" title="{{ $book->judul }}">{{ $book->judul }}</div>
+                            <div class="text-sm text-lumina-blue font-medium mb-3">{{ $book->penulis }}</div>
+                            <div class="text-sm text-slate-500 mb-4 line-clamp-2 leading-relaxed">{{ Str::limit($synopsis, 90) }}</div>
 
-                        <div class="font-bold text-lumina-blue text-lg mt-auto">{{ $rupiah($book->harga) }}</div>
-                    </x-card>
+                            <div class="font-bold text-lumina-blue text-lg mt-auto">{{ $rupiah($book->harga) }}</div>
+                        </x-card>
+                    </a>
                 @empty
                     <div class="col-span-full">
                         <div class="text-center text-slate-500 py-16 bg-slate-50 rounded-3xl border border-dashed border-slate-200">

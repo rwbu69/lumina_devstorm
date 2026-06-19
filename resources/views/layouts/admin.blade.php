@@ -14,7 +14,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
-    
+
     <!-- Tailwind CSS (Vite) -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -28,7 +28,7 @@
 <!-- Sidebar component already has its own Alpine logic for mobile offcanvas and desktop fixed -->
 <x-admin.sidebar />
 
-<!-- Main content wrapper. 
+<!-- Main content wrapper.
      On lg screens (where sidebar is fixed block), we add pl-72 (padding-left 288px) to push content to the right. -->
 <main class="flex-grow flex flex-col lg:pl-72 transition-all duration-300">
     <div class="w-full px-4 lg:px-8 py-6 flex-grow">

@@ -39,6 +39,10 @@ class OrderController extends Controller
 
     public function verify(Order $order): RedirectResponse
     {
+        if ($order->status !== 'pending') {
+            return back()->with('error', 'Status pesanan tidak valid untuk diverifikasi.');
+        }
+
         $order->update(['status' => 'verified']);
         AdminActivityLogger::log('Verifikasi Pesanan', "Memverifikasi pesanan #ORD-{$order->id} (User ID: {$order->user_id})");
 
@@ -51,6 +55,10 @@ class OrderController extends Controller
 
     public function reject(Order $order): RedirectResponse
     {
+        if ($order->status !== 'pending') {
+            return back()->with('error', 'Status pesanan tidak valid untuk ditolak.');
+        }
+
         $order->update(['status' => 'cancelled']);
         AdminActivityLogger::log('Tolak Pesanan', "Menolak pesanan #ORD-{$order->id} (User ID: {$order->user_id})");
 

@@ -28,7 +28,22 @@ class CartController extends Controller
             'book_id' => ['required', 'exists:books,id'],
         ]);
 
-        $cartService->add((int) $request->input('book_id'));
+        $bookId = (int) $request->input('book_id');
+
+        if (\Illuminate\Support\Facades\Auth::check()) {
+            $ownedBookIds = \Illuminate\Support\Facades\Auth::user()->ownedBookIds();
+            if (in_array($bookId, $ownedBookIds, true)) {
+                if ($request->wantsJson() || $request->ajax()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Anda sudah memiliki buku ini.',
+                    ], 400);
+                }
+                return back()->with('error', 'Anda sudah memiliki buku ini.');
+            }
+        }
+
+        $cartService->add($bookId);
 
         if ($request->wantsJson() || $request->ajax()) {
             return response()->json([

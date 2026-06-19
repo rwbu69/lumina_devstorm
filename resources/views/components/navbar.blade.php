@@ -5,7 +5,7 @@
     $user = auth()->user();
     $name = $user->nama ?? $user->name ?? 'User';
     $username = $user->username ?? 'user';
-    
+
     // Generate Initials
     $words = explode(' ', trim($name));
     $initials = '';
@@ -20,7 +20,7 @@
 <nav class="bg-white border-b border-slate-200 sticky top-0 z-[1050] font-sans shadow-sm" x-data="{ open: false, mobileMenu: false }">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16 items-center">
-            
+
             <!-- Left Side: Logo & Brand -->
             <div class="flex items-center space-x-6">
                 <!-- Brand Logo & Teks -->
@@ -56,13 +56,13 @@
 
                 @auth
                 <!-- Shopping Cart Icon -->
-                <div class="relative hidden sm:block" x-data="{ 
-                    count: {{ session('cart') ? count(session('cart')) : 0 }}, 
+                <div class="relative hidden sm:block" x-data="{
+                    count: {{ session('cart') ? count(session('cart')) : 0 }},
                     animate: false,
                     showHover: false
                 }"
                 @cart-updated.window="count = $event.detail.count; animate = true; setTimeout(() => animate = false, 300); showHover = true; setTimeout(() => showHover = false, 3000)">
-                    <a href="{{ route('cart.index') }}" 
+                    <a href="{{ route('cart.index') }}"
                        @mouseenter="showHover = true" @mouseleave="showHover = false"
                        class="text-slate-500 hover:text-lumina-blue transition-all duration-300 relative p-2 rounded-xl hover:bg-slate-50 flex items-center justify-center"
                        :class="animate ? 'scale-125 text-lumina-blue' : ''">
@@ -86,7 +86,7 @@
                         </button>
 
                         <!-- Dropdown Menu -->
-                        <div x-show="open" 
+                        <div x-show="open"
                              x-transition:enter="transition ease-out duration-100"
                              x-transition:enter-start="transform opacity-0 scale-95"
                              x-transition:enter-end="transform opacity-100 scale-100"
@@ -95,14 +95,14 @@
                              x-transition:leave-end="transform opacity-0 scale-95"
                              class="absolute right-0 top-full mt-3 w-56 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden z-[1050]"
                              style="display: none;">
-                            
+
                             <!-- Account Info -->
                             <div class="p-4 border-b border-slate-50 bg-slate-50/50">
                                 <p class="text-[10px] font-bold text-slate-400 tracking-wider uppercase mb-0.5">Akun Saya</p>
                                 <p class="font-bold text-slate-800 text-sm truncate">{{ $name }}</p>
                                 <p class="text-xs text-lumina-blue font-medium truncate">&#64;{{ $username }}</p>
                             </div>
-                            
+
                             <!-- Menu Items -->
                             <div class="py-1">
                                 <a href="{{ route('profile.edit') }}" class="flex items-center px-4 py-2.5 text-slate-700 hover:bg-slate-50 hover:text-lumina-blue text-sm font-medium transition-colors">
@@ -140,11 +140,11 @@
     </div>
 
     <!-- Mobile Menu Dropdown -->
-    <div x-show="mobileMenu" 
-         x-transition.opacity 
+    <div x-show="mobileMenu"
+         x-transition.opacity
          class="md:hidden bg-white border-b border-slate-200 px-4 py-4 space-y-4"
          style="display: none;">
-        
+
         @if($showSearch)
         <div class="mb-4">
             <form action="{{ route('catalog.index') }}" method="GET" class="relative">
@@ -178,7 +178,7 @@
                     <a href="{{ route('profile.edit') }}" class="text-slate-600 text-sm font-medium"><x-heroicon-o-user class="mr-2 size-5" /> Profil Saya</a>
                     <a href="{{ route('collection.index') }}" class="text-slate-600 text-sm font-medium"><x-heroicon-o-bookmark class="mr-2 size-5" /> Buku Saya</a>
                     <a href="{{ route('cart.index') }}" class="text-slate-600 text-sm font-medium"><x-heroicon-o-shopping-cart class="mr-2 size-5" /> Keranjang</a>
-                    
+
                     <form method="POST" action="{{ route('logout') }}" class="mt-2">
                         @csrf
                         <button type="submit" class="text-rose-600 text-sm font-bold flex items-center"><x-heroicon-o-arrow-right-on-rectangle class="mr-2 size-5" /> Keluar</button>

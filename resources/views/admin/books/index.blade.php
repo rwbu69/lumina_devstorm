@@ -21,7 +21,7 @@
                 </div>
                 <h2 class="font-bold text-slate-800 text-2xl">{{ number_format($totalJudul, 0, ',', '.') }}</h2>
             </x-admin.card>
-            
+
             <!-- Stok Rendah (Hidden for digital focus)
             <x-admin.card>
                 <div class="flex items-start justify-between mb-4">
@@ -62,10 +62,6 @@
             <x-slot:header>
                 <div class="flex items-center justify-between">
                     <h5 class="font-bold text-lumina-blue flex items-center text-lg"><x-heroicon-o-list-bullet class="mr-2 size-6" />Daftar Inventaris Buku</h5>
-                    <div class="flex gap-2">
-                        <button class="w-10 h-10 rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-lumina-blue transition-colors flex items-center justify-center"><x-heroicon-o-funnel class="size-6" /></button>
-                        <button class="w-10 h-10 rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-lumina-blue transition-colors flex items-center justify-center"><x-heroicon-o-arrow-down-tray class="size-6" /></button>
-                    </div>
                 </div>
             </x-slot:header>
 
@@ -161,11 +157,11 @@
             <div x-show="activeModal === 'modalTambahBuku'" x-transition.opacity class="fixed inset-0 bg-slate-900/50" @click="activeModal = null"></div>
 
             <div class="flex min-h-full items-center justify-center p-4">
-                <div x-show="activeModal === 'modalTambahBuku'" 
-                     x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" 
-                     x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" 
+                <div x-show="activeModal === 'modalTambahBuku'"
+                     x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                     x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                      class="relative transform bg-white rounded-3xl text-left shadow-lg transition-all w-full max-w-4xl overflow-hidden">
-                    
+
                     <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
                         <h5 class="text-xl font-bold text-lumina-blue">Tambah Buku</h5>
                         <button type="button" @click="activeModal = null" class="text-slate-400 hover:text-rose-500 p-1 transition-colors">
@@ -182,6 +178,7 @@
                               format: '{{ old('format', 'digital') }}',
                               harga: '{{ old('harga') }}',
                               stok: '{{ old('stok', 0) }}',
+                              previewUrl: null,
                               errors: {},
                               validate() {
                                   this.errors = {};
@@ -192,10 +189,10 @@
                                   if(!this.format) this.errors.format = 'Format buku harus dipilih.';
                                   if(this.harga === '' || this.harga < 0) this.errors.harga = 'Harga minimal 0.';
                                   if(this.stok === '' || this.stok < 0) this.errors.stok = 'Stok minimal 0.';
-                                  
+
                                   const cover = this.$refs.coverInput;
                                   if(!cover || !cover.files || cover.files.length === 0) this.errors.cover_buku = 'Cover buku harus diunggah.';
-                                  
+
                                   return Object.keys(this.errors).length === 0;
                               }
                           }" @submit="if(!validate()) $event.preventDefault()">
@@ -225,7 +222,7 @@
                                     </select>
                                     <template x-if="errors.category_id"><p class="text-rose-500 text-xs mt-1" x-text="errors.category_id"></p></template>
                                     @error('category_id') <p x-show="!errors.category_id" class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
-                                    
+
                                     <div x-show="category_id === 'new'" x-cloak class="mt-3" x-transition>
                                         <input type="text" name="new_category_name" x-model="new_category_name" @input="delete errors.new_category_name" :class="errors.new_category_name ? 'border-rose-500 ring-1 ring-rose-500' : 'border-lumina-blue/30'" placeholder="Ketik nama kategori baru..." class="w-full px-4 py-3 bg-white border rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors shadow-inner">
                                         <template x-if="errors.new_category_name"><p class="text-rose-500 text-xs mt-1" x-text="errors.new_category_name"></p></template>
@@ -258,7 +255,7 @@
                                     <textarea name="sinopsis" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors" rows="3">{{ old('sinopsis') }}</textarea>
                                     @error('sinopsis') <p class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
                                 </div>
-                                <div x-data="{ previewUrl: null }">
+                                <div>
                                     <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Upload Cover Buku</label>
                                     <input type="file" x-ref="coverInput" name="cover_buku" class="block w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-lumina-blue/10 file:text-lumina-blue hover:file:bg-lumina-blue/20 border rounded-xl bg-slate-50 focus:outline-none focus:border-lumina-blue transition-all p-1.5 cursor-pointer" :class="errors.cover_buku ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-200'" accept="image/jpeg,image/png,image/webp,image/jpg" @change="previewUrl = URL.createObjectURL($event.target.files[0]); delete errors.cover_buku">
                                     <small class="text-slate-400 text-xs mt-2 block">Format: JPG, PNG, WEBP (Maks 2MB)</small>
@@ -294,18 +291,18 @@
                 <div x-show="activeModal === 'deleteModal-{{ $book->id }}'" x-transition.opacity class="fixed inset-0 bg-slate-900/50" @click="activeModal = null"></div>
 
                 <div class="flex min-h-full items-center justify-center p-4">
-                    <div x-show="activeModal === 'deleteModal-{{ $book->id }}'" 
-                         x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" 
-                         x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" 
+                    <div x-show="activeModal === 'deleteModal-{{ $book->id }}'"
+                         x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                         x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                          class="relative transform bg-white rounded-3xl text-left shadow-lg transition-all w-full max-w-lg overflow-hidden">
-                        
+
                         <div class="p-8 text-center">
                             <div class="w-16 h-16 rounded-full bg-rose-100 text-rose-500 flex items-center justify-center mx-auto mb-5">
                                 <x-heroicon-o-exclamation-triangle class="size-10" />
                             </div>
                             <h3 class="text-xl font-bold text-slate-800 mb-2">Konfirmasi Hapus</h3>
                             <p class="text-slate-500 mb-6">Apakah kamu yakin ingin menghapus buku <span class="font-bold text-slate-700">"{{ $book->judul }}"</span>? Tindakan ini tidak dapat dibatalkan.</p>
-                            
+
                             <div class="flex justify-center gap-3">
                                 <button type="button" @click="activeModal = null" class="px-6 py-2.5 bg-white border border-slate-200 text-slate-700 font-bold rounded-xl shadow-sm hover:bg-slate-50 transition-colors w-full">Batal</button>
                                 <form action="{{ route('admin.books.destroy', $book->id) }}" method="POST" class="w-full">
@@ -324,11 +321,11 @@
                 <div x-show="activeModal === 'modalEditBuku-{{ $book->id }}'" x-transition.opacity class="fixed inset-0 bg-slate-900/50" @click="activeModal = null"></div>
 
                 <div class="flex min-h-full items-center justify-center p-4">
-                    <div x-show="activeModal === 'modalEditBuku-{{ $book->id }}'" 
-                         x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" 
-                         x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" 
+                    <div x-show="activeModal === 'modalEditBuku-{{ $book->id }}'"
+                         x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                         x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                          class="relative transform bg-white rounded-3xl text-left shadow-lg transition-all w-full max-w-4xl overflow-hidden">
-                        
+
                         <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
                             <h5 class="text-xl font-bold text-lumina-blue">Ubah Buku</h5>
                             <button type="button" @click="activeModal = null" class="text-slate-400 hover:text-rose-500 p-1 transition-colors">
@@ -355,7 +352,7 @@
                                       if(!this.format) this.errors.format = 'Format buku harus dipilih.';
                                       if(this.harga === '' || this.harga < 0) this.errors.harga = 'Harga minimal 0.';
                                       if(this.stok === '' || this.stok < 0) this.errors.stok = 'Stok minimal 0.';
-                                      
+
                                       return Object.keys(this.errors).length === 0;
                                   }
                               }" @submit="if(!validate()) $event.preventDefault()">
@@ -386,7 +383,7 @@
                                         </select>
                                         <template x-if="errors.category_id"><p class="text-rose-500 text-xs mt-1" x-text="errors.category_id"></p></template>
                                         @error('category_id') <p x-show="!errors.category_id" class="text-rose-500 text-xs mt-1">{{ $message }}</p> @enderror
-                                        
+
                                         <div x-show="category_id === 'new'" x-cloak class="mt-3" x-transition>
                                             <input type="text" name="new_category_name" x-model="new_category_name" @input="delete errors.new_category_name" :class="errors.new_category_name ? 'border-rose-500 ring-1 ring-rose-500' : 'border-lumina-blue/30'" placeholder="Ketik nama kategori baru..." class="w-full px-4 py-3 bg-white border rounded-xl focus:ring-2 focus:ring-lumina-blue/20 focus:border-lumina-blue transition-colors shadow-inner">
                                             <template x-if="errors.new_category_name"><p class="text-rose-500 text-xs mt-1" x-text="errors.new_category_name"></p></template>
